@@ -1,0 +1,39 @@
+/*
+*用2bit表示一个数即可。
+*0表示未出现，1表示出现一次，2表示出现2次及以上。
+*在遍历这些数的时候，如果对应位置的值是0，则将其置为1；如果是1，将其置为2；如果是2，则保持不变。
+*/
+unsigned char flags[N]; //数组大小由元数据中数值的最大值决定     
+unsigned get_val(int idx)  {   
+//  |    8 bit  |  
+//  |00 00 00 00|  //映射3 2 1 0  
+//  |00 00 00 00|  //表示7 6 5 4  
+//  ……  
+//  |00 00 00 00|  
+  
+    int i = idx/4;  //一个char 表示4个数，  
+    int j = idx%4;    
+    unsigned ret = ( flags[i] & ( 0x3<<(2*j) ) )>>(2*j);
+    //将flags[i]中的 2*j处的数值取出，并右移得到2*j处的值。
+    //0x3 = 11 相当于把11当作1来进行移位。只是位的位数为2*j。
+   return ret;    
+}    
+        
+unsigned set_val(int idx, unsigned int val)  {    
+    int i = idx/4;    
+    int j = idx%4;    
+    unsigned tmp = ( flags[i] & ~( 0x3<<(2*j) )) | ( (val%4) << (2*j) );
+    //首先将flags[i]中 2*j处的两位bits位置零，然后将原位置处置为val的值。
+    flags[i] = tmp;    
+    return 0;    
+} 
+
+unsigned add_one(int idx)    
+{    
+    if (get_val(idx)>=2) {  //这一位置上已经出现过了？？  
+        return 1;    
+    }  else  {    
+        set_val(idx, get_val(idx)+1);    
+        return 0;    
+    }    
+}    

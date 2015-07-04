@@ -1,0 +1,38 @@
+#define MAX 26  //仅小写字母
+typedef struct TrieNode{
+	char ch;
+	struct TrieNode * child[MAX];
+	int count;
+}TrieNode;
+
+TrieNode * createTrieNode(char c){
+	int i;
+	TrieNode * pt = (TrieNode *)malloc(sizeof(TrieNode));
+	pt->ch = c;
+	pt->count = 0;  //记录单词数量及是否为有效单词
+	for(i=0;i<MAX;i++)
+		pt->child[i] = NULL;
+	return pt;
+}
+int findWord8Trie(TrieNode * root,char s[],int length){
+	int i;
+	TrieNode * pt = root;
+	for(i=0;i<length;i++){
+		if( pt->child[s[i]-'a'] == NULL )
+			break;
+		pt = pt->child[ s[i]-'a' ];
+	}
+	return i==length && pt->count != 0;
+}
+
+void insertTrieNode(TrieNode * root,char s[],int length){
+	int i;
+	TrieNode * pt = root;
+	
+	for(i=0;i<length;i++){
+		if(pt->child[ s[i]-'a'] == NULL)
+			pt->child[ s[i]-'a'] = createTrieNode(s[i]);
+		pt = pt->child[ s[i]-'a' ];
+	}
+	pt->count ++;
+}

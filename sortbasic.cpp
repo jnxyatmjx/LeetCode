@@ -65,6 +65,24 @@ void selectSort(int * vecval,size_t veclen){
 
 }
 
+//Binary search AS
+template <typename T>
+int binary_search(T *a,int l,int r,T targ)
+{
+	while(l <= r)
+	{
+		int m = l + (r - l)/2;
+		if(*(a + m) == targ)
+			return m;
+		else if(*(a + m) > targ)
+			r = m - 1; //if type is size_t, minus 1 maybe crash ! so type MUST contain negative value
+		else if(*(a + m) < targ)
+			l = m + 1;	
+	}
+	return -1;
+
+}
+
 void delChar(char * buf,char delval){
 	if (buf == NULL) return;
 	char * fast,*slow;
@@ -82,17 +100,6 @@ void delChar(char * buf,char delval){
 
 }
 
-void reverse(int *a,int left,int right)
-{
-	if(left < right)
-	{
-		int temp;
-		temp = *(a+left);
-		*(a+left) = *(a+right);
-		*(a+right) = temp;	
-		reverse(a,left+1,right-1);
-	}
-}
 void * thuc(void * index){
 	cpu_set_t cpuMask;
  	intptr_t i = (intptr_t)index; //in 64-bit system (void *) have 8Bytes but (int) only have 4Bytes!!!
@@ -104,13 +111,13 @@ void * thuc(void * index){
 	pthread_exit(NULL);
 }
 
-int main()
+int main(int argc,char * argv[])
 {
 
 	int cpus = sysconf(_SC_NPROCESSORS_ONLN);printf("computers have %d cpus\n",cpus);
 
-	srand(time(0));
-	int a[5]= {0};size_t a_len = sizeof(a)/sizeof(a[0]);
+	srand(time(0)); printf("argv[1]:%d\n",atoi(argv[1]));
+	int *a = (int*)malloc(sizeof(int) * atoi(argv[1]));memset(a,0,atoi(argv[1]));size_t a_len = atoi(argv[1]); 
 	for(size_t i = 0; i< a_len;i++)
 		a[i]=rand()/100000;
 	for(size_t i = 0;i < a_len;i++)
@@ -125,8 +132,13 @@ int main()
 	for(size_t i = 0;i < a_len;i++)
 		printf("%d ",*(a+i));
 	printf("\n");
-
-
+		
+  while(1){	int compval;
+		scanf("%d",&compval);
+		printf("a len:%td\n",a_len);	
+		int posi = binary_search<int>(a,0,(int)a_len - 1,compval);
+		printf("posi:%d\n",posi);
+	}
 	char * bufd = new char[100];memset(bufd,0,100);
 	//snprintf(bufd,100,"%s","ggggggggggggabcdefgggg");
 	delChar(bufd,'g');	

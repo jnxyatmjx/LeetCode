@@ -15,11 +15,13 @@
 #include <map>
 #include <time.h>
 #include <string>
+#include <sys/time.h>
 //待排序数据分为已排序的前半部分 和 未排序的后半部分.取后半部分第一个元素插入到前半部分对应位置
-void insertSortPart(int *val,size_t left,size_t right){
 
-	for(size_t i = left+1; i <= right ;i++){
-		int temp = val[i];//获取未排序部分第一个元素
+template <typename T>
+void insertsortPart(T *val,std::size_t left,std::size_t right){
+	for(std::size_t i = left+1; i <= right ;i++){
+		T temp = val[i];//获取未排序部分第一个元素
 		for(size_t j = i; j > left && val[j] < val[j-1];j--){
 			val[j] = val[j-1];
 			val[j-1] = temp;
@@ -83,21 +85,53 @@ int binary_search(T *a,int l,int r,T targ)
 
 }
 
-void delChar(char * buf,char delval){
-	if (buf == NULL) return;
-	char * fast,*slow;
-	fast = slow = buf;
-	while(*fast != '\0')
-	{
-		if( *fast != delval)
-		{
-			*slow = *fast;
-			slow++;
-		}
-		fast++;
-	}
-	while(slow != fast){*slow = '\0';slow++;}	
+//just for quick sort 
+template <typename T>
+void quicks_swap(T* a,T* b)
+{
+	T tem = *a;
+	*a = *b;
+	*b = tem;
+}
 
+//just for quick sort
+template <typename T>
+bool quicks_median3(T* a,std::size_t l,std::size_t r)
+{	
+	if( (r-l) < 2) return false; //the count of element must greate than 3
+	std::size_t c = l + (r-l)/2;
+	if(*(a+l) > *(a+c)) quicks_swap(a+l,a+c);
+	if(*(a+l) > *(a+r)) quicks_swap(a+l,a+r);
+	if(*(a+c) > *(a+r)) quicks_swap(a+c,a+r);
+
+	quicks_swap(a+c,a+r-1);
+
+	return true;
+}
+
+template <typename T>
+void quicks(T* a,std::size_t l,std::size_t r,std::size_t cutoff = 11)
+{
+	if(l + cutoff <= r)
+	{
+		quicks_median3(a,l,r);
+		T pivot = *(a+r-1);
+		std::size_t i = l,j = r - 1;
+		while(1)
+		{
+			while(a[++i] < pivot){} //STOP when element equal to pivot
+			while(a[--j] > pivot){}
+			if(i < j) quicks_swap(a+i,a+j);
+			else break;
+		}
+		quicks_swap(a+i,a+r-1);
+		quicks(a,l,i-1,cutoff);
+		quicks(a,i+1,r,cutoff);
+	}
+	else
+	{
+		insertsortPart(a,l,r);	
+	}	
 }
 
 void * thuc(void * index){
@@ -119,19 +153,19 @@ int main(int argc,char * argv[])
 	srand(time(0)); printf("argv[1]:%d\n",atoi(argv[1]));
 	int *a = (int*)malloc(sizeof(int) * atoi(argv[1]));memset(a,0,atoi(argv[1]));size_t a_len = atoi(argv[1]); 
 	for(size_t i = 0; i< a_len;i++)
-		a[i]=rand()/100000;
-	for(size_t i = 0;i < a_len;i++)
-		printf("%d ",*(a+i));
+		a[i]=rand() ;
 	printf("\n");
 
 	//reverse(a,0,1);
 	//selectSort(a,a_len);
-	selectSortPart(a,0,a_len-1);
+	//selectSortPart(a,0,a_len-1);
+	struct timeval now,cur;
+	gettimeofday(&now,NULL);
+	quicks(a,0,a_len-1,13);
+	gettimeofday(&cur,NULL);
 	//insertSort(a,a_len);
 //	insertSortPart(a,0,a_len-1);
-	for(size_t i = 0;i < a_len;i++)
-		printf("%d ",*(a+i));
-	printf("\n");
+	printf("Sort Complete (%td)\n", (cur.tv_usec - now.tv_usec)/1000 + (cur.tv_sec - now.tv_sec)*1000);
 		
   while(1){	int compval;
 		scanf("%d",&compval);
@@ -139,10 +173,6 @@ int main(int argc,char * argv[])
 		int posi = binary_search<int>(a,0,(int)a_len - 1,compval);
 		printf("posi:%d\n",posi);
 	}
-	char * bufd = new char[100];memset(bufd,0,100);
-	//snprintf(bufd,100,"%s","ggggggggggggabcdefgggg");
-	delChar(bufd,'g');	
-	delete []bufd;
 
 
 poll(NULL,0,-1);

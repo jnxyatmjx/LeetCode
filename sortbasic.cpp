@@ -3,7 +3,7 @@
 #include <pthread.h>
 #include <sched.h>
 #include <pthread.h>
-
+#include <algorithm>
 #include <stdio.h>
 #include <stdint.h>
 #include <vector>
@@ -134,16 +134,33 @@ void quicks(T* a,std::size_t l,std::size_t r,std::size_t cutoff = 11)
 	}	
 }
 
-void * thuc(void * index){
-	cpu_set_t cpuMask;
- 	intptr_t i = (intptr_t)index; //in 64-bit system (void *) have 8Bytes but (int) only have 4Bytes!!!
-	CPU_ZERO(&cpuMask);
-	CPU_SET(i,&cpuMask);
-	pthread_setaffinity_np(pthread_self(), sizeof(cpuMask), &cpuMask);
-
-   	sleep(1);
-	pthread_exit(NULL);
+#include <future>
+//quick sort with multiple threads
+template <typename T>
+void quicks_mt(T* a,std::size_t l,std::size_t r,std::size_t cutoff = 11)
+{
+	if(l + cutoff <= r)
+	{
+		quicks_median3(a,l,r);
+		T pivot = *(a+r-1);
+		std::size_t i = l,j = r - 1;
+		while(1)
+		{
+			while(a[++i] < pivot){} //STOP when element equal to pivot
+			while(a[--j] > pivot){}
+			if(i < j) quicks_swap(a+i,a+j);
+			else break;
+		}
+		quicks_swap(a+i,a+r-1);
+		auto lefts = std::async(std::launch::async,[&](){printf("Le->tid:%td\n",syscall(SYS_gettid));quicks_mt(a,l,i-1,cutoff);});
+		auto rights = std::async(std::launch::async,[&](){printf("Ri->tid:%td\n",syscall(SYS_gettid));quicks(a,i+1,r,cutoff); });
+	}
+	else
+	{
+		insertsortPart(a,l,r);	
+	}	
 }
+
 
 int main(int argc,char * argv[])
 {
@@ -163,10 +180,10 @@ int main(int argc,char * argv[])
 	gettimeofday(&now,NULL);
 	quicks(a,0,a_len-1,13);
 	gettimeofday(&cur,NULL);
-	//insertSort(a,a_len);
 //	insertSortPart(a,0,a_len-1);
-	printf("Sort Complete (%td)\n", (cur.tv_usec - now.tv_usec)/1000 + (cur.tv_sec - now.tv_sec)*1000);
-		
+//	for(std::size_t i = 0;i < a_len;i++) printf("%d ",a[i]); 
+	printf("MT Sort Complete (%td)\n", (cur.tv_usec - now.tv_usec)/1000 + (cur.tv_sec - now.tv_sec)*1000);
+
   while(1){	int compval;
 		scanf("%d",&compval);
 		printf("a len:%td\n",a_len);	

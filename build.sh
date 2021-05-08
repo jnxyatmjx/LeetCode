@@ -6,3 +6,6 @@ g++ -o reverse reverse.cpp -g --std=c++11 -g -pthread
 
 ##
 g++ -o detail detail.cpp -g --std=c++11 -g -pthread
+
+
+g++ -o heap heap.cpp -g --std=c++11 -g -pthread

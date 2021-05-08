@@ -17,7 +17,7 @@ void * thuc(void * index){
 
 int main(int argc,char * argv[])
 {
-
+	(void)argc;(void)argv;
 	int cpus = sysconf(_SC_NPROCESSORS_ONLN);printf("computers have %d cpus\n",cpus);
 	thuc((void*)2);
 

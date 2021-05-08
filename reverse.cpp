@@ -39,7 +39,7 @@ void reverse_while(T* val,S left,S right)
 }
 
 int main(int argc,char * argv[])
-{
+{	(void)argc;
 	printf("%s argv[1] size:%td\n",argv[1],::strlen(argv[1]));
 	
 //	reverse_while<char,size_t>(argv[1],(size_t)0,::strlen(argv[1])   -   1);

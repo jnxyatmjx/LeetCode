@@ -36,7 +36,7 @@ void insertSort(int *val ,size_t valen){
 			val[j] = val[j-1];
 			val[j-1] = temp;
 		}
-		for(int m = 0;m <= i ;m++)
+		for(size_t m = 0;m <= i ;m++)
 		printf(" %d",val[m]);
 	printf("\n");
 	}
@@ -164,7 +164,7 @@ void quicks_mt(T* a,std::size_t l,std::size_t r,std::size_t cutoff = 11)
 
 int main(int argc,char * argv[])
 {
-
+	(void)argc;
 	int cpus = sysconf(_SC_NPROCESSORS_ONLN);printf("computers have %d cpus\n",cpus);
 
 	srand(time(0)); printf("argv[1]:%d\n",atoi(argv[1]));

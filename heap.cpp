@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <algorithm> //std::max
+#include <string> //std::string
 
 //Use array and begin from 0
 
@@ -33,18 +34,18 @@ SIZE heapHeight(INDEX root,SIZE maxnum)
 }
 
 template <typename T,typename INDX>
-void heapPrintUpdate(INDX root,T* li,char ** res,INDX count,INDX row,INDX left,INDX right)
+void heapPrintUpdate(INDX root,T* li,std::string ** res,INDX count,INDX row,INDX left,INDX right)
 {
 	if(root >= count) return;
 	INDX mid = left + (right - left)/2;
-	res[row][mid] = li[root];
+	res[row][mid] = std::to_string( li[root] );
 	heapPrintUpdate(2*root+1,li,res,count,row+1,left,mid - 1);
 	heapPrintUpdate(2*root+2,li,res,count,row+1,mid + 1,right);
 }
 	
 	
 template <typename T,typename INDX>
-void heapPrint(T* li,INDX count,char ** res)
+void heapPrint(T* li,INDX count,std::string ** res)
 {
 	INDX heigh = heapHeight<INDX,INDX>(0,count);
 	INDX width = (INDX)(::pow(2,heigh) - 1);
@@ -73,8 +74,8 @@ int main(int argc,char* argv[])
 	//malloc res )))
 	int row = heapHeight<int,int>(0,n);
 	int colum = (int)::pow(2,row) - 1;
-	char **  ans = (char **)malloc(sizeof(char*) * row);
-	for(int i = 0 ;i < row;i++) ans[i] = (char*)malloc(sizeof(char) * colum);
+	std::string **  ans = (std::string **)malloc(sizeof(std::string*) * row);
+	for(int i = 0 ;i < row;i++) ans[i] = (std::string*)malloc(sizeof(std::string) * colum);
 	
 	//set value
 	for(int i = 0;i < row;i++)
@@ -83,7 +84,8 @@ int main(int argc,char* argv[])
 
 	for(int i = 0 ;i < n ;i++)
 		printf("%d ",res[i]);	
-		printf("\n");
+	
+	printf("\n");
 
 
 	heapPrint<int,int>(res,n,ans);
@@ -91,8 +93,8 @@ int main(int argc,char* argv[])
 	for(int i = 0;i < row;i++)
 	{
 		for(int j = 0 ; j < colum;j++)
-			printf("%c ",ans[i][j]);
-		printf("--\n");
+			printf("%s ",ans[i][j].c_str());
+		printf("\n");
 	}
 
 	printf("\n");

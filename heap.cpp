@@ -4,9 +4,9 @@
 #include <algorithm> //std::max
 #include <string> //std::string
 
-//Use array and begin from 0
-
+//Use array and Begin from 0
 //Minimum Heap
+
 template <typename T,typename INDX>
 void heapifyUpToDown(T * li,INDX count,INDX position)
 {
@@ -24,6 +24,29 @@ void heapifyUpToDown(T * li,INDX count,INDX position)
 			break;
 	}
 	li[i] = tmp;
+}
+
+template <typename T>
+void heapSwap(T* a,T* b)
+{
+	T tp = *a;
+	*a = *b;
+	*b = tp;
+}
+
+template <typename T,typename INDX>
+void heapSort(T * li,INDX count)
+{
+	//build heap
+	for(INDX i = count/2 -1;i >=0;i--)
+		heapifyUpToDown<T,INDX>(li,count,i);
+	
+	//swap and rebuild heap
+	for(INDX i = count - 1;i > 0;i--)
+	{
+		heapSwap<T>(li + 0,li + i);
+		heapifyUpToDown<T,INDX>(li,i,0);
+	}
 }
 
 template <typename INDEX,typename SIZE>
@@ -52,7 +75,7 @@ void heapPrint(T* li,INDX count,char *** res)
 {
 	INDX heigh = heapHeight<INDX,INDX>(0,count);
 	INDX width = (INDX)(::pow(2,heigh) - 1);
-	heapPrintUpdate(0,li,res,count,0,0,width-1);
+	heapPrintUpdate<T,INDX>(0,li,res,count,0,0,width-1);
 }
 
 
@@ -68,11 +91,7 @@ int main(int argc,char* argv[])
 	
 	srand(time(0)); 
 	for(int i = 0; i< n;i++)
-		res[i] = rand()%100; 
-	
-	//build heap
-	for(int i = n/2 -1 ;i >= 0 ;i--)
-		heapifyUpToDown<int,int>(res,n,i);
+		res[i] = rand()%100;
 
 	//malloc res )))
 	int row = heapHeight<int,int>(0,n);
@@ -92,9 +111,18 @@ int main(int argc,char* argv[])
 		printf("%d ",res[i]);	
 	
 	printf("\n");
-
-
+	
+	//build heap
+	for(int i = n/2 -1 ;i >= 0 ;i--)
+		heapifyUpToDown<int,int>(res,n,i);
 	heapPrint<int,int>(res,n,ans);
+	
+	heapSort<int,int>(res,n);
+	printf("ufter sort:");
+	for(int i = 0 ;i < n ;i++)
+		printf("%d ",res[i]);	
+	
+	printf("\nPrint:\n");
 
 	for(int i = 0;i < row;i++)
 	{
@@ -102,7 +130,7 @@ int main(int argc,char* argv[])
 			printf("%s",ans[i][j]);
 		printf("\n");
 	}
-	
+
 	printf("\n");
 
 	//free resource

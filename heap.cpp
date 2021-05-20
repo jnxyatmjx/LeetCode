@@ -8,6 +8,20 @@
 //Minimum Heap
 
 template <typename T,typename INDX>
+void heapifyDownToUp(T* li,INDX count,INDX position)
+{
+	INDX i;
+	T tmp = li[position];
+	/*
+	 * CAUTION : -1/2 = 0
+	 * the purpose of (i-1)>=0 is redurce lost into busy loop
+	 * */
+	for(i = position; (i-1)>=0 && (i-1)/2 >= 0 && li[(i-1)/2] > tmp; i = (i-1)/2 )
+		li[i] = li[(i-1)/2];
+	li[i] = tmp;
+}
+
+template <typename T,typename INDX>
 void heapifyUpToDown(T * li,INDX count,INDX position)
 {
 	INDX i,child;
@@ -54,7 +68,7 @@ SIZE heapHeight(INDEX root,SIZE maxnum)
 {
 	if(root >= maxnum) return 0;
 	
-	return 1 + std::max( heapHeight(2*root + 1,maxnum),heapHeight(2*root+2,maxnum) );
+	return 1 + std::max( heapHeight(2*root + 1,maxnum),heapHeight(2*root + 2,maxnum) );
 }
 
 template <typename T,typename INDX>

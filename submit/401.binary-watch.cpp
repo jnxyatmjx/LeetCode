@@ -28,7 +28,7 @@ private:
         // 	printf("%d ",m);
         // printf("\n");
 
-        return res;
+        return std::move(res);
     }
 public:
     vector<string> readBinaryWatch(int turnedOn) {

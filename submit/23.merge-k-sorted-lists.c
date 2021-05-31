@@ -55,7 +55,30 @@ struct ListNode* mergeList(struct ListNode** lists,int l,int r)
                 lists[i] = self.merge2Lists(lists[i], lists[i + interval])
             interval *= 2
         return lists[0] if amount > 0 else None
-    
+            | |
+            V V
+        def f1(amou):
+            inter = 1
+            while inter < amou:
+                for i in range(0,amou - inter,inter * 2):
+                    print(i,end='+')
+                    print(i + inter,end=' ')
+                print('#!!!#')
+                inter *= 2
+
+        result :
+        f1(16)
+            0+1 2+3 4+5 6+7 8+9 10+11 12+13 14+15 #!!!#
+            0+2 4+6 8+10 12+14 #!!!#
+            0+4 8+12 #!!!#
+            0+8 #!!!#
+
+        f1(18)
+            0+1 2+3 4+5 6+7 8+9 10+11 12+13 14+15 16+17 #!!!#
+            0+2 4+6 8+10 12+14 #!!!#
+            0+4 8+12 #!!!#
+            0+8 #!!!#
+            0+16 #!!!#
     */
 }
 

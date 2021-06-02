@@ -12,6 +12,27 @@
  */
 int* twoSum(int* numbers, int numbersSize, int target, int* returnSize){
 
+// 11. Container With Most Water
+//240. Search a 2D Matrix II
+    int l = 0,r = numbersSize - 1;
+    while(l < r)
+    {
+        if(numbers[l] + numbers[r] == target)
+        {
+            int * res = (int*)malloc(2 * sizeof(int));
+            res[0] = l + 1;
+            res[1] = r + 1;
+            *returnSize = 2;
+            return res;
+        }
+        else if(numbers[l] + numbers[r] > target)
+            r = r - 1;
+        else if(numbers[l] + numbers[r] < target)
+            l = l + 1;
+    }
+    *returnSize = 0;
+    return NULL;
+/* //use Binary Search for O(NlogN)
     for(int i = 0; i < numbersSize; i++)
     {
         int l = i + 1, r = numbersSize - 1;
@@ -37,6 +58,7 @@ int* twoSum(int* numbers, int numbersSize, int target, int* returnSize){
     }//end for
     *returnSize = 0;
     return NULL;
+*/
 }
 // @lc code=end
 

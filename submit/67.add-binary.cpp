@@ -8,6 +8,22 @@
 class Solution {
 public:
     string addBinary(string a, string b) {
+
+        int i = a.length() - 1;
+        int j = b.length() -1;
+        std::string res = "";
+
+        int carry = 0;
+        while(i>=0 || j>=0 || carry>0)
+        {
+            carry += (i>=0 ? a.at(i--) - '0' : 0);
+            carry += (j>=0 ? b.at(j--) - '0' : 0);
+            res.insert(0,1,(carry % 2 + '0'));
+            carry /= 2;
+        }
+
+        return res;
+#if 0
         std::reverse(a.begin(),a.end());
         std::reverse(b.begin(),b.end());
         
@@ -46,6 +62,7 @@ public:
         
         std::reverse(ans.begin(),ans.end());
         return ans;
+#endif
     }
 };
 // @lc code=end

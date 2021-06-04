@@ -85,9 +85,8 @@ void do_accept(tcp::acceptor& acc,asio::io_service &iosvr)
           {
             //std::make_shared<session>(std::move(socket_))->start();
             std::shared_ptr<session> okpt( new session(std::move(socket_)) );
+            printf("Session %p has be Constr.. socket:%p %td\n",okpt.get(),&socket_,okpt.use_count());
             okpt->start();
-            printf("Session %p has be Constr.. socket:%p\n",okpt.get(),&socket_);
-
           }
 
           do_accept(acc,iosvr);

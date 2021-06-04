@@ -10,7 +10,7 @@ public:
     string addBinary(string a, string b) {
 
         int i = a.length() - 1;
-        int j = b.length() -1;
+        int j = b.length() - 1;
         std::string res = "";
 
         int carry = 0;
@@ -25,19 +25,21 @@ public:
         return res;
 #if 0
 	//Hexadecimal
+    int carry = 0;
 	int l1 = s1.length() - 1;
-        int l2 = s2.length() - 1;
-        char symobl[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+    int l2 = s2.length() - 1;
+    
+    char symobl[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
         
 	while(l1>=0 || l2>=0 || carry>0)
-        {
-                carry += (l1>=0 ? (s1[l1]>'9' ? s1[l1--]-'A'+10 : s1[l1--]-'0' ) : 0);
-                carry += (l2>=0 ? (s2[l2]>'9' ? s2[l2--]-'A'+10 : s2[l2--]-'0' ) : 0);
+    {
+        carry += (l1>=0 ? (s1[l1]>'9' ? s1[l1--]-'A'+10 : s1[l1--]-'0' ) : 0);
+        carry += (l2>=0 ? (s2[l2]>'9' ? s2[l2--]-'A'+10 : s2[l2--]-'0' ) : 0);
 
-                ans.insert(0,1,symobl[carry % 16]);
-                carry /= 16;
-        }
-        return ans;
+        ans.insert(0,1,symobl[carry % 16]);
+        carry /= 16;
+    }
+    return ans;
 #endif
 
 #if 0

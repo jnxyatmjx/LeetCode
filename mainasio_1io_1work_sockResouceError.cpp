@@ -45,13 +45,13 @@ private:
   void do_read()
   {
     auto self(shared_from_this()); 
-    printf("do_read %p share count:%td tid:%td\n",&socket_,self.use_count(),syscall(SYS_gettid));
+    //printf("do_read %p share count:%td tid:%td\n",&socket_,self.use_count(),syscall(SYS_gettid));
     socket_.async_read_some(asio::buffer(data_, max_length),
         [self,this](std::error_code ec, std::size_t length)
         {
           if (!ec)
           {
-            printf("read %s len:%td\n",data_,length);
+            //printf("read %s len:%td\n",data_,length);
             do_write(length);
           }
         });
@@ -65,7 +65,7 @@ private:
         {
           if (!ec)
           {
-            printf("write %td\n",tj_len);
+            //printf("write %td\n",tj_len);
             do_read();
           }
         });

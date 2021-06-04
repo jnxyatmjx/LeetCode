@@ -16,13 +16,30 @@ public:
         int carry = 0;
         while(i>=0 || j>=0 || carry>0)
         {
-            carry += (i>=0 ? a.at(i--) - '0' : 0);
-            carry += (j>=0 ? b.at(j--) - '0' : 0);
+            carry += (i>=0 ? a[i--] - '0' : 0);
+            carry += (j>=0 ? b[j--] - '0' : 0);
             res.insert(0,1,(carry % 2 + '0'));
             carry /= 2;
         }
 
         return res;
+#if 0
+	//Hexical
+	int l1 = s1.length() - 1;
+        int l2 = s2.length() - 1;
+        char symobl[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+        
+	while(l1>=0 || l2>=0 || carry>0)
+        {
+                carry += (l1>=0 ? (s1[l1]>'9' ? s1[l1--]-'A'+10 : s1[l1--]-'0' ) : 0);
+                carry += (l2>=0 ? (s2[l2]>'9' ? s2[l2--]-'A'+10 : s2[l2--]-'0' ) : 0);
+
+                ans.insert(0,1,symobl[carry % 16]);
+                carry /= 16;
+        }
+        return ans;
+#endif
+
 #if 0
         std::reverse(a.begin(),a.end());
         std::reverse(b.begin(),b.end());

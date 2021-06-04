@@ -24,7 +24,7 @@ public:
 
         return res;
 #if 0
-	//Hexical
+	//Hexadecimal
 	int l1 = s1.length() - 1;
         int l2 = s2.length() - 1;
         char symobl[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};

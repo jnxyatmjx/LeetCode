@@ -47,7 +47,7 @@ private:
     auto self(shared_from_this()); 
     printf("do_read %p share count:%td tid:%td\n",&socket_,self.use_count(),syscall(SYS_gettid));
     socket_.async_read_some(asio::buffer(data_, max_length),
-        [self,this](std::error_code ec, std::size_t length)
+        [this,self](std::error_code ec, std::size_t length)
         {
           if (!ec)
           {
@@ -77,9 +77,23 @@ private:
   std::string data = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nHello, world!";
 };
 
-void do_accept(tcp::acceptor& acc,asio::io_service &iosvr)
+void do_accept(tcp::acceptor& acc,asio::io_context &ioAcceptSvr,asio::io_context &ioWorkSvr)
   {
-    acc.async_accept([&iosvr,&acc](std::error_code ec,tcp::socket socket_)
+    std::shared_ptr<tcp::socket> sock_newgo_( new tcp::socket(ioWorkSvr) );
+    acc.async_accept(*sock_newgo_,[&acc,&ioAcceptSvr,&ioWorkSvr, sock_newgo_ ](std::error_code ec){
+        if (!ec)
+          {
+            std::shared_ptr<session> okpt( new session(std::move(*sock_newgo_)) );
+            okpt->start();
+            printf("sock_newgo_ 111 count:%td\n",sock_newgo_.use_count());
+          }
+
+          do_accept(acc,ioAcceptSvr,ioWorkSvr);
+    });
+    printf("sock_newgo_ 222 count:%td\n",sock_newgo_.use_count());
+
+#if 0
+    acc.async_accept([&acc,&ioAcceptSvr,&ioWorkSvr](std::error_code ec,tcp::socket socket_)
         {
           if (!ec)
           {
@@ -89,10 +103,13 @@ void do_accept(tcp::acceptor& acc,asio::io_service &iosvr)
             // 创建类 sessoin智能指针对象
             std::shared_ptr<session> okpt( new session(std::move(socket_)) );
             okpt->start();// 通过shared_from_this() 创建类 session 智能指针对象
+
+            
           }
 
-          do_accept(acc,iosvr);
+          do_accept(acc,ioAcceptSvr,ioWorkSvr);
         });
+#endif
   }
 
 class A : public std::enable_shared_from_this<A>
@@ -141,8 +158,9 @@ int main(int argc, char* argv[])
     }
   printf("Main threadId:%td\n",syscall(SYS_gettid));
 
-  asio::io_service accetp_iosvr_;
-  asio::io_service work_iosvr_;
+  asio::io_context accetp_iosvr_;
+  asio::io_context work_iosvr_;
+
 
   tcp::endpoint ep_(tcp::v4(), port);
   //tcp::acceptor accept_(accetp_iosvr_,tcp::endpoint(tcp::v4(), port));
@@ -152,15 +170,29 @@ int main(int argc, char* argv[])
 	accept_.bind(ep_);
 	accept_.listen();
 
-  do_accept(accept_,accetp_iosvr_);
+  //create I/O context. Use io_context::work to Keep I/0 context Alive
+  auto iowork_ = std::make_shared<asio::io_context::work>(work_iosvr_); 
 
+  //create Accept context.
+  do_accept(accept_,accetp_iosvr_,work_iosvr_);
+
+
+  //create I/O thread. Use io_context::work to Keep I/0 context Alive
+  //auto iowork_ = std::make_shared<asio::io_context::work>(work_iosvr_); 
+  std::thread([&work_iosvr_](){
+    work_iosvr_.run();
+  }).detach();
+
+
+  //create Accept thread
   std::thread([&accetp_iosvr_](){
     accetp_iosvr_.run();
   }).detach();
+
      //server s(std::atoi(argv[1]));
     // s.initServer();
     // for(int i = 0 ; i < 4 ;i++)
-    //   std::thread( [&io_service](){io_service.run();} ).detach();
+    //   std::thread( [&io_context](){io_context.run();} ).detach();
 
     poll(NULL,0,-1);
   }

@@ -33,7 +33,7 @@ public:
   
   ~session(void)
   {
-    //printf("Session %p has be Delete.. socket:%p\n",this,&socket_);
+    printf("Session %p has be Delete..\n\n",this);
   }
 
   void start()
@@ -45,7 +45,7 @@ private:
   void do_read()
   {
     auto self(shared_from_this()); 
-    printf("do_read %p share count:%td tid:%td\n",&socket_,self.use_count(),syscall(SYS_gettid));
+    //printf("do_read %p share count:%td tid:%td\n",&socket_,self.use_count(),syscall(SYS_gettid));
     socket_.async_read_some(asio::buffer(data_, max_length),
         [this,self](std::error_code ec, std::size_t length)
         {
@@ -79,18 +79,21 @@ private:
 
 void do_accept(tcp::acceptor& acc,asio::io_context &ioAcceptSvr,asio::io_context &ioWorkSvr)
   {
-    std::shared_ptr<tcp::socket> sock_newgo_( new tcp::socket(ioWorkSvr) );
+    std::shared_ptr<tcp::socket> sock_newgo_( new tcp::socket(ioWorkSvr),[](tcp::socket *p){printf("Socket %p has be delete\n",p);delete p;} );
+    printf("Socket %p has be construct\n",sock_newgo_.get());
     acc.async_accept(*sock_newgo_,[&acc,&ioAcceptSvr,&ioWorkSvr, sock_newgo_ ](std::error_code ec){
         if (!ec)
           {
             std::shared_ptr<session> okpt( new session(std::move(*sock_newgo_)) );
+                printf("Session %p has be Construct..\n",okpt.get());
             okpt->start();
-            printf("sock_newgo_ 111 count:%td\n",sock_newgo_.use_count());
+            //printf("sock_newgo_ 111 count:%td %p\n",sock_newgo_.use_count(),sock_newgo_.get());
+
           }
 
           do_accept(acc,ioAcceptSvr,ioWorkSvr);
     });
-    printf("sock_newgo_ 222 count:%td\n",sock_newgo_.use_count());
+    //printf("sock_newgo_ 222 count:%td %p\n",sock_newgo_.use_count(),sock_newgo_.get());
 
 #if 0
     acc.async_accept([&acc,&ioAcceptSvr,&ioWorkSvr](std::error_code ec,tcp::socket socket_)

@@ -15,7 +15,7 @@ int maxArea(int* height, int heightSize){
     int area = 0;
     while(l < r)
     {
-        area = MAX( area , MIN(height[l],height[r]) * (r-1) );
+        area = MAX( area , MIN(height[l],height[r]) * (r-l) );
         if(height[l] < height[r])
             l++;
         else

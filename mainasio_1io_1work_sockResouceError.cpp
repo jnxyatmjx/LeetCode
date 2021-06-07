@@ -19,6 +19,7 @@
 #include <sys/syscall.h>
 
 #include "asio.hpp"
+#include "io_context_pool.h"
 
 using asio::ip::tcp;
 
@@ -33,7 +34,7 @@ public:
   
   ~session(void)
   {
-    printf("Session %p has be Delete..\n\n",this);
+    //printf("Session %p has be Delete.. socket:%p\n",this,&socket_);
   }
 
   void start()
@@ -77,23 +78,24 @@ private:
   std::string data = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nHello, world!";
 };
 
-void do_accept(tcp::acceptor& acc,asio::io_context &ioAcceptSvr,asio::io_context &ioWorkSvr)
+void do_accept(tcp::acceptor& acc,asio::io_context &ioAcceptSvr,io_context_pool &ioWorkSvr)
   {
-    std::shared_ptr<tcp::socket> sock_newgo_( new tcp::socket(ioWorkSvr),[](tcp::socket *p){printf("Socket %p has be delete\n",p);delete p;} );
-    printf("Socket %p has be construct\n",sock_newgo_.get());
+    std::shared_ptr<tcp::socket> sock_newgo_( new tcp::socket(ioWorkSvr.get_io_context()) );
     acc.async_accept(*sock_newgo_,[&acc,&ioAcceptSvr,&ioWorkSvr, sock_newgo_ ](std::error_code ec){
+        
+        if(!acc.is_open())
+          return ;
+
         if (!ec)
           {
             std::shared_ptr<session> okpt( new session(std::move(*sock_newgo_)) );
-                printf("Session %p has be Construct..\n",okpt.get());
             okpt->start();
-            //printf("sock_newgo_ 111 count:%td %p\n",sock_newgo_.use_count(),sock_newgo_.get());
-
+            //printf("sock_newgo_ 111 count:%td\n",sock_newgo_.use_count());
           }
 
           do_accept(acc,ioAcceptSvr,ioWorkSvr);
     });
-    //printf("sock_newgo_ 222 count:%td %p\n",sock_newgo_.use_count(),sock_newgo_.get());
+    //printf("sock_newgo_ 222 count:%td\n",sock_newgo_.use_count());
 
 #if 0
     acc.async_accept([&acc,&ioAcceptSvr,&ioWorkSvr](std::error_code ec,tcp::socket socket_)
@@ -148,21 +150,23 @@ int main(int argc, char* argv[])
     //所以 class A cout:2
   }
 
-  int port = -1;
+  int port = -1;std::size_t polsize = 0;
   try
   {
     if (argc < 2)
     {
-      std::cerr << "Usage: async_tcp_echo_server <port> 8970\n";
+      std::cerr << "Usage: async_tcp_echo_server <port> 8970 <poolSize> 1\n";
       port = 8970;
+      polsize = 1;
     }else
     {
       port = atoi(argv[1]);
+      polsize = atoi(argv[2]);
     }
   printf("Main threadId:%td\n",syscall(SYS_gettid));
 
   asio::io_context accetp_iosvr_;
-  asio::io_context work_iosvr_;
+ //asio::io_context work_iosvr_;
 
 
   tcp::endpoint ep_(tcp::v4(), port);
@@ -174,7 +178,9 @@ int main(int argc, char* argv[])
 	accept_.listen();
 
   //create I/O context. Use io_context::work to Keep I/0 context Alive
-  auto iowork_ = std::make_shared<asio::io_context::work>(work_iosvr_); 
+  //auto iowork_ = std::make_shared<asio::io_context::work>(work_iosvr_); 
+
+  io_context_pool work_iosvr_(polsize);
 
   //create Accept context.
   do_accept(accept_,accetp_iosvr_,work_iosvr_);
@@ -182,9 +188,9 @@ int main(int argc, char* argv[])
 
   //create I/O thread. Use io_context::work to Keep I/0 context Alive
   //auto iowork_ = std::make_shared<asio::io_context::work>(work_iosvr_); 
-  std::thread([&work_iosvr_](){
-    work_iosvr_.run();
-  }).detach();
+  // std::thread([&work_iosvr_](){
+  //   work_iosvr_.run();
+  // }).detach();
 
 
   //create Accept thread
@@ -196,8 +202,8 @@ int main(int argc, char* argv[])
     // s.initServer();
     // for(int i = 0 ; i < 4 ;i++)
     //   std::thread( [&io_context](){io_context.run();} ).detach();
-
-    poll(NULL,0,-1);
+  work_iosvr_.run();
+  poll(NULL,0,-1);
   }
   catch (std::exception& e)
   {

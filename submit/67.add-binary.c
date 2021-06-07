@@ -17,6 +17,9 @@ void reverse(char * res,int l,int r)
     reverse(res,l+1,r-1);
 }
 
+/*
+    similar to 13.roman-to-integer.c
+*/
 char * addBinary(char * a, char * b){
 
     int aLen = strlen(a),bLen = strlen(b);

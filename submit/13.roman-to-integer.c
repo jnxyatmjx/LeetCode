@@ -6,7 +6,10 @@
 
 // @lc code=start
 
+/*
 
+    similar to  67.add-binary.c
+*/
 int romanToInt(char * s){
     int symbolVal[26];memset(symbolVal,0,26);
     symbolVal['I' - 'A'] = 1;

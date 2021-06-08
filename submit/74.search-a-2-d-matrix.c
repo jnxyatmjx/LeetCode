@@ -8,14 +8,16 @@
 
 
 bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target){
-    int row = matrixSize - 1;
-    int colum = 0;
+    
+    //Search from the most left column on the bottom row
+    int row = matrixSize - 1; //bottom row
+    int colum = 0;            //most left colum
     while(row >= 0 && colum < matrixColSize[row])
     {
         if(matrix[row][colum] > target)
-            row--;
+            row--;   //go to a smaller row
         else if(matrix[row][colum] < target)
-            colum++;
+            colum++; //move to a bigger colum
         else
             return true;
     }

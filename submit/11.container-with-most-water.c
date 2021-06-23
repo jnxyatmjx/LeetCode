@@ -26,7 +26,7 @@ int maxArea(int* height, int heightSize){
     while(l < r)
     {
         area = maxA( area , MIN(height[l],height[r]) * (r-l) );
-        if(height[l] < height[r])
+        if(height[l] < height[r]) //Left lower , Right higher --> so Move Right may container the most water
             l++;
         else
             r--;

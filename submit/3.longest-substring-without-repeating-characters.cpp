@@ -26,7 +26,7 @@ public:
             }//end while
             maxStr = lmax(maxStr,i-left+1);
             lookup.insert(s[i]);
-    } //end for
+        } //end for
         return maxStr;
         
     }

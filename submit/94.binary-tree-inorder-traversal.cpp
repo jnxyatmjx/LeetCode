@@ -20,7 +20,7 @@ class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
         std::vector<int> res;
-        std::deque<TreeNode*> st;
+        std::deque<TreeNode*> st;//use as Stack
         while( root || !st.empty())
         {
             if(root)

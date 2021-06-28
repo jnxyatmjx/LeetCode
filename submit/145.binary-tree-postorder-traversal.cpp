@@ -20,7 +20,7 @@ class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
         std::vector<int> res;
-        std::deque<TreeNode*> stk;
+        std::deque<TreeNode*> stk;//Use a Stack
         TreeNode* lastVisit = NULL; //the last node visited
         
         while(root || !stk.empty())
@@ -39,7 +39,7 @@ public:
                 }
                 else
                 {
-                    res.push_back(stkTop->val);;
+                    res.push_back(stkTop->val);
                     lastVisit = stk.back();stk.pop_back();
                     root = NULL;
                 }

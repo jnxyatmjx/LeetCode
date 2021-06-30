@@ -15,7 +15,8 @@
 
 
 struct ListNode* removeNthFromEnd(struct ListNode* head, int n){
-    struct ListNode hdump;hdump.next = head;
+    
+    struct ListNode hdump;hdump.next = head;//precursor of header
     
     struct ListNode* cur = head;
     int listLen = 0;

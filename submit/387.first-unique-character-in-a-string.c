@@ -44,15 +44,15 @@ int firstUniqChar(char * s){
     }
 
     //for(size_t i=0; i<26; i++)
-    //    printf("%c --> %d\n",'a'+i,symbol_idx[i]);
+    //    printf("%c-%d ",'a'+i,symbol_idx[i]);
     
     for(size_t i=0; i<sLen; i++)
     {
         if(symbol_idx[s[i]-'a'] == 1 )
-            {
-                resId = i;
-                break;
-            }
+        {
+          resId = i;
+          break;
+        }
     }
 
     //release resource

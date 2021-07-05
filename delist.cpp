@@ -1,23 +1,31 @@
 
-//#if defined(WINDOWS_64) || defined(WINDOWS_32)
-#include "stdafx.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <utility>
 #include <assert.h>
 
+#include <string>
+
 namespace lrucache{
+
+	template<typename T>
+	struct lNode
+	{
+		T val;
+		struct lNode* prev;
+		struct lNode* next;
+	};
 
 	template<typename T>
 	class delist
 	{
-		typedef struct lNode
+		/*typedef struct lNode
 		{
 			T val;
 			struct lNode* prev;
 			struct lNode* next;
-		}lNode;
+		}lNode;*/
 
 	public:
 		explicit delist(size_t max_size)
@@ -34,7 +42,7 @@ namespace lrucache{
 
 		void add2head(T val)
 		{
-			lNode* tmp = this->mallocNode();
+			lNode<T>* tmp = this->mallocNode();
 			tmp->val = val;
 
 			tmp->next = head_;
@@ -44,7 +52,7 @@ namespace lrucache{
 			num_++;
 		}
 
-		T rm1node(lNode* pnode)
+		T rm1node(lNode<T>* pnode)
 		{
 			assert(pnode != NULL && num_ > 0);
 			T res = pnode->val;
@@ -72,12 +80,12 @@ namespace lrucache{
 
 
 	private:
-		inline lNode* mallocNode()
+		inline lNode<T>* mallocNode()
 		{
-			return (lNode*)calloc(1, sizeof(lNode));
+			return (lNode<T>*)calloc(1, sizeof(lNode<T>));
 		}
 
-		inline void freeNode(lNode* pn_)
+		inline void freeNode(lNode<T>* pn_)
 		{
 			if (pn_)
 			{
@@ -88,7 +96,7 @@ namespace lrucache{
 			}
 		}
 	private:
-		lNode* head_;
+		lNode<T>* head_;
 		size_t capacity_;
 		size_t num_;
 	};
@@ -103,13 +111,12 @@ namespace lrucache{
 }//end namespace
 int main(int argc,char* argv[])
 {
+
 	{
-		lrucache::delist<int> dli(19);
-		dli.add2head(1);
-		dli.add2head(2);
-		dli.add2head(3);
-		dli.add2head(4);
-		dli.add2head(5);
+		lrucache::delist<float> dli(19);
+		dli.add2head(float(1.11));
+		dli.add2head(float(2.22));
+		dli.add2head(float(3.33));
 	}
 	getchar();
 	return EXIT_SUCCESS;

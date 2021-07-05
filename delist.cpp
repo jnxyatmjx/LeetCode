@@ -26,10 +26,10 @@ namespace lrucache{
 
 		~delist()
 		{
-			/*while(head_ && num_--){
-				lNode * cur = head_;
-				rm1node(cur);
-				}*/
+			while(head_)
+			{
+				rm1node(head_);
+			}
 		}
 
 		void add2head(T val)
@@ -70,13 +70,6 @@ namespace lrucache{
 			return std::move(res);
 		}
 
-		void rm()
-		{
-			while (head_)
-			{
-				rm1node(head_);
-			}
-		}
 
 	private:
 		inline lNode* mallocNode()
@@ -99,6 +92,13 @@ namespace lrucache{
 		size_t capacity_;
 		size_t num_;
 	};
+	class cache{
+		cache()
+		{}
+
+		~cache()
+		{}
+	};
 
 }//end namespace
 int main(int argc,char* argv[])
@@ -110,9 +110,7 @@ int main(int argc,char* argv[])
 		dli.add2head(3);
 		dli.add2head(4);
 		dli.add2head(5);
-
-		dli.rm();
 	}
-
+	getchar();
 	return EXIT_SUCCESS;
 }

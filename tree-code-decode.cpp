@@ -153,7 +153,7 @@ public:
 
 		EncodePreorder(root,res);
 
-		return std::move(res);
+		return res; //RVO?
 	}
 	
 	tNode<T> * Decode(const std::string& ress)
@@ -171,7 +171,8 @@ public:
 		}
 
 	for(const auto& m: clist_)		
-	printf("%s ",m.c_str());	printf("\n");
+		printf("%s ",m.c_str());	
+	printf("\n");
 		
 		return DecodePreorder(clist_);
 	}//end Decode

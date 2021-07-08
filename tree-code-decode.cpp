@@ -6,7 +6,7 @@
 #include <list>
 
 // a binary tree Encode and Decode
-namespace ED{
+namespace EncodeDecode{
 
     template <typename T>
     struct tNode
@@ -15,8 +15,9 @@ namespace ED{
         struct tNode * left;        
         struct tNode * right;
         
-        tNode(const T& v)
-        :left(NULL),right(NULL)
+	tNode():left(NULL),right(NULL){}
+
+        tNode(const T& v):left(NULL),right(NULL)
         {
 		val = v;
         }        
@@ -30,6 +31,7 @@ namespace ED{
         {
             tNode<T> * nod = (tNode<T>*)malloc(sizeof(tNode<T>));
             nod->val = val;
+	    return nod;
         }
 
         void freeNode(tNode<T> *nod)
@@ -64,10 +66,10 @@ namespace ED{
 		if(list.empty()) return NULL;
 
 		std::string valss = std::move(list.front());list.pop_front();
-		if(valss.compare("#")) return NULL;	
+		if(valss.compare("#") == 0 ) return NULL;	
 
 		tNode<T>* node = createNode(atoi(valss.c_str()));
-
+		printf("sub i %p\n",node);
 		node->left = DecodeInorder(list);
 		node->right = DecodeInorder(list);
 		return node;
@@ -91,6 +93,7 @@ public:
 	tNode<T> * Decode(const std::string& ress)
 	{
 		std::list<std::string> clist_;	
+		
 		std::size_t slen = ress.length();
 		for(std::size_t i=0,j=0; i<slen && j<slen; j++)
 		{
@@ -120,10 +123,10 @@ public:
 
 int main(int argc,char * argv[])
 {
-	ED::treeED<int> ed;
+	EncodeDecode::treeED<int> ed;
 	
-	ed.Decode("-3,1,15,#,#,1029,#,#,#,");    
-	
+	EncodeDecode::tNode<int> * root = ed.Decode("-3,1,15,#,#,1029,#,#,#,");    
+	printf("%p\n",root);	
 	
 return EXIT_SUCCESS;
 }

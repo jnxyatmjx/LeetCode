@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <math.h>
+#include <deque>
 
 template <typename T>
     struct tNode
@@ -108,24 +109,24 @@ namespace EncodeDecode{
             //nod->right = NULL;
         }
     
-        /*
-            # --> is a NULL pointer
-            , --> is separator of 2 poiners
+    /*
+        # --> is a NULL pointer
+        , --> is separator of 2 poiners
 
-        */
-        void EncodePreorder(tNode<T>* root,std::string& res)
+    */
+    void EncodePreorder(tNode<T>* root,std::string& res)
+    {
+        if(root == NULL)
         {
-            if(root == NULL)
-			{
-				res.append("#,");
-				return;
-			}
-
-			res.append(std::to_string(root->val)).append(",");
-
-			EncodePreorder(root->left,res);
-			EncodePreorder(root->right,res);
+            res.append("#,");
+            return;
         }
+
+        res.append(std::to_string(root->val)).append(",");
+
+        EncodePreorder(root->left,res);
+        EncodePreorder(root->right,res);
+    }
 
 	tNode<T> * DecodePreorder(std::list<std::string>& list)
 	{
@@ -140,9 +141,77 @@ namespace EncodeDecode{
 		node->right = DecodePreorder(list);
 		return node;
 	}
+    /*
+        curlev  : current level of binary three
+    */
+    void levelDfs(std::vector<std::string>& res,int curlev,tNode<T> *root)
+    {
+        if(res.size() <= curlev) //current level of this tree is greater than vector(res) 's size
+            res.push_back( std::string("") );
+        
+        if(root == NULL)
+        {
+            res[curlev].append(std::string("#,"));
+            return ;
+        }
+
+        res[curlev].append( std::to_string(root->val) + "," );
+
+        levelDfs(res, curlev + 1 ,root->left);  //++curlev or curlev++ are all ERROR
+        levelDfs(res, curlev + 1 ,root->right);
+    }
+
+    void encodeLevel(tNode<T> *root,std::string& res_ss)
+    {
+        std::vector<std::string> level_evc;
+        levelDfs(level_evc,0,root);
+        
+        for(const auto& m_le : level_evc)
+        {
+            res_ss.append(m_le);
+        }
+
+    }
+
+    tNode<T> * decodeLevel(std::list<std::string>& list_)
+    {
+        std::string valss = std::move(list_.front());list_.pop_front();
+        if(valss.compare("#") == 0) return NULL;
+
+        tNode<T>* root = createNode(atoi(valss.c_str()));
+        std::deque<tNode<T>*> q_; q_.push_back(root);
+
+        // while(!q_.empty())
+        // {
+            while( !list_.empty() )
+            {
+                tNode<T>* parent = q_.front();q_.pop_front();
+
+                std::string valTmp = std::move(list_.front());list_.pop_front();
+                if(valTmp.compare("#") != 0)
+                {
+                    parent->left = createNode(atoi(valTmp.c_str()));
+                    q_.push_back(parent->left);
+                }else
+                    parent->left = NULL;
+
+                
+                valTmp = std::move(list_.front());list_.pop_front();
+                if(valTmp.compare("#") != 0)
+                {
+                    parent->right = createNode(atoi(valTmp.c_str()));
+                    q_.push_back(parent->right);
+                }else
+                    parent->right = NULL;
+            }
+        //}
+
+        return root;
+    }
+
 
 public:	
-	/*
+	    /*
             # --> is a NULL pointer
             , --> is separator of 2 poiners
         */
@@ -151,8 +220,8 @@ public:
 	{
 		std::string res;
 
-		EncodePreorder(root,res);
-
+		//EncodePreorder(root,res);
+        encodeLevel(root,res);
 		return res; //RVO?
 	}
 	
@@ -170,11 +239,12 @@ public:
 		    }
 		}
 
-	for(const auto& m: clist_)		
+	for(const auto& m: clist_)
 		printf("%s ",m.c_str());	
 	printf("\n");
 		
-		return DecodePreorder(clist_);
+		//return DecodePreorder(clist_);
+        return decodeLevel(clist_);
 	}//end Decode
 
         BinaryTreeED()
@@ -192,8 +262,11 @@ int main(int argc,char * argv[])
 {
 	EncodeDecode::BinaryTreeED<int> ed;
 	
-	tNode<int> * root = ed.Decode("-3,1,15,#,#,-10,#,#,#,");
-    printf("befor %s\n","-3,1,15,#,#,-10,#,#,#,");
+	//tNode<int> * root = ed.Decode("-3,1,15,#,#,-10,#,#,#,");
+	tNode<int> * root = ed.Decode("-3,1,#,15,-10,#,#,#,#,");
+    printf("-3,1,#,15,-10,#,#,#,#,\n");
+
+
 // tNode<int> * root = (tNode<int>*)malloc(sizeof(tNode<int>));root->val = -3;// new tNode<int>(-3);
 // tNode<int> * r1 = (tNode<int>*)malloc(sizeof(tNode<int>)); r1->val = 1;
 // tNode<int> * r15 = (tNode<int>*)malloc(sizeof(tNode<int>)); r15->val = 15;
@@ -204,8 +277,8 @@ int main(int argc,char * argv[])
     std::string ssd = ed.Encode(root);
     printf("after %s\n",ssd.c_str());
 
-    tree::binaryTreePrintPreorder(root);
-    printf("\n");
+    //tree::binaryTreePrintPreorder(root);
+    //printf("\n");
 	//EncodeDecode::tNode<int> * root = ed.Decode("-3,1,15,#,#,1029,#,#,#,");    
 	tree::binaryTreePrint(root);
 	

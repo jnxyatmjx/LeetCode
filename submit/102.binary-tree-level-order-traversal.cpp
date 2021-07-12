@@ -28,8 +28,8 @@ public:
         
         res[level].push_back(root->val);
 
-        dfs(res,level+1,root->left);
-        dfs(res,level+1,root->right);
+        dfs(res, level+1 ,root->left);//level++ or ++level are all ERROR
+        dfs(res, level+1 ,root->right);
     }
 
     vector<vector<int>> levelOrder(TreeNode* root) {
@@ -38,7 +38,6 @@ public:
         if(root == NULL) return std::move(res);
 
         dfs(res,0,root);
-
         return std::move(res);
 /*
         std::deque<TreeNode*> lis_;lis_.push_front(root);

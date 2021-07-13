@@ -238,10 +238,6 @@ public:
 			i = j+1;
 		    }
 		}
-
-	for(const auto& m: clist_)
-		printf("%s ",m.c_str());	
-	printf("\n");
 		
 		//return DecodePreorder(clist_);
         return decodeLevel(clist_);
@@ -258,6 +254,7 @@ public:
 
 }//end namespace
 
+#if 0
 int main(int argc,char * argv[])
 {
 	EncodeDecode::BinaryTreeED<int> ed;
@@ -284,3 +281,4 @@ int main(int argc,char * argv[])
 	
 return EXIT_SUCCESS;
 }
+#endif

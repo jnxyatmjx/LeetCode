@@ -53,6 +53,9 @@ void recoverTree(struct TreeNode* root){
         lists[i]->val = vals[i];
     }
 
+
+idx = 0; //This global variable affects the test case
+
     free(vals);
     free(lists);
 }

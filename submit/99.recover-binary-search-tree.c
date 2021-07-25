@@ -13,48 +13,49 @@
  *     struct TreeNode *right;
  * };
  */
-int idx = 0;
 
 int nodeNums(struct TreeNode* root)
 {
     if(root == NULL) return 0;
-    return 1 + nodeNums(root->left) + nodeNums(root->right);
+    int ls = nodeNums(root->left);
+    int lr = nodeNums(root->right);
+    return 1 + ls + lr;
 }
 
-void inordeHelp(struct TreeNode* root,int* vals,struct TreeNode** lists)
+void inordeHelp(struct TreeNode* root,int* vals,struct TreeNode** lists,int* idx)
 {
-    if(!root) return;
+    if(root == NULL) return;
 
-    inordeHelp(root->left,vals,lists);
+    inordeHelp(root->left,vals,lists,idx);
 
-    vals[idx] = root->val;
-    lists[idx] = root;
-    idx++;
+    vals[*idx] = root->val;
+    lists[*idx] = root;
+    (*idx)++;
 
-    inordeHelp(root->right,vals,lists);
+    inordeHelp(root->right,vals,lists,idx);
 }
 
 int comap(const void* a,const void* b)
 {
     return *(const int*)(a) >= *(const int*)(b);
 }
+
 void recoverTree(struct TreeNode* root){
     
     int nodexs = nodeNums(root);
-    printf("nodeNums:%d\n",nodexs);
-    int * vals = (int *)calloc(nodexs,sizeof(int));
-    struct TreeNode** lists = (struct TreeNode**)calloc(nodexs,sizeof(struct TreeNode*));
     
-    inordeHelp(root,vals,lists);
+    int* vals = (int *)calloc(nodexs,sizeof(int));
+    struct TreeNode** lists = (struct TreeNode**)calloc(nodexs,sizeof(struct TreeNode*));
+    int* idx = (int*)calloc(1,sizeof(int));
+    *idx = 0;
+
+    inordeHelp(root,vals,lists,idx);
     qsort(vals,nodexs,sizeof(int),comap);
 
     for(int i=0; i<nodexs; i++)
     {
         lists[i]->val = vals[i];
     }
-
-
-idx = 0; //This global variable affects the test case
 
     free(vals);
     free(lists);

@@ -12,6 +12,7 @@
  *     struct ListNode *next;
  * };
  */
+// fast and slow pointer can find middle node of this list (slow)
 bool hasCycle(struct ListNode *head) {
     if(head == NULL) return false;  
     struct ListNode * fast=head, *slow=head;

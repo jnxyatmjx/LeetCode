@@ -21,6 +21,7 @@
  * };
  */
 
+#if 0
 struct TreeNode* createNode(int val)
 {
     struct TreeNode* node = (struct TreeNode*)calloc(1,sizeof(struct TreeNode));
@@ -28,6 +29,8 @@ struct TreeNode* createNode(int val)
     return node;
 }
 
+// this algorithm has Time Complexity O(NlogN) ,Space Complexity O(logN)
+//[head,tail)
 struct TreeNode* bltTree(struct ListNode* head,struct ListNode* tail)
 {
     if(head == tail) return NULL;
@@ -52,10 +55,39 @@ struct TreeNode* bltTree(struct ListNode* head,struct ListNode* tail)
     return node;
 }
 
-
 struct TreeNode* sortedListToBST(struct ListNode* head){
     if(head == NULL) return NULL;
     return bltTree(head,NULL);
+}
+#endif
+
+//this algorithm has Time Complexity O(N) and Space Complexity O(logN)
+int getLength(struct ListNode* head) {
+    int ret = 0;
+    while (head != NULL) {
+        ++ret, head = head->next;
+    }
+    return ret;
+}
+
+//[left ,right]
+struct TreeNode* buildTree(struct ListNode** head, int left, int right) {
+    if (left > right) {
+        return NULL;
+    }
+    //int mid = (left + right + 1) / 2;
+    int mid = left + (right - left)/2; //different from above mid position
+    struct TreeNode* root = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    root->left = buildTree(head, left, mid - 1);
+    root->val = (*head)->val;
+    (*head) = (*head)->next;
+    root->right = buildTree(head, mid + 1, right);
+    return root;
+}
+
+struct TreeNode* sortedListToBST(struct ListNode* head) {
+    int length = getLength(head);
+    return buildTree(&head, 0, length - 1);
 }
 // @lc code=end
 

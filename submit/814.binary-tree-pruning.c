@@ -19,7 +19,7 @@ struct TreeNode* pruneTree(struct TreeNode* root){
     if(root == NULL)
         return NULL;
     
-    //postorder tree , reduce duplicate calculate
+    //postorder travel tree , reduce duplicate calculate
     root->left = pruneTree(root->left);
     root->right = pruneTree(root->right);
 

@@ -28,7 +28,7 @@ struct ListNode* removeNthFromEnd(struct ListNode* head, int n){
 
     listLen -= n; //the precursor of Nth node ,precursor list length
     cur = &hdump; //!!!!! Caution CAUTION CAUTION !!!! Need ths precursor of header
-    while(listLen > 0)
+     while(listLen > 0)
     {   
         cur = cur->next;
         listLen--;

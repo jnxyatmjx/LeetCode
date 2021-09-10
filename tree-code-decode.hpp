@@ -40,7 +40,11 @@ namespace tree{
 	std::size_t binaryTreeMaxHeigh(tNode<T> *root)
 	{
 		if(root == NULL) return 0;
-		return 1 + std::max( binaryTreeMaxHeigh(root->left) , binaryTreeMaxHeigh(root->right) );
+		//Postorder Traversal
+		std::size_t lef = binaryTreeMaxHeigh(root->left);
+		std::size_t rig = binaryTreeMaxHeigh(root->right);
+		return 1 + std::max( lef , rig);
+		//return 1 + std::max( binaryTreeMaxHeigh(root->left) , binaryTreeMaxHeigh(root->right) );
 	}
 	
     template<typename T>
@@ -96,7 +100,7 @@ namespace EncodeDecode{
     private:
         tNode<T> * createNode(T val)
         {
-            tNode<T> * nod = (tNode<T>*)malloc(sizeof(tNode<T>));
+            tNode<T> * nod = (tNode<T>*)calloc(1,sizeof(tNode<T>));
             nod->val = val;
 	        return nod;
         }
@@ -144,7 +148,7 @@ namespace EncodeDecode{
     /*
         curlev  : current level of binary three
     */
-    void levelDfs(std::vector<std::string>& res,int curlev,tNode<T> *root)
+    void encodeLevelDFS(std::vector<std::string>& res,int curlev,tNode<T> *root)
     {
         if(res.size() <= curlev) //current level of this tree is greater than vector(res) 's size
             res.push_back( std::string("") );
@@ -157,14 +161,39 @@ namespace EncodeDecode{
 
         res[curlev].append( std::to_string(root->val) + "," );
 
-        levelDfs(res, curlev + 1 ,root->left);  //++curlev or curlev++ are all ERROR
-        levelDfs(res, curlev + 1 ,root->right);
+        encodeLevelDFS(res, curlev + 1 ,root->left);  //++curlev or curlev++ are all ERROR
+        encodeLevelDFS(res, curlev + 1 ,root->right);
     }
+
+    void encodeLevelHelp(tNode<T> * root,std::string& rs)
+    {
+        if(root == NULL) return ;
+        
+        std::deque<tNode<T>*> que;
+        que.push_back(root);
+        
+        while(!que.empty())
+        {
+            for(std::size_t i=que.size(); i>0; i--)
+            {
+                tNode<T>* tp = que.front();que.pop_front();
+                if (tp == NULL)
+                {
+                   rs.append("#,");
+                }else
+                {
+                    rs.append(std::to_string(tp->val)).append(",");
+                    que.push_back(tp->left);                
+                    que.push_back(tp->right);
+                }
+            }//end for
+        }
+    }//end function
 
     void encodeLevel(tNode<T> *root,std::string& res_ss)
     {
         std::vector<std::string> level_evc;
-        levelDfs(level_evc,0,root);
+        encodeLevelDFS(level_evc,0,root);
         
         for(const auto& m_le : level_evc)
         {
@@ -175,36 +204,33 @@ namespace EncodeDecode{
 
     tNode<T> * decodeLevel(std::list<std::string>& list_)
     {
+        if(list_.size() <= 0) return NULL;
+
         std::string valss = std::move(list_.front());list_.pop_front();
         if(valss.compare("#") == 0) return NULL;
 
-        tNode<T>* root = createNode(atoi(valss.c_str()));
+        //store tree level traversal struct
+        tNode<T>* root = createNode(std::atoi(valss.c_str()));
         std::deque<tNode<T>*> q_; q_.push_back(root);
 
-        // while(!q_.empty())
-        // {
-            while( !list_.empty() )
+        while( !list_.empty() )
+        {
+            tNode<T>* parent = q_.front();q_.pop_front();
+
+            std::string valTmp = std::move(list_.front());list_.pop_front();
+            if(valTmp.compare("#") != 0)
             {
-                tNode<T>* parent = q_.front();q_.pop_front();
-
-                std::string valTmp = std::move(list_.front());list_.pop_front();
-                if(valTmp.compare("#") != 0)
-                {
-                    parent->left = createNode(atoi(valTmp.c_str()));
-                    q_.push_back(parent->left);
-                }else
-                    parent->left = NULL;
-
-                
-                valTmp = std::move(list_.front());list_.pop_front();
-                if(valTmp.compare("#") != 0)
-                {
-                    parent->right = createNode(atoi(valTmp.c_str()));
-                    q_.push_back(parent->right);
-                }else
-                    parent->right = NULL;
+                parent->left = createNode(atoi(valTmp.c_str()));
+                q_.push_back(parent->left);
             }
-        //}
+
+            valTmp = std::move(list_.front());list_.pop_front();
+            if(valTmp.compare("#") != 0)
+            {
+                parent->right = createNode(atoi(valTmp.c_str()));
+                q_.push_back(parent->right);
+            }
+        }
 
         return root;
     }
@@ -221,7 +247,8 @@ public:
 		std::string res;
 
 		//EncodePreorder(root,res);
-        encodeLevel(root,res);
+        //encodeLevel(root,res);
+        encodeLevelHelp(root,res);
 		return res; //RVO?
 	}
 	

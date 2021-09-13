@@ -15,6 +15,11 @@
 struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
     // p1 point to ListA header, p2 point to ListB header
     struct ListNode *p1 = headA, *p2 = headB;
+    /*
+            if listA and listB is intersect,
+            nodes after intersection is exactly same (as a list subAB),
+            so (listA + listB) and (listB + listA) all have list subAB
+    */
     while (p1 != p2) {
         // p1 move one, if p1 reached tail of listA, p1 move to listB
         if (p1 == NULL) p1 = headB;

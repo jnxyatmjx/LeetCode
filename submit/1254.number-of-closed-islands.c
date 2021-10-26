@@ -7,6 +7,7 @@
 // @lc code=start
 
 //from [row,column] SET adjacent lands to Water
+//Fillover all adjacent land cells to water
 void dfs(int** gird,int row,int column,int row_bounds,int column_bounds)
 {
     //out of bounds

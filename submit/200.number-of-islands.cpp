@@ -22,7 +22,7 @@ public:
     void dfs(vector<vector<char>>& grid,std::size_t r,std::size_t c)
     {
         //out of bounds
-        if(r < 0 || r >= grid.size() || c <0 | c>= grid[r].size())
+        if(r < 0 || r >= grid.size() || c <0 || c>= grid[r].size())
             return;
         
         if(grid[r][c] == '0')

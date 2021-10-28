@@ -28,7 +28,8 @@ public:
     void dfs(std::vector<std::vector<char>>& grid,std::size_t r,std::size_t c,std::string& sb)
     {
         //out of bounds
-        if(r < 0 || r >= grid.size() || c <0 | c>= grid[r].size())
+	// r and c is type of std::size_t , always greater than 0
+        if(/*r < 0 || */r >= grid.size() || /*c <0 ||*/ c>= grid[r].size())
             return;
         
         if(grid[r][c] == '0')

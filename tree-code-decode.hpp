@@ -9,18 +9,17 @@
 #include <deque>
 
 template <typename T>
-    struct tNode
-    {
-        T val;
-        struct tNode * left;        
-        struct tNode * right;
-        
-	    tNode():left(NULL),right(NULL){}
+struct tNode
+{
+    T val;
+    struct tNode * left;        
+    struct tNode * right;
+    
+    tNode():left(NULL),right(NULL){}
 
-        tNode(const T& v):left(NULL),right(NULL),val(v)
-        {}        
-    };
-
+    tNode(const T& v):left(NULL),right(NULL),val(v)
+    {}        
+};
 
 //tree
 namespace tree{
@@ -65,7 +64,7 @@ namespace tree{
         std::size_t row = binaryTreeMaxHeigh(root);
         std::size_t colum = ::pow(2,row) - 1;
         
-        std::vector<std::vector<std::string> > res(row, std::vector<std::string>(colum,")(") );
+        std::vector<std::vector<std::string> > res(row, std::vector<std::string>(colum," ") );
         
         binaryTreePher(root,res,0,0,colum-1);
 

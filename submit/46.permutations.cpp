@@ -10,10 +10,11 @@ public:
     vector<vector<int>> permute(vector<int>& num) {
         vector<vector<int>> res;
         vector<int> out, visited(num.size(), 0);
-        permuteDFS(num, 0, visited, out, res);
+        backtrack(num, 0, visited, out, res);
         return res;
     }
-    void permuteDFS(vector<int>& num, int level, vector<int>& visited, vector<int>& out, vector<vector<int>>& res) {
+    
+    void backtrack(vector<int>& num, int level, vector<int>& visited, vector<int>& out, vector<vector<int>>& res) {
         
         //level is recored current number of visited
         if (level == num.size()) {
@@ -28,7 +29,7 @@ public:
             visited[i] = 1;
             out.push_back(num[i]); //make choice
 
-            permuteDFS(num, level + 1, visited, out, res);
+            backtrack(num, level + 1, visited, out, res);
 
             out.pop_back(); //cancel the choice
             visited[i] = 0;

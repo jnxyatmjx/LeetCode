@@ -13,6 +13,7 @@ public:
         /*
             initialize board. '.' means empty, 'Q' means a Queen
             board contain n rows and n columns
+            one row default is all empty '.'
         */
         vector<string> board(n,string(n,'.'));
         backtrack(board,0,res);
@@ -52,22 +53,26 @@ public:
         
         int n = board.size();
         // check is same column
+        /* no need to check row, because a row default is empty '.' */
         for (int i = 0; i < n; i++) {
             if (board[i][col] == 'Q')
                 return false;
         }
+
         // check upper right area
         for (int i = row - 1, j = col + 1; 
                 i >= 0 && j < n; i--, j++) {
             if (board[i][j] == 'Q')
                 return false;
         }
+
         // check upper left area
         for (int i = row - 1, j = col - 1;
                 i >= 0 && j >= 0; i--, j--) {
             if (board[i][j] == 'Q')
                 return false;
         }
+        
         return true;
 
     }//end isValid

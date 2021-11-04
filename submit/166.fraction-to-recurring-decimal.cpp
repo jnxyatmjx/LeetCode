@@ -40,8 +40,10 @@ public:
             {
                 fraction.insert(contain[remainder],1,'(');
                 fraction.append(1,')');
-                break;  
+                break;
             }
+
+            //position of parentheses
             contain[remainder] = fraction.size();
 
             remainder *= 10;

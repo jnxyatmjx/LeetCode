@@ -15,18 +15,18 @@ public:
         return res;
     }
 
-    void travers(vector<vector<int>>& graph,int level,vector<vector<int>>& res,vector<int>& path)
+    void travers(vector<vector<int>>& graph,int nodes,vector<vector<int>>& res,vector<int>& path)
     {
-        path.push_back(level);
+        path.push_back(nodes);
 
-        if(level == graph.size()-1)
+        if(nodes == graph.size()-1) //reach end node of this graph
         {
             res.push_back(path);
-            path.pop_back();
+            path.pop_back(); //backforward previous node
             return ;
         }
 
-        for(auto const s: graph[level])
+        for(auto const s: graph[nodes])
         {
             travers(graph,s,res,path);
         }

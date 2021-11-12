@@ -23,7 +23,7 @@ public:
             }
 
         for (int i = 0; i < num.size(); ++i) {
-            if (visited[i] == 1) 
+            if (visited[i] == 1) //position of num array
                 continue;
 
             visited[i] = 1;

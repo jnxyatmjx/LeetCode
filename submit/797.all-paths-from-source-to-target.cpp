@@ -7,6 +7,11 @@
 // @lc code=start
 class Solution {
 public:
+/*
+    N : number of nodes this graph
+    Time:  O(N * 2^N)
+    Space: O(N)
+*/
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
         
         vector<vector<int>> res;

@@ -26,7 +26,7 @@ int lengthOfLongestSubstring(char * s){
         left = lmax(lookup[s[i]], left);
         ans = lmax(ans, i - left + 1);
         lookup[s[i]] = i + 1;
-        //printf("left:%d i:%d lookup[%d]:%d\n",left,i,s[i],lookup[s[i]]);
+        printf("left:%d i:%d lookup[%d]:%d\n",left,i,s[i],lookup[s[i]]);
     }
     return ans;
 }

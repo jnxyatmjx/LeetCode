@@ -8,14 +8,14 @@
 
 
 bool isPowerOfThree(int n){
-    
+
     if(n == 1) return true;
     if(n < 3) return false;
     unsigned int idx = 0;
     while (n % 3 == 0) 
     {
         n /= 3;
-        idx++;
+        idx++; //number of power degree
     }
     printf("idx:%u",idx);
     return n == 1;

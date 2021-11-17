@@ -16,8 +16,20 @@
 #include <time.h>
 #include <string>
 #include <sys/time.h>
-//待排序数据分为已排序的前半部分 和 未排序的后半部分.取后半部分第一个元素插入到前半部分对应位置
 
+//merge sort 
+template<class Iter>
+void merge_sort(Iter first, Iter last)
+{
+    if (last - first > 1) {
+        Iter middle = first + (last - first) / 2;
+        merge_sort(first, middle);
+        merge_sort(middle, last);
+        std::inplace_merge(first, middle, last);
+    }
+}
+ 
+//待排序数据分为已排序的前半部分 和 未排序的后半部分.取后半部分第一个元素插入到前半部分对应位置
 template <typename T>
 void insertsortPart(T *val,std::size_t left,std::size_t right){
 	for(std::size_t i = left+1; i <= right ;i++){
@@ -178,7 +190,10 @@ int main(int argc,char * argv[])
 	//selectSortPart(a,0,a_len-1);
 	struct timeval now,cur;
 	gettimeofday(&now,NULL);
-	quicks(a,0,a_len-1,13);
+	//quicks(a,0,a_len-1,13);
+	printf("a Prev Poiter:%p <> %p\n",a,a+a_len-1);
+	merge_sort(a,a+a_len);
+	printf("a Post Poiter:%p <> %p\n",a,a+a_len-1);
 	gettimeofday(&cur,NULL);
 //	insertSortPart(a,0,a_len-1);
 //	for(std::size_t i = 0;i < a_len;i++) printf("%d ",a[i]); 

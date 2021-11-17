@@ -40,7 +40,7 @@ public:
         {
             res.push_back(path);
             path.pop_back();
-            return; //reach leaves , just return
+            return; //reach leaf , just return
         }
         helper(root->left,targetSum - root->val,path,res);
         helper(root->right,targetSum - root->val,path,res);

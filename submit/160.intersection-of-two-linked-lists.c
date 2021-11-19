@@ -22,13 +22,18 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
     */
     while (p1 != p2) {
         // p1 move one, if p1 reached tail of listA, p1 move to listB
-        if (p1 == NULL) p1 = headB;
-        else            p1 = p1->next;
+        if (p1 == NULL) 
+            p1 = headB;
+        else            
+            p1 = p1->next;
+
         // p2 move one, if p2 reached tail of listB, p2 move to listA
-        if (p2 == NULL) p2 = headA;
-        else            p2 = p2->next;
+        if (p2 == NULL) 
+            p2 = headA;
+        else            
+            p2 = p2->next;
     }
-    return p1;
+    return p2;//return p2;
 }
 // @lc code=end
 

@@ -33,7 +33,7 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
         else            
             p2 = p2->next;
     }
-    return p2;//return p2;
+    return p1;//return p2;
 }
 // @lc code=end
 

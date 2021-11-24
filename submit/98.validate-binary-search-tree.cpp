@@ -19,18 +19,20 @@
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
+        vector<int> res;
+
+        //BST inorder traverl is sorted vector
+        inorder_traver(root,res);
         
-        return preorder_traver(root,NULL,NULL);
+        return is_sorted(res.begin(),res.end(), less_equal<int>());
     }
 
-    bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
+    void inorder_traver(struct TreeNode* root,vector<int>& res)
     {
-        if(root==NULL) return true;
-
-        if(min!=NULL && root->val <= min->val) return false;
-        if(max!=NULL && root->val >= max->val) return false;
-
-        return preorder_traver(root->left,min,root) && preorder_traver(root->right,root,max);
+        if(root==NULL) return;
+        inorder_traver(root->left,res);
+        res.push_back(root->val);
+        inorder_traver(root->right,res);
     }
 };
 // @lc code=end

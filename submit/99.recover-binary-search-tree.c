@@ -59,6 +59,7 @@ void recoverTree(struct TreeNode* root){
 
     free(vals);
     free(lists);
+    free(idx);
 }
 // @lc code=end
 

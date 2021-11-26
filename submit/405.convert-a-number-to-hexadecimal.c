@@ -29,8 +29,8 @@ char * toHex(int num){
     
     while(num != 0 && numsd++ < (sizeof(int)*8)/4 ) /*num>=0 is ERROR ,when negative*/
     {   
-        res[idx++] = symbol[num&15]; //num%16 is error, because -1 % 16 = -1
-        num = num >> 4;
+        res[idx++] = symbol[num&15]; //num%16 (取余)is error, because -1 % 16 = -1(取余), we need -1 % 16 = 15(取模)
+        num = num >> 4;// num = num / 16 is error
     }
     reverse(res,0, strlen(res)-1);
     return res;

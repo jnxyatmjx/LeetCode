@@ -41,11 +41,12 @@ struct TreeNode* deleteNode(struct TreeNode* root, int key){
         //node have two childrens
         if(root->left && root->right)
         {
-            struct TreeNode* currT = findMin(root->right);
+            struct TreeNode* currT = findMin(root->right);// find minimum node of right subtree
             root->val = currT->val;
             root->right = deleteNode(root->right,/**/currT->val);
-            
+
         }else {
+            //back insert into the tree is recursive process
             struct TreeNode* cruT = root;
             if(cruT->left == NULL)
                 root = cruT->right;

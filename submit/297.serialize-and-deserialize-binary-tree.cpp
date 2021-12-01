@@ -19,7 +19,7 @@ public:
 
     // Encodes a tree to a single string.
 
-    void serialInorder(TreeNode* root,std::string& res)
+    void serialPreorder(TreeNode* root,std::string& res)
     {
         if(root == NULL)
         {
@@ -29,14 +29,14 @@ public:
         
         res.append(std::to_string(root->val)).append(",");
 
-        serialInorder(root->left,res);
-        serialInorder(root->right,res);
+        serialPreorder(root->left,res);
+        serialPreorder(root->right,res);
     }
 
     string serialize(TreeNode* root) {
         std::string res;
         
-        serialInorder(root,res);
+        serialPreorder(root,res);
         //printf("res:%s\n len:%td",res.c_str(),res.length());
         return std::move(res);
     }
@@ -48,7 +48,7 @@ public:
     }
 
     // Decodes your encoded data to tree.
-    TreeNode* deseriInorder(std::list<std::string>& list_)
+    TreeNode* deseriPreorder(std::list<std::string>& list_)
     {
         if(list_.empty()) return NULL;
 
@@ -56,8 +56,8 @@ public:
         if(c_.compare("#") == 0) return NULL;
         TreeNode* root = createNode(atoi(c_.c_str()));
 
-        root->left = deseriInorder(list_);
-        root->right = deseriInorder(list_);
+        root->left = deseriPreorder(list_);
+        root->right = deseriPreorder(list_);
 
         return root;
     }
@@ -77,7 +77,7 @@ public:
         //     printf("%s ",m_.c_str());
         // printf("\n");
         
-        return deseriInorder(clist);
+        return deseriPreorder(clist);
     }
 };
 

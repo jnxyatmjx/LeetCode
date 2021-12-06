@@ -5,6 +5,30 @@
  */
 
 // @lc code=start
+
+//capacity_ means characters in preorder,
+//add a not-null node into tree means-->
+//character in preorder minus 1..  and we obtain two more leaves in the tree and capacity_+= 2.
+
+bool isValidSerialization(char * preorder){
+    
+    char* order_vc = (char*)calloc(strlen(preorder)+2,sizeof(char));
+    strncpy(order_vc,preorder,strlen(preorder));
+    order_vc[strlen(preorder)] = ',';//add comma
+    
+    size_t ve_le = strlen(order_vc);
+    int capacity_ = 1;//tree must have a root
+    for(size_t i=0; i<ve_le; i++)
+    {
+        if(order_vc[i] != ',') continue;
+        if(--capacity_ < 0) return false;
+        if(order_vc[i-1] != '#') capacity_+=2;
+    }
+
+    return capacity_ == 0;
+}
+
+#if 0
 //caution if value have more than one char symbol
 //"9,#,92,#,#"\n
 //"92,#,#,21"\n
@@ -64,7 +88,7 @@ void preorder_build(char** ordervec,int* idx,int orderLen,bool* isValid)
 bool isValidSerialization(char * preorder){
     
     int orderLen = orderNum(preorder);
-    
+
     char ** ordervec = (char**)calloc(orderLen+1,sizeof(char*));
     for(int i=0; i<orderLen; i++)
         ordervec[i] = (char*)calloc(4,sizeof(char));
@@ -80,5 +104,7 @@ bool isValidSerialization(char * preorder){
 
     return isVald;
 }
+
+#endif
 // @lc code=end
 

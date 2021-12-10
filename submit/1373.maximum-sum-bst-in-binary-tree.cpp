@@ -25,8 +25,8 @@ public:
         return maxsum;
     }
     //vector<int> --> this root isBST, 
-    //                minimum node of root's left subtree, 
-    //                maximum node of root's right subtree, 
+    //                minimum node of root's left subtree, [means minimum node of this tree]
+    //                maximum node of root's right subtree, [means maximum node of this tree] 
     //                sum
 
     //vector[1] --> root's minimum node if is BST

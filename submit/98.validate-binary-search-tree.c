@@ -13,7 +13,11 @@
  *     struct TreeNode *right;
  * };
  */
+
+//similar to 1373
+
 /*
+//1 BST node value's characteristics
 bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 {
     if(root==NULL) return true;
@@ -30,6 +34,24 @@ bool isValidBST(struct TreeNode* root){
 }
 */
 
+// min: root subtree's minimum node value
+// max: root subtree's maximum node value
+bool valcompare(struct TreeNode* root, long min, long max)
+{
+    if(root==NULL) return true;
+    if(root->val <= min || root->val >= max) return false;
+    return valcompare(root->left,min, root->val) && 
+           valcompare(root->right,root->val,max);
+}
+
+bool isValidBST(struct TreeNode* root){
+    
+   if(root == NULL) return true;
+    
+    return valcompare(root,LONG_MIN,LONG_MAX);
+}
+#if 0
+//use binary tree inorder traversal
 bool isValidBST(struct TreeNode* root){
     
     //variables must be a global for c language
@@ -57,6 +79,6 @@ void inorder_traver(struct TreeNode* root,struct TreeNode **pre,bool *valid)
 
     inorder_traver(root->right,pre,valid);
 }
-
+#endif
 // @lc code=end
 

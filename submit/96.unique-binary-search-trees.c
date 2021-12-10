@@ -6,7 +6,7 @@
 
 // @lc code=start
 
-
+//Catalan number
 int numTrees(int n){
     int * dp = (int*)calloc(n+1,sizeof(int));
     dp[0] = dp[1] = 1;

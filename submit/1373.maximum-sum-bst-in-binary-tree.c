@@ -28,6 +28,9 @@ struct context
 
 struct context dfs(struct TreeNode* root,int *maxsum)
 {
+    ////make sure a leaf is BST
+    //this is a NULL pseudo-node,make sure its parent node(a leaf node) process condition
+    // --> root->val > left.max && root->val < right.min
     if(root == NULL)
     {
         struct context temp = {true,40001,-40001,0};

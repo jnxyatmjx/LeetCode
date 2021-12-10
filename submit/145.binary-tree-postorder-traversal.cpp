@@ -18,7 +18,31 @@
  */
 class Solution {
 public:
-    vector<int> postorderTraversal(TreeNode* root) {
+    
+    // reverse pseudo-preorder[root,right,left] --- {preorder[root,left,right]}
+     vector<int> postorderTraversal(TreeNode* root)
+     {
+        if(root==NULL) return vector<int>(0);
+        
+        vector<int>res;
+        deque<TreeNode*> q;
+        while(!q.empty() || root)
+        {
+            if(root != NULL)
+            {
+                res.insert(res.begin(),root->val); //insert into header of vector
+                if(root->left) q.push_back(root->left);
+                root = root->right;
+            }else
+            {
+                root = q.back();q.pop_back();
+            }
+        }
+        return res;
+     }
+
+    //traditional method
+    vector<int> postorderTraversal222(TreeNode* root) {
         std::vector<int> res;
         std::deque<TreeNode*> stk;//Use a Stack
         TreeNode* lastVisit = NULL; //the last node visited

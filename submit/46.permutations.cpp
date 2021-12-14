@@ -27,7 +27,7 @@ public:
                 continue;
 
             visited[i] = 1;
-            out.push_back(num[i]); //make choice
+            out.push_back(num[i]); //make a choice
 
             backtrack(num, level + 1, visited, out, res);
 

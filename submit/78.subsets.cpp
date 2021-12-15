@@ -21,8 +21,9 @@ public:
 
     void bt(vector<int>& nums,vector<vector<int>>& res,vector<int>& out,int start)
     {
+        //this maybe a NULL set ??
         res.push_back(out); //Why and WF?????
-        
+
         for(int i=start; i<nums.size(); i++)
         {
             out.push_back(nums[i]);

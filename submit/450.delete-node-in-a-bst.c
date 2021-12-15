@@ -41,7 +41,9 @@ struct TreeNode* deleteNode(struct TreeNode* root, int key){
         //node have two childrens
         if(root->left && root->right)
         {
-            struct TreeNode* currT = findMin(root->right);// find minimum node of right subtree
+            // find minimum node of right subtree
+            // because no node between currT and root ,can preserve order in original tree
+            struct TreeNode* currT = findMin(root->right);
             root->val = currT->val;
             root->right = deleteNode(root->right,/**/currT->val);
 

@@ -42,7 +42,7 @@ struct TreeNode* deleteNode(struct TreeNode* root, int key){
         if(root->left && root->right)
         {
             // find minimum node of right subtree
-            // because no node between currT and root ,can preserve order in original tree
+            // because no node between currT(right subtree's minimus node) and root ,can preserve order in original tree
             struct TreeNode* currT = findMin(root->right);
             root->val = currT->val;
             root->right = deleteNode(root->right,/**/currT->val);

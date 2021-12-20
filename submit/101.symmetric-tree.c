@@ -27,8 +27,8 @@ bool ishelp(struct TreeNode* lft,struct TreeNode* rgt){
 
 
     return (lft->val == rgt->val ) &&
-            ishelp(lft->left,rgt->right) && 
-            ishelp(lft->right,rgt->left);
+            ishelp(lft->left,rgt->right) && //left subtree's left node symmtric right subtree's right node
+            ishelp(lft->right,rgt->left); //left subtree's right node symmtric right subtree's left node
 }
 
 bool isSymmetric(struct TreeNode* root)

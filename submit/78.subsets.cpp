@@ -23,13 +23,15 @@ public:
     {
         //this maybe a NULL set ??
         res.push_back(out); //Why and WF?????
-
+        for(auto const m : out) printf("%d ",m);
+        printf("\n ");
         for(int i=start; i<nums.size(); i++)
         {
             out.push_back(nums[i]);
             bt(nums,res,out,i+1);
             out.pop_back();
         }
+
     }
 
 };

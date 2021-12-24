@@ -39,16 +39,26 @@ public:
     }
     void helper(TreeNode* node, int sum, int curSum, vector<TreeNode*>& out, int& res) {
         if (!node) return;
+
+        //curSum is stack variable,Valid only in ONE Recursive Calls
+        //curSum is sum of nodes path ,travel from parent to child
         curSum += node->val;
         out.push_back(node);
+
+    for(auto const m: out)
+        printf("%d ",m->val);
+        printf(" |%d\n",curSum);
+
         if (curSum == sum) ++res;
         int t = curSum;
-        for (int i = 0; i < out.size() - 1; ++i) {
+        for (int i = 0; i < out.size()-1/*minimus 1 means EXCLUDE the node value*/; ++i) {
             t -= out[i]->val;
             if (t == sum) ++res;
         }
+
         helper(node->left, sum, curSum, out, res);
         helper(node->right, sum, curSum, out, res);
+        
         out.pop_back();
     }
 };

@@ -5,7 +5,7 @@
  */
 
 // @lc code=start
-
+//https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247490696&idx=1&sn=798a350fcca16c89572caf65323dbec7&scene=21#wechat_redirect
 //Catalan number
 int numTrees(int n){
     int * dp = (int*)calloc(n+1,sizeof(int));

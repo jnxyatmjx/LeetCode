@@ -16,7 +16,7 @@
 > 2. **Back-of-the-envelope estimation**.It is always a good idea to estimate the scale of the system we’re going to design. 粗略评估
 > 3. **System interface definition**.Define what APIs are expected from the system. 定义系统接口
 > 4. **Defining data model**.The ata model will clarify how data will flow between different system components. Later, it will guide for data partitioning and management.(e.g. storage, transportation, encryption)定义数据模型
-> 4. High-level design.Design the core components of our system.We should identify enough components that are needed to solve the actual problem from end to end.
+> 4. **High-level design**.Design the core components of our system.We should identify enough components that are needed to solve the actual problem from end to end.
 > 4. **Detailed design**.There is no single answer,the only important thing is to consider ***Tradeoffs  between different options while keeping system constraints in mind***.细节设计
 > 4. **Identifying and resolving bottlenecks**.找到并解决系统瓶颈
 > > -  Is there any single point of failure in our system.

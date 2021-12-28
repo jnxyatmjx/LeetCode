@@ -7,16 +7,33 @@
 // @lc code=start
 class Solution {
 public:
-    //Catalan number
+
      int numTrees(int n) {
-        vector<int> dp(n + 1);
-        dp[0] = dp[1] = 1;
-        for (int i = 2; i <= n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                dp[i] += dp[j] * dp[i - j - 1];
-            }
+
+        vector<vector<int>> // value from 1 to n ,so we need n+1 vector size
+            dp(n+1,vector<int>(n+1,0));//dynamic programming
+
+        //it is arranged in order from 1 to n, which ensure a BST can be constructed
+        return nums(1,n,dp);
+    }
+
+    int nums(int lft, int rgt,vector<vector<int>>& dp)
+    {
+        if(lft > rgt) return 1;//1 for multiply
+
+        if(dp[lft][rgt] != 0) return dp[lft][rgt];
+
+        int res=0;
+        for(int i=lft; i<=rgt; i++)
+        {
+            //i as root for psuedo-subtree
+            int left = nums(lft,i-1,dp);
+            int right = nums(i+1,rgt,dp);
+            res += left * right;      //calculate them separately and add them
         }
-        return dp[n];
+        dp[lft][rgt] = res; //like post traversal tree
+
+        return res;
     }
 };
 // @lc code=end

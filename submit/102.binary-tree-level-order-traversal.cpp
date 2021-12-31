@@ -18,7 +18,7 @@
  */
 class Solution {
 public:
-
+    //similar to leetcode 366
     void dfs(std::vector<std::vector<int>>& res,int level,TreeNode* root)
     {
         if(root == NULL) return;

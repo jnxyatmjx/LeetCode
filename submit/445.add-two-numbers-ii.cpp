@@ -19,7 +19,8 @@ class Solution {
 public:
 
 /*
-    Reverse lists and similar to 2.add-two-numbers
+    1.Reverse lists and similar to 2.add-two-numbers
+    2.Stack to simulate the Reverse List
 */
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 

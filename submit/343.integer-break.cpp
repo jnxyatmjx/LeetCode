@@ -11,7 +11,7 @@ public:
         vector<int> dp(n + 1); //dp[i] means the maximum product value obtained that spliting interger i .
         dp[2] = 1;
         for (int i = 3; i <= n ; i++) {
-            for (int j = 1; j < i - 1; j++) {
+            for (int j = 1; j < i; j++) {
                 /*
                     2 solutions
                     first : Product of two numbers. {e.g. j and (i-j) }

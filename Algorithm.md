@@ -53,3 +53,89 @@
 >2. 两个或两个以上任务同时拥有并请求彼此的资源，请求时**形成一个循环依赖关系**，会产生死锁
 >> 1. MySQL 的死锁检测算法是**深度优先搜索，如果在搜索过程中发现了环，就说明发生了死锁**. 为了避免死锁检测开销过大，如果搜索深度超过了 200（LOCK_MAX_DEPTH_IN_DEADLOCK_CHECK)也同样认为发生了死锁。[e.g. [here](https://leviathan.vip/2020/02/02/mysql-deadlock-check/)]
 >> 2. InnoDB 使用 MVCC 来解决事务的并发控制，而其中 Undo Log 是 MVCC 的重要组成部分
+
+
+
+
+* ### 回溯及操作步骤
+1. 找到选项集合
+2. 做出选择
+3. 递归操作
+4. 撤销选择
+>- array `nums` of distinct integers, return *all the possible permutations*.**46**
+>```c++
+  vector<vector<int>> permute(vector<int>& num) {
+          vector<vector<int>> res;
+          vector<int> out, visited(num.size(), 0);
+          backtrack(num, 0, visited, out, res);
+          return res;
+      }
+      void backtrack(vector<int>& num, int level, vector<int>& visited, vector<int>& out, vector<vector<int>>& res) {
+          //level is recored current number of visited
+          if (level == num.size()) {
+                  res.push_back(out); 
+                  return;
+              }
+          for (int i = 0; i < num.size(); ++i) {
+              if (visited[i] == 1) //position of num array
+                  continue;
+              visited[i] = 1;
+              out.push_back(num[i]); //make a choice
+              backtrack(num, level + 1, visited, out, res);
+              out.pop_back(); //cancel the choice
+              visited[i] = 0;
+          }//end for
+      }
+  
+  ```
+
+------
+>- integers `n` and `k`, return *all possible combinations of* `k` *numbers out of the range* `[1,n]`.**77**
+>```c++
+vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        vector<int> out;
+        backtrack(res,out,1,n,k);//start from 1, [1,....,n]
+        return res;
+    }
+    //Have n select options(n width of decision tree), 
+    //k heigh of decision tree
+    void backtrack(vector<vector<int>>&res ,vector<int>&out,int start, int n,int k)
+    {
+        if(static_cast<int>(out.size()) == k)//bottom of decision tree
+        {
+            res.push_back(out);
+            return ;
+        }
+        for(int i=start; i<=n; i++)
+        {
+            out.push_back(i);//make a choice
+            backtrack(res,out,i+1,n,k);
+            out.pop_back();
+        }
+    }//end backtrack;
+  
+  ```
+
+------
+>- array `nums` of distinct elements, return *all possible subsets (the power set)*.**78**
+>```c++
+vector<vector<int>> subsets(vector<int>& nums) {
+        if(nums.size() <= 0)
+            return {{}};
+        vector<vector<int>> res;
+        vector<int> out;
+        bt(nums,res,out,0);
+        return res;
+    } //end subsets
+    void bt(vector<int>& nums,vector<vector<int>>& res,vector<int>& out,int start)
+    {
+        //this maybe a NULL set ??
+        res.push_back(out); //Why and WF?????
+        for(int i=start; i<nums.size(); i++)
+        {
+            out.push_back(nums[i]);
+            bt(nums,res,out,i+1);
+            out.pop_back();
+        }
+    }

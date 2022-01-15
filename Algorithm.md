@@ -86,9 +86,8 @@
               visited[i] = 0;
           }//end for
       }
-  
   ```
-
+------
 ------
 >- integers `n` and `k`, return *all possible combinations of* `k` *numbers out of the range* `[1,n]`.**77**
 >```c++
@@ -114,15 +113,14 @@ vector<vector<int>> combine(int n, int k) {
             out.pop_back();
         }
     }//end backtrack;
-  
   ```
-
+------
 ------
 >- array `nums` of distinct elements, return *all possible subsets (the power set)*.**78**
 >```c++
 vector<vector<int>> subsets(vector<int>& nums) {
         if(nums.size() <= 0)
-            return {{}};
+            return vector<vector<int>>();
         vector<vector<int>> res;
         vector<int> out;
         bt(nums,res,out,0);
@@ -139,3 +137,4 @@ vector<vector<int>> subsets(vector<int>& nums) {
             out.pop_back();
         }
     }
+  ```

@@ -9,7 +9,7 @@ class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
         if(nums.size() <= 0)
-            return {{}};
+            return vector<vector<int>>();
 
         vector<vector<int>> res;
         vector<int> out;

@@ -8,7 +8,7 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        if(nums.size() <=0) return {};
+        if(nums.size() <=0) return vector<vector<int>>();
 
         sort(nums.begin(),nums.end());
 

@@ -138,3 +138,72 @@ vector<vector<int>> subsets(vector<int>& nums) {
         }
     }
   ```
+
+
+
+
+
+* ###二分查找及变种
+- 普通二分查找
+- 查第一个二分查找
+- 查最后一个二分查找
+>- search normal
+> ```c++
+int Binary_normal(int*num,int tar,int lef ,int rig)
+{   
+    while(lef <= rig)
+    {
+        int mid = lef + (rig-lef)/2;//prevent overflow
+        if(num[mid] > tar)
+            rig = mid -1;
+        else if(num[mid] < tar)
+            lef = mid + 1;
+        else
+        	return mid;
+    }
+    return -1;
+}
+------
+------
+>- search first
+>```c++
+>int Binary_first(int*num,int tar,int lef ,int rig)
+>{   
+>  while(lef <= rig)
+>  {
+>      int mid = lef + (rig-lef)/2;
+>      if(num[mid] > tar)
+>          rig = mid -1;
+>      else if(num[mid] < tar)
+>          lef = mid + 1;
+>      else
+>      {
+>          //get the first when find equal elements
+>          if(mid == lef || num[mid-1]!=tar) return mid;
+>          rig = mid -1;
+>      }
+>  }
+>  return -1;
+>}
+------
+------
+>- search last
+>```c++
+>int Binary_last(int*num,int tar,int lef ,int rig)
+>{   
+>  while(lef <= rig)
+>  {
+>      int mid = lef + (rig-lef)/2;
+>      if(num[mid] > tar)
+>          rig = mid -1;
+>      else if(num[mid] < tar)
+>          lef = mid + 1;
+>      else
+>      {
+>          //get last when find equal elements
+>          if(mid == rig || num[mid+1]!=tar) return mid;
+>          lef = mid +1;
+>      }
+>  }
+>  return -1;
+>}

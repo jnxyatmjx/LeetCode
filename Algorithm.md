@@ -179,7 +179,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >      else
 >      {
 >          //get the first when find equal elements
->          if(mid == lef || num[mid-1]!=tar) return mid;
+>          if(mid==lef || num[mid-1]!=tar) return mid;
 >          rig = mid -1;
 >      }
 >  }
@@ -201,7 +201,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >      else
 >      {
 >          //get last when find equal elements
->          if(mid == rig || num[mid+1]!=tar) return mid;
+>          if(mid==rig || num[mid+1]!=tar) return mid;
 >          lef = mid +1;
 >      }
 >  }

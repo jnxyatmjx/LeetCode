@@ -58,3 +58,13 @@ ___
 > 4. **Most Recently Used (MRU)**: Discards, in contrast to LRU, the most recently used items first.
 > 5. **Least Frequently Used (LFU)**: Counts how often an item is needed. Those that are used least often are discarded first.
 > 6. **Random Replacement (RR)**: Randomly selects a candidate item and discards it to make space when necessary.
+
+
+
+
+
+### Socket Error
+
+> - ***man errno***
+> -  **EAGAIN**          Resource temporarily unavailable (may be the same value as EWOULDBLOCK) (POSIX.1-2001).
+> -  **EWOULDBLOCK**     Operation would block (may be same value as EAGAIN) (POSIX.1-2001).

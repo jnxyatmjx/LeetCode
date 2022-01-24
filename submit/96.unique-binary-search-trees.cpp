@@ -26,7 +26,7 @@ public:
         int res=0;
         for(int i=lft; i<=rgt; i++)
         {
-            //i as root for psuedo-subtree
+            //i as root for this psuedo-subtree
             int left = nums(lft,i-1,dp);
             int right = nums(i+1,rgt,dp);
             res += left * right;      //calculate them separately and add them

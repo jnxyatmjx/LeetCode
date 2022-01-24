@@ -207,3 +207,99 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >  }
 >  return -1;
 >}
+
+
+
+
+
+
+
+* ###  Binary Tree二叉树
+> - **Unique BST**.Integer `N`, return the number of **unique BST's**  which has exactly n nodes of unique values **from 1 to `N`**.96
+> ```c++
+> int numTrees(int n) {
+>         vector<vector<int>> // value from 1 to n ,so we need n+1 vector size
+>             dp(n+1,vector<int>(n+1,0));//dynamic programming去重备忘录
+> 
+>         //it is arranged in order from 1 to n, which ensure a BST can be constructed
+>         return nums(1,n,dp);
+>     }
+> int nums(int lft, int rgt,vector<vector<int>>& dp)
+> {
+>     if(lft > rgt) return 1;//1 for multiply
+> 
+>     if(dp[lft][rgt] != 0) return dp[lft][rgt];
+> 
+>     int res=0;
+>     for(int i=lft; i<=rgt; i++)
+>     {
+>         //i as root for this psuedo-subtree
+>         int left = nums(lft,i-1,dp);
+>         int right = nums(i+1,rgt,dp);
+>         res += left * right;      //calculate them separately and add them
+>     }
+>     dp[lft][rgt] = res; //like post traversal tree
+>     return res;
+> }
+
+
+
+> - **Unique BST II**.Integer `N`, return ***all  unique BST**'s, which has exactly* `n` *nodes of unique values from* `1` *to* `N`. 95
+> ```c++
+> vector<TreeNode*> generateTrees(int n) {
+>        return build(1,n);
+>     }
+> 
+> vector<TreeNode*> build(int lft, int rgt)
+> {
+>     if(lft>rgt) return {NULL};//for NULL node
+> 
+>     vector<TreeNode*> res;
+> 
+>     for(int i=lft; i<=rgt; i++)
+>     {
+>         vector<TreeNode*> left  = build(lft,i-1);
+>         vector<TreeNode*> right = build(i+1,rgt);
+> 
+>         for(auto l:left)
+>             for(auto r:right)
+>             {
+>                 TreeNode* root = new TreeNode(i);//i as root node of subtree
+>                 root->left = l;
+>                 root->right = r;
+>                 res.push_back(root);
+>             }
+>     }
+>     return move(res);//like post order traversal
+> }
+
+
+
+> - **Maximum Binary Tree**.Integer array `nums` with no duplicates. Return *the **maximum binary tree** built from* `nums` 654
+>
+> ```c++
+> TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+>         TreeNode * root = helper(nums,0,static_cast<int>(nums.size())-1);
+>         return root;
+>     }
+> 
+>     TreeNode* helper(vector<int>& nums,int lft,int rgt)
+>     {
+>         if(lft > rgt) return NULL;
+>         
+>         int maxv=nums[lft], idx=lft;
+>         for (int i=lft; i<=rgt; i++) //find maximum value from lft to rgt
+>         {
+>             if(nums[i] > maxv)
+>             {
+>                 maxv = nums[i];
+>                 idx = i;
+>             }
+>         }
+> 
+>         TreeNode * root = new TreeNode(maxv);
+>         root->left = helper(nums,lft,idx-1);
+>         root->right = helper(nums,idx+1,rgt);
+> 
+>         return root;
+>     }

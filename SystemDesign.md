@@ -66,5 +66,14 @@ ___
 ### Socket Error
 
 > - ***man errno***
-> -  **EAGAIN**          Resource temporarily unavailable (may be the same value as EWOULDBLOCK) (POSIX.1-2001).
+> -  **EAGAIN**    Resource temporarily unavailable (may be the same value as EWOULDBLOCK) (this error can be ignore e.g. ZeroMQ).
 > -  **EWOULDBLOCK**     Operation would block (may be same value as EAGAIN) (POSIX.1-2001).
+
+
+
+* ### ZeroMQ
+> - A high-performance asynchronous messaging library,It provides a message queue.
+> - ZeroMQ supports *common messaging patterns* (**pub/sub, request/reply, client/server** and others) over a variety of transports (TCP, in-process, inter-process, multicast, WebSocket and more), making inter-process messaging as simple as inter-thread messaging. 
+>	- The inter-process transport passes messages between local processes using a system-dependent IPC mechanism. 
+>	- The in-process transport passes messages via memory directly between threads sharing a single ØMQ *context*.
+> - A ZeroMQ message is a discrete unit of data passed between applications or components of the same application.

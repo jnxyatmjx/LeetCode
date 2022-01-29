@@ -155,7 +155,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
     {
         int mid = lef + (rig-lef)/2;//prevent overflow
         if(num[mid] > tar)
-            rig = mid -1;
+            rig = mid - 1;
         else if(num[mid] < tar)
             lef = mid + 1;
         else
@@ -173,7 +173,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >  {
 >      int mid = lef + (rig-lef)/2;
 >      if(num[mid] > tar)
->          rig = mid -1;
+>          rig = mid - 1;
 >      else if(num[mid] < tar)
 >          lef = mid + 1;
 >      else
@@ -195,7 +195,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >  {
 >      int mid = lef + (rig-lef)/2;
 >      if(num[mid] > tar)
->          rig = mid -1;
+>          rig = mid - 1;
 >      else if(num[mid] < tar)
 >          lef = mid + 1;
 >      else

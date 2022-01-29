@@ -21,6 +21,7 @@ public:
     string serialize(TreeNode* root) {
         ostringstream os;
         serialize(root, os);
+        printf("%s\n",os.str().c_str());
         return os.str();
     }
 
@@ -33,7 +34,7 @@ public:
     void serialize(TreeNode* root, ostringstream& os) {
         if (root==NULL) os << "# ";
         else {
-            os << root->val << " "; // split the numbers which multiple digits
+            os << root->val << " "; // the space split the numbers for istringstream
             serialize(root->left, os);
             serialize(root->right, os);
         }

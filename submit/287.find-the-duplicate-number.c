@@ -10,28 +10,28 @@
 int findDuplicate(int* nums, int numsSize){
 
 /*Below is Time Limit Exceeded*/
-    // for(int i=1; i<numsSize; i++)
-    // {
-    //     for(int j=0; j<i; j++)
-    //     {
-    //         if(nums[i]==nums[j])
-    //             return nums[i];
-    //     }
-    // }
-    // return -1;
+    /*for(int i=1; i<numsSize; i++)
+    {
+        for(int j=0; j<i; j++)
+        {
+            if(nums[i]==nums[j])
+                return nums[i];
+        }
+    }
+    return -1;*/
 
-//below is allmost
-    // long cures = 0;
+//Below is allmost Mathmatic 
+//But [1,2,3,4,5,4,4] is error
+    // long Sumarr = 0;
     // for(int i=0; i<numsSize; i++)
-    //     cures+= nums[i];
+    //     Sumarr+= nums[i];
     
-    // long neres = 0;
-    // for(int i=1; i<=numsSize; i++)
-    //     neres+=i;
-    // return cures-neres;
+    // long neres = (numsSize-1)*numsSize/2;
+    
+    // return Sumarr-neres;
 
-    //fix length arr to store the frequency, since it's from 1 to n, use index as val
-    // and number in the arr is frequency
+    //Fix length arr to store the frequency, since it's from 1 to n, use index as val and number in the arr is frequency
+    //But space O(N)
     int out = 0;
     int * ptr = calloc(sizeof(int), numsSize);
     for (int i = 0; i < numsSize; i++){
@@ -41,7 +41,6 @@ int findDuplicate(int* nums, int numsSize){
             return nums[i];
             
         }
-        
     }
     return -1;
 

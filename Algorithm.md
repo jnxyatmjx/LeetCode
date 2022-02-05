@@ -212,8 +212,6 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 
 
 
-
-
 * ###  Binary Tree二叉树
 > - **Unique BST**.Integer `N`, return the number of **unique BST's**  which has exactly n nodes of unique values **from 1 to `N`**.96
 > ```c++

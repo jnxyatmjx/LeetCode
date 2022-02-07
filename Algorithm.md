@@ -273,7 +273,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 
 
 
-> - **Maximum Binary Tree**.Integer array `nums` with no duplicates. Return *the **maximum binary tree** built from* `nums` 654
+> - **Maximum Binary Tree**.Integer array `nums` with no duplicates. Return *the **maximum binary tree** built from* `nums` .654
 >
 > ```c++
 > TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
@@ -301,3 +301,94 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 > 
 >         return root;
 >     }
+
+
+
+> - Determine a binary  tree is a valid binary search tree (BST).98
+>
+>   ```c++
+>   /*
+>   	Subtree with node root as its root.
+>   	min--> Subtree of node root's minimum value node
+>   	max--> Subtree of node root's maximum value node
+>   */
+>   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
+>   {
+>       if(root==NULL) return true;
+>     
+>       if(min && root->val <= min->val) return false;
+>       if(max && root->val >= max->val) return false;
+>   	/*
+>   		root as Left(root->left) subtree's maximum value node
+>   		root as Right(root->right) subtree's minimum value node
+>       */
+>       return preorder_traver(root->left,min,root) && 
+>              preorder_traver(root->right,root,max);
+>   }
+>     
+>   bool isValidBST(struct TreeNode* root){
+>     
+>       return preorder_traver(root,NULL,NULL);
+>   }
+>   ```
+
+
+
+> - Given a **binary tree** `root`, return *the maximum sum of all keys of **any** sub-tree which is also a Binary Search Tree (BST)*.1373
+>
+> ```c++
+> #define maxl(a,b)\
+> ({ __typeof__ (a) a_ = (a);\
+>     __typeof__ (b) b_ = (b);\
+>     a_ > b_ ? a_ : b_;})
+> 
+> struct context
+> {
+>     bool isBST;
+>     int min; //minimum node of this tree(means this tree's minimum node)
+>     int max; //maximum node of this tree(means this tree's maximum node)
+>     int sum; //this tree's(if is a BST) sum of nodes
+> };
+> 
+> struct context dfs(struct TreeNode* root,int *maxsum)
+> {
+>     ////make sure a leaf is BST
+>     //this is a NULL pseudo-node,make sure its parent node(a leaf node) process condition
+>     // --> root->val > left.max && root->val < right.min
+>     if(root == NULL)
+>     {
+>         struct context temp = {true,40001,-40001,0};
+>         return temp;
+>     }
+> 
+>     struct context left = dfs(root->left,maxsum);
+>     struct context right = dfs(root->right,maxsum);
+> 
+>     if(left.isBST==false || right.isBST==false ||
+>         root->val <= left.max || root->val >= right.min)
+>         /*root->val > left.max and root->val < right.min is BST*/
+>     {
+>         struct context temp = {false,0,0,0};
+>         return temp;
+>     }
+> 
+>     struct context temp;
+>     temp.isBST = true;
+>     temp.min = (root->left ? left.min : root->val);   //if has left subtree, set left subtre's min as total tree's minimum val
+>     temp.max = (root->right ? right.max : root->val); //if has right subtree, set right subtree's max as total tree's maximum val
+>     temp.sum = root->val + left.sum + right.sum;
+>     *maxsum = maxl(*maxsum,temp.sum);
+> 
+>     return temp;
+> }
+> //[4,3,null,1,2]
+> int maxSumBST(struct TreeNode* root){
+>     
+>     // Must initial a values or will get a wrong value
+>     // Example 3,All values are negatives. Return an empty BST.
+>     int maxSUm = 0;
+>     dfs(root,&maxSUm);
+>     
+>     return maxSUm;
+> }
+> ```

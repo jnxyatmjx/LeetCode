@@ -194,7 +194,6 @@ public:
                 cache.insertAtHead(key,value);
                 idx[key] = cache.getHead();
             }
-        printf("list size:%d\n",cache.listSize());
     }//end function
 };
 

@@ -29,7 +29,7 @@ void merge_sort(Iter first, Iter last)
     if (last - first > 1) {
         Iter middle = first + (last - first) / 2;
         merge_sort(first, middle);
-        merge_sort(middle, last); //merge [first,lst) ,so not middle+1..!!!
+        merge_sort(middle, last); //merge [first,lst) ,so NOT middle+1..!!!
         std::inplace_merge(first, middle, last);
     }
 }

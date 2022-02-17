@@ -62,6 +62,7 @@
 2. 做出选择
 3. 递归操作
 4. 撤销选择
+4. *回溯算法*就是**多叉树的遍历问题**，关键是在**前序遍历**和**后序遍历**的位置做⼀些操作。某种程度上说，动态规划的**暴⼒求解阶段就是回溯算法**。只是有的问题具有重叠⼦问题性质，可以⽤dp table或者备忘录优化，将递归树⼤幅剪枝，这就变成了动态规划。
 >- array `nums` of distinct integers, return *all the possible permutations*.**46**
 >```c++
   vector<vector<int>> permute(vector<int>& num) {
@@ -139,7 +140,73 @@ vector<vector<int>> subsets(vector<int>& nums) {
     }
   ```
 
-
+------
+>- `N-Queens`.51
+>
+>  ```c++
+>  /* is Queen valid at board[row][col] ?*/
+>      bool isValid(vector<string>& board, int row, int col) {
+>          int n = board.size();
+>          // check is same column
+>          /* no need to check row, because a row default is empty '.' */
+>          for (int i = 0; i < n; i++) {
+>              if (board[i][col] == 'Q')
+>                  return false;
+>          }
+>  
+>          // check upper right area
+>          for (int i = row - 1, j = col + 1; 
+>                  i >= 0 && j < n; i--, j++) {
+>              if (board[i][j] == 'Q')
+>                  return false;
+>          }
+>  
+>          // check upper left area
+>          for (int i = row - 1, j = col - 1;
+>                  i >= 0 && j >= 0; i--, j--) {
+>              if (board[i][j] == 'Q')
+>                  return false;
+>          }
+>          return true;
+>      }//end isValid
+>  
+>  vector<vector<string>> solveNQueens(int n) {
+>          vector<vector<string>> res;
+>          /*
+>              initialize board. '.' means empty, 'Q' means a Queen
+>              board contain n rows and n columns
+>              one row default is all empty '.'
+>          */
+>          vector<string> board(n,string(n,'.'));
+>          backtrack(board,0,res);
+>          return res;
+>      }
+>  
+>      void backtrack(vector<string>& board,int row,vector<vector<string>>& res)
+>      {
+>          if(row == board.size())
+>          {
+>              res.push_back(board);
+>              return ;
+>          }
+>  
+>          size_t numofCells1row = board[row].size();
+>          for(size_t i=0;i<numofCells1row;i++)
+>          {   
+>              if(!isValid(board,row,i))
+>                  continue;
+>  
+>              //make chance
+>              board[row].at(i) = 'Q';
+>              
+>              //enter next row
+>              backtrack(board,row+1,res);
+>              
+>              //cancel the chance
+>              board[row].at(i) = '.';
+>          }
+>      }//end backtrack
+>  ```
 
 
 
@@ -315,7 +382,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->     
+>           
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -325,9 +392,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->     
+>           
 >   bool isValidBST(struct TreeNode* root){
->     
+>           
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```

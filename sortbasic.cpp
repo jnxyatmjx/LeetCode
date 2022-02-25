@@ -178,6 +178,64 @@ void quicks_mt(T* a,std::size_t l,std::size_t r,std::size_t cutoff = 11)
 	}	
 }
 
+//algorithm will cost 2 powers of N, when vector a is increase or decrease
+template <typename T>
+void quick_sort1(T *a, int lft, int rgt)
+{
+	if (lft >= rgt) return ;
+
+	int i=lft ,j=rgt+1, pivot=a[lft];
+	while(1)
+	{
+		while(a[++i] < pivot)
+			if(i >= rgt)
+				break;
+		
+		while (a[--j] > pivot)
+			if(i <= lft)
+				break;
+		
+		if(i < j)
+			quicks_swap(a+i,a+j);
+		else
+			break;
+	}//end while
+	
+	//swap pivot
+	quicks_swap(a+j,a+lft);
+
+	quick_sort1(a, lft, j-1);
+	quick_sort1(a, j+1, rgt);
+}
+
+template <typename T>
+void quick_sort2(T *a, int lft, int rgt)
+{
+	if (lft >= rgt) return ;
+
+	int i=lft-1 ,j=rgt, pivot=a[rgt];
+	while(1)
+	{
+		while(a[++i] < pivot)
+			if(i >= rgt)
+				break;
+		
+		while (a[--j] > pivot)
+			if(i <= lft)
+				break;
+		
+		if(i < j)
+			quicks_swap(a+i,a+j);
+		else
+			break;
+	}//end while
+	
+	//swap pivot
+	quicks_swap(a+i,a+rgt);
+
+	quick_sort2(a, lft, i-1);
+	quick_sort2(a, i+1, rgt);
+}
 
 int main(int argc,char * argv[])
 {
@@ -187,7 +245,7 @@ int main(int argc,char * argv[])
 	srand(time(0)); printf("argv[1]:%d\n",atoi(argv[1]));
 	int *a = (int*)malloc(sizeof(int) * atoi(argv[1]));memset(a,0,atoi(argv[1]));size_t a_len = atoi(argv[1]); 
 	for(size_t i = 0; i< a_len;i++)
-		a[i]=rand() ;
+		a[i]=rand()% 200 ;
 	printf("\n");
 
 	//reverse(a,0,1);
@@ -197,13 +255,17 @@ int main(int argc,char * argv[])
 	gettimeofday(&now,NULL);
 	//quicks(a,0,a_len-1,13);
 	printf("a Prev Poiter:%p <> %p\n",a,a+a_len-1);
-	merge_sort(a,a+a_len);
+	//quick_sort1(a,0,a_len-1);
+	quick_sort2(a,0,a_len-1);
+	//merge_sort(a,a+a_len);
+	//insertsortPart<int>(a,0,a_len-1);
 	printf("a Post Poiter:%p <> %p\n",a,a+a_len-1);
 	gettimeofday(&cur,NULL);
 //	insertSortPart(a,0,a_len-1);
-//	for(std::size_t i = 0;i < a_len;i++) printf("%d ",a[i]); 
+	for(std::size_t i = 0;i < a_len;i++) printf("%d ",a[i]); 
+	printf("\n");
 	printf("MT Sort Complete (%td)\n", (cur.tv_usec - now.tv_usec)/1000 + (cur.tv_sec - now.tv_sec)*1000);
-
+return 0;
   while(1){	int compval;
 		scanf("%d",&compval);
 		printf("a len:%td\n",a_len);	

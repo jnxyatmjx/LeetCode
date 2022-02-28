@@ -77,3 +77,7 @@ ___
 >	- The inter-process transport passes messages between local processes using a system-dependent IPC mechanism. 
 >	- The in-process transport passes messages via memory directly between threads sharing a single ØMQ *context*.
 > - A ZeroMQ message is a discrete unit of data passed between applications or components of the same application.
+
+
+* ### Redis
+> - 序号发生器 INCR key

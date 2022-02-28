@@ -382,7 +382,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->           
+>                   
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -392,9 +392,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->           
+>                   
 >   bool isValidBST(struct TreeNode* root){
->           
+>                   
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -459,3 +459,69 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >     return maxSUm;
 > }
 > ```
+
+
+
+
+* ###各种排序及其变种
+> - Quick Sorts
+> ```c++
+> //algorithm will cost 2 powers of N, when vector a is increase or decrease
+> template <typename T>
+> void quick_sort1(T *a, int lft, int rgt)
+> {
+> 	if (lft >= rgt) return ;//caution this condition very import
+> 
+> 	int i=lft ,j=rgt+1, pivot=a[lft];
+> 	while(1)
+> 	{
+> 		while(a[++i] < pivot) //skip the firt i(lft), because pivot is a[lft]
+> 			if(i >= rgt)
+> 				break;
+> 		
+> 		while (a[--j] > pivot)
+> 			if(i <= lft)
+> 				break;
+> 		
+> 		if(i < j)
+> 			quicks_swap(a+i,a+j);
+> 		else
+> 			break;
+> 	}//end while
+> 	
+> 	//swap pivot
+> 	quicks_swap(a+j,a+lft);// Use j to swap pivot
+> 
+> 	quick_sort1(a, lft, j-1);
+> 	quick_sort1(a, j+1, rgt);
+> }
+> 
+> //algorithm will cost 2 powers of N, when vector a is increase or decrease
+> template <typename T>
+> void quick_sort2(T *a, int lft, int rgt)
+> {
+> 	if (lft >= rgt) return ; //caution this condition very import
+> 
+> 	int i=lft-1 ,j=rgt, pivot=a[rgt];
+> 	while(1)
+> 	{
+> 		while(a[++i] < pivot)
+> 			if(i >= rgt)
+> 				break;
+> 		
+> 		while (a[--j] > pivot) //skip the last j(rgt), because j is pivot
+> 			if(i <= lft)
+> 				break;
+> 		
+> 		if(i < j)
+> 			quicks_swap(a+i,a+j);
+> 		else
+> 			break;
+> 	}//end while
+> 	
+> 	//swap pivot
+> 	quicks_swap(a+i,a+rgt); //Use i to swap pivot
+> 
+> 	quick_sort2(a, lft, i-1);
+> 	quick_sort2(a, i+1, rgt);
+> }

@@ -127,6 +127,7 @@ vector<vector<int>> subsets(vector<int>& nums) {
         bt(nums,res,out,0);
         return res;
     } //end subsets
+  
     void bt(vector<int>& nums,vector<vector<int>>& res,vector<int>& out,int start)
     {
         //this maybe a NULL set ??
@@ -144,7 +145,7 @@ vector<vector<int>> subsets(vector<int>& nums) {
 >- `N-Queens`.51
 >
 >  ```c++
->  /* is Queen valid at board[row][col] ?*/
+>  /* check is Queen valid at board[row][col]*/
 >      bool isValid(vector<string>& board, int row, int col) {
 >          int n = board.size();
 >          // check is same column

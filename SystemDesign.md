@@ -81,3 +81,12 @@ ___
 
 * ### Redis
 > - 序号发生器 INCR key
+> - 滑动窗口 API限流（使用Sorted Set配合zadd，zremrankbyscore，zcard）
+
+
+
+
+
+* ###OOP
+>- Difference between a `Reference` variable and a `Pointer` in C++?
+>A pointer stores the address of the variable whereas a reference variable is just an alias for that variable.

@@ -27,7 +27,7 @@ public:
         }
         
         /*
-            Means the the initial state is minHeap==maxHeap+1
+            Means the the initial state is minHeap == maxHeap+1
             and num INSERT into minHeap, Balance minHeap
         */
         if(minHeap.size() > maxHeap.size()+1)
@@ -52,7 +52,6 @@ public:
             return minHeap.top(); //if odd, number of minHeap more than maxHeap 
         
         return -1;
-
     }
 };
 

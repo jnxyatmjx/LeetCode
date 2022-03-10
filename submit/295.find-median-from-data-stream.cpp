@@ -15,30 +15,43 @@ public:
     }
     
     void addNum(int num) {
-        if (maxHeap.empty() || maxHeap.top() >= num) {
-        maxHeap.push(num);
-        } else {
-        minHeap.push(num);
+        //We decide to minHeap have more element than maxheap
+        
+        // num greater or equal to top minHeap, insert it into minHeap
+        if(minHeap.empty() || minHeap.top() <= num)
+        {
+            minHeap.push(num);
+        }else// num smaller than top minHeap, insert int into maxHeap
+        {
+            maxHeap.push(num);
         }
-
-        // either both the heaps will have equal number of elements or max-heap will have one
-        // more element than the min-heap
-        if (maxHeap.size() > minHeap.size() + 1) {
-        minHeap.push(maxHeap.top());
-        maxHeap.pop();
-        } else if (maxHeap.size() < minHeap.size()) {
-        maxHeap.push(minHeap.top());
-        minHeap.pop();
+        
+        /*
+            Means the the initial state is minHeap==maxHeap+1
+            and num INSERT into minHeap, Balance minHeap
+        */
+        if(minHeap.size() > maxHeap.size()+1)
+        {
+            maxHeap.push(minHeap.top()); minHeap.pop();
+        }
+        /*
+            Mean the initial state is minHeap == maxHeap
+            and number INSERT INTO maxHeap, Balance maxHeap
+        */
+        else if(minHeap.size() < maxHeap.size())
+        {
+            minHeap.push(maxHeap.top()); maxHeap.pop();
         }
     }
     
     double findMedian() {
-         if (maxHeap.size() == minHeap.size()) {
-            // we have even number of elements, take the average of middle two elements
-            return maxHeap.top() / 2.0 + minHeap.top() / 2.0;
-        }
-        // because max-heap will have one more element than the min-heap
-        return maxHeap.top();
+        // TODO: Write your code here
+        if(maxHeap.size() == minHeap.size())
+            return maxHeap.top()/2.0 + minHeap.top()/2.0; //prevent overflow
+        else
+            return minHeap.top(); //if odd, number of minHeap more than maxHeap 
+        
+        return -1;
 
     }
 };

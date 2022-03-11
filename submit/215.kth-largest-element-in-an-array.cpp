@@ -76,6 +76,8 @@ void quick_sock1(vector<int>& a, int lft, int rgt, int k)
     quick_sock1(a,j+1,rgt,k);
 }
 
+//minHeap with k elements
+std::priority_queue <int ,std::vector<int>, std::greater<int>> minHeap;
 };
 // @lc code=end
 

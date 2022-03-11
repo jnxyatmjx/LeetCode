@@ -7,7 +7,7 @@
 // @lc code=start
 class Solution {
 public:
-    vector<vector<int>> subsets(vector<int>& nums) {
+    vector<vector<int>> subsets1(vector<int>& nums) {
         if(nums.size() <= 0)
             return vector<vector<int>>();
 
@@ -31,6 +31,28 @@ public:
             out.pop_back();
         }
 
+    }
+
+    //Iteration  BFS
+    vector<vector<int>> subsets(vector<int>& nums)
+    {
+        vector<vector<int>> res;
+
+        //start by adding empty res
+        res.push_back(vector<int>());
+
+        for(const auto& ns : nums)
+        {
+            //take all existing subsets and insert the current number in them to create new subsets
+            std::size_t n = res.size();
+            for(std::size_t i=0; i<n; i++)
+            {
+                vector<int> sets = res[i];
+                sets.push_back(ns);//insert the current number in them to create new subsets
+                res.push_back(sets);
+            }
+        }
+        return res;
     }
 
 };

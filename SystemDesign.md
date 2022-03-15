@@ -39,7 +39,7 @@
 
 
 
-##Cache
+* ## Cache
 ___
 - ### Keep the cache coherent with the source of truth缓存与库一致性
 > 1. **Write-through cache:** Under this scheme, data is written into the cache and the corresponding database simultaneously. 缓存与库***同时写***
@@ -79,14 +79,27 @@ ___
 > - A ZeroMQ message is a discrete unit of data passed between applications or components of the same application.
 
 
-* ### Redis
+* ## Redis
 > - 序号发生器 INCR key
-> - 滑动窗口 API限流（使用Sorted Set配合zadd，zremrankbyscore，zcard）
+> - 滑动窗口 API限流（使用Sorted Set配合zadd，zremrankbyscore，zcard)
+
+
+* ## Redis持久化`AOF`和`RDB`及其实现原理
+1. `AOF(Append Only File) `通过保存Redis的**写命令**来保存数据库状态。具体通过`命令追加`、`文件写入同步`三个步骤实现持久化
+> - **命令追加**: 每个写命令都会以协议格式追加到aof_buf缓冲区。
+>
+> - **文件写入同步**:Redis服务进程就是一个事件循环，处理文件事件、时间事件等。在写的文件事件循环结束前，都会调用flushAOF函数来将aof_buf中的数据写入和保存到`AOF`文件中。同时根据`appedfsync`选项对写入命令进行实际文件同步落盘操作。
+>
+>> -  appendfsync: ***always(可能丢失一个事件内的的所有写命令)***、everysec(会丢失一秒钟数据)、no(文件同步操作由操作系统决定，Redis重启会丢失数据)
+>> - AOF有文件重写功能以压缩日益膨胀的aof文件体积
+2. `RDB(Redis Data Binary)`使用键值对的压缩二进制文件保存数据库状态。
+> - 通过SAVE和BGSAVE两种命令创建RDB文件，前者创建时会阻塞工作进程，而后者则另起一个子进程做创建工作不会阻塞Redis工作进程。
+> - Redis周期性操作函数serverCron，定期检查是否满足RDB操作条件(save 600 3. 600秒内至少操作了3次修改)。如果满足则进行RDB相关操作。类似定时器操作***所以较容易丢失数据***
 
 
 
 
 
-* ###OOP
+* ### OOP
 >- Difference between a `Reference` variable and a `Pointer` in C++?
 >A pointer stores the address of the variable whereas a reference variable is just an alias for that variable.

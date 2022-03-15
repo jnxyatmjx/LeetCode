@@ -37,11 +37,11 @@
 
 
 
-* ### **无序数组中找到$Kth$大(小)的值**
+* ### 无序数组中找到$Kth$大(小)的值
 
->1. 排序后找到$Kth$值 Time: $O(Nlog_2N)$
->2. 遍历数据同时放入堆 Time:$O(Nlog_2K)$
->3. [**快速选择**]  类似  [**快速排序**] 能以**最快$O(2N-1)$**,\[**最差$O(N^2)$有序数组**\]速度找打$Kth$值 (e.g.  215)
+> 1. 排序后找到$Kth$值 Time: $O(Nlog_2N)$
+> 2. 遍历数据同时放入堆 Time:$O(Nlog_2K)$
+> 3. [**快速选择**]  类似  [**快速排序**] 能以**最快$O(2N-1)$**,\[**最差$O(N^2)$有序数组**\]速度找打$Kth$值 (e.g.  215)
 
 
 
@@ -49,6 +49,7 @@
 
 
 * ### 死锁及检测死锁
+
 >1. 在MySQL中，当两个或两个以上的事务相互持有或者请求锁，并形成一个**循环的依赖关系**，就会产生死锁
 >2. 两个或两个以上任务同时拥有并请求彼此的资源，请求时**形成一个循环依赖关系**，会产生死锁
 >> 1. MySQL 的死锁检测算法是**深度优先搜索，如果在搜索过程中发现了环，就说明发生了死锁**. 为了避免死锁检测开销过大，如果搜索深度超过了 200（LOCK_MAX_DEPTH_IN_DEADLOCK_CHECK)也同样认为发生了死锁。[e.g. [here](https://leviathan.vip/2020/02/02/mysql-deadlock-check/)]
@@ -210,7 +211,7 @@ vector<vector<int>> subsets(vector<int>& nums) {
 
 
 
-* ###二分查找及变种
+* ### 二分查找及变种
 - 普通二分查找
 - 查第一个二分查找
 - 查最后一个二分查找
@@ -382,7 +383,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                     
+>                                               
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -392,9 +393,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                     
+>                                               
 >   bool isValidBST(struct TreeNode* root){
->                     
+>                                               
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -463,7 +464,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 
 
 
-* ###各种排序及其变种
+* ### 各种排序及其变种
 > - Quick Sorts
 > ```c++
 > //algorithm will cost 2 powers of N, when vector a is increase or decrease

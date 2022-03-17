@@ -9,12 +9,14 @@ class Solution {
 public:
 //simillar to 78
     //Iterate
-    vector<vector<int>> subsetsWithDup1(vector<int>& nums) {
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
         sort(nums.begin(), nums.end());  // sort the numbers to handle duplicates
+
         vector<vector<int>> subsets;
-        subsets.push_back(vector<int>());
-        int startIndex = 0, endIndex = 0;
-        for (int i = 0; i < nums.size(); i++) {
+        subsets.push_back(vector<int>()); //start from empty subsets
+
+        std::size_t startIndex = 0, endIndex = 0;
+        for (std::size_t i = 0; i < nums.size(); i++) {
             startIndex = 0;
             // if current and the previous elements are same, create new subsets only from the subsets
             // added in the previous step
@@ -22,6 +24,7 @@ public:
                 startIndex = endIndex + 1;
             }
             endIndex = subsets.size() - 1;
+            //printf("startIndex:%td,endIndex:%td,resSize:%td\n",startIndex,endIndex,subsets.size());
             for (int j = startIndex; j <= endIndex; j++) {
                 // create a new subset from the existing subset and add the current element to it
                 vector<int> set(subsets[j]);
@@ -33,11 +36,11 @@ public:
     }
 
     //Recursive
-    vector<vector<int>> subsetsWithDup(vector<int>& nums)
+    vector<vector<int>> subsetsWithDup2(vector<int>& nums)
     {
         std::vector<vector<int>> res;
         std::vector<int> out;
-        std::sort(nums.begin(),nums.end());
+        std::sort(nums.begin(),nums.end());//sort array
         bt(nums,res,out,0);
         return res;
     }
@@ -52,9 +55,18 @@ public:
 
             out.push_back(nums[i]);
             bt(nums,res,out,i+1);
+            //print_out(out); //this position is PostOrder
             out.pop_back();
+            //Postorder Position
             while (i+1 < nums.size() && nums[i] == nums[i+1]) i++; // Because of the Sorted Arrary
         }
+    }
+
+    void print_out(vector<int>& out)
+    {
+        for(const auto& aa : out)
+            printf(" %d",aa);
+        printf("\n");
     }
 };
 // @lc code=end

@@ -20,7 +20,8 @@ class Solution {
 public:
     bool isValidBST(TreeNode* root) {
 
-        return help(root,NULL,NULL);
+        //return help(root,NULL,NULL);
+        return help2(root,NULL,NULL);
         // vector<int> res;
 
         // //BST inorder traverl is sorted vector
@@ -47,6 +48,20 @@ public:
         if(lmax && lmax->val >= root->val) return false;
         if(rmin && rmin->val <= root->val) return false;
         return help(root->left,lmax,root) && help(root->right,root,rmin);
+    }
+
+    /*
+        min: root tree's minimum node 
+        max: root tree's maximum node
+    */
+    bool help2(TreeNode *root, TreeNode *min, TreeNode *max)
+    {
+        if(root==NULL) return true;
+
+        if(min && root->val <= min->val) return false;
+        if(max && root->val >= max->val) return false;
+
+        return help2(root->left,min,root) && help2(root->right,root,max);
     }
 };
 // @lc code=end

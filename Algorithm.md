@@ -64,7 +64,7 @@
 3. 递归操作
 4. 撤销选择
 4. *回溯算法*就是**多叉树的遍历问题**，关键是在**前序遍历**和**后序遍历**的位置做⼀些操作。某种程度上说，动态规划的**暴⼒求解阶段就是回溯算法**。只是有的问题具有重叠⼦问题性质，可以⽤dp table或者备忘录优化，将递归树⼤幅剪枝，这就变成了动态规划。
->- array `nums` of distinct integers, return *all the possible permutations*.**46**
+>- array `nums` of distinct integers, return *all the possible **permutations***.**46**
 >```c++
   vector<vector<int>> permute(vector<int>& num) {
           vector<vector<int>> res;
@@ -91,34 +91,108 @@
   ```
 ------
 ------
->- integers `n` and `k`, return *all possible combinations of* `k` *numbers out of the range* `[1,n]`.**77**
+>- integers `n` and `k`, return *all possible **combinations** of* `k` *numbers out of the range* `[1,n]`.**77**
 >```c++
-vector<vector<int>> combine(int n, int k) {
-        vector<vector<int>> res;
-        vector<int> out;
-        backtrack(res,out,1,n,k);//start from 1, [1,....,n]
-        return res;
-    }
-    //Have n select options(n width of decision tree), 
-    //k heigh of decision tree
-    void backtrack(vector<vector<int>>&res ,vector<int>&out,int start, int n,int k)
-    {
-        if(static_cast<int>(out.size()) == k)//bottom of decision tree
-        {
-            res.push_back(out);
-            return ;
-        }
-        for(int i=start; i<=n; i++)
-        {
-            out.push_back(i);//make a choice
-            backtrack(res,out,i+1,n,k);
-            out.pop_back();
-        }
-    }//end backtrack;
-  ```
+>vector<vector<int>> combine(int n, int k) {
+>        
+>        vector<vector<int>> res;
+>        vector<int> out;
+>        backtrack(res,out,1,n,k);//start from 1, [1,....,n]
+>        return res;
+>    }
+>
+>    //Have n select options(n width of decision tree), 
+>    //k heigh of decision tree
+>    void backtrack(vector<vector<int>>&res ,vector<int>&out,int start, int n,int k)
+>    {
+>        if(static_cast<int>(out.size()) == k)//bottom of decision tree
+>        {
+>            res.push_back(out);
+>            return ;
+>        }
+>
+>        for(int i=start; i<=n; i++)
+>        {
+>            out.push_back(i);//make a choice
+>            backtrack(res,out,i+1,n,k);
+>            out.pop_back();
+>        }
+>    }//end backtrack;
+>```
+>
+>- array of *distinct integers candidates* and a integer *target*, return a list of all unique **combinations** of candidates where the chosen numbers sum to target. *The same number may be chosen from candidates an unlimited number of times*.**39**
+>
+>```c++
+>vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+>      vector<vector<int>> res;
+>      vector<int> out;
+>      bt(candidates,res,out,target,0,0);
+>      return res;
+>  }
+>
+>  void bt(vector<int>& candidates, vector<vector<int>>& res, vector<int>& out, int target, int sum, int st)
+>  {
+>      if(sum == target)
+>      {
+>          res.push_back(out);
+>          return;
+>      }
+>      //Missing this condition will result in Time Limited Exceeded
+>      if(sum > target)
+>       return;
+>
+>      for(int i=st; i<candidates.size(); i++)
+>      {
+>          sum += candidates[i];
+>          out.push_back(candidates[i]);
+>          //The same number may be chosen from candidates an unlimited number of times.
+>          bt(candidates,res,out,target,sum,/*i+1*/ i); //Caution Here.
+>          out.pop_back();
+>          sum -= candidates[i];
+>      }
+>  }
+>```
+>
+>- array of *duplicated integers candidates* and a integer *target*, return a list of all unique **combinations** of candidates where the chosen numbers sum to target. Each number in candidates may only be used **once** in the combination.**40**
+>```c++
+>vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+>      vector<vector<int>> res;
+>      vector<int> out;
+>      std::sort(candidates.begin(),candidates.end()); //Sort this array
+>      bt(candidates,res,out,target,0,0);
+>      return res;
+>  }
+>
+>  void bt(vector<int>& candidates, vector<vector<int>>& res, vector<int>& out, int target, int sum, std::size_t start)
+>  {
+>      if(sum == target)
+>      {
+>          res.push_back(out);
+>          return ;
+>      }
+>
+>      //Missing this condition will result in Time Limit Exceeded
+>      if(sum > target)
+>          return ;
+>
+>      for(std::size_t i=start; i<candidates.size(); i++)
+>      {
+>          //Remove duplicate elements
+>          if(i>start && candidates[i] == candidates[i-1]) 
+>              continue;
+>
+>          sum += candidates[i];
+>          out.push_back(candidates[i]);
+>          bt(candidates,res,out,target,sum,i+1);
+>          out.pop_back();
+>          sum -= candidates[i];
+>      }
+>  }
+>```
+>
 ------
 ------
->- array `nums` of distinct elements, return *all possible subsets (the power set)*.**78**
+>- array nums of `distinct elements`, return *all possible **subsets** (the power set)*.**78**
 >```c++
 vector<vector<int>> subsets(vector<int>& nums) {
         if(nums.size() <= 0)
@@ -140,7 +214,39 @@ vector<vector<int>> subsets(vector<int>& nums) {
         }
     }
   ```
-
+>- array nums that may `contain duplicates`, return all possible **subsets** (the power set).**90**
+>
+>  ```c++
+>  vector<vector<int>> subsetsWithDup(vector<int>& nums)
+>      {
+>          std::vector<vector<int>> res;
+>          std::vector<int> out;
+>      
+>          std::sort(nums.begin(),nums.end());//sort array
+>      
+>          bt(nums,res,out,0);
+>          return res;
+>      }
+>  
+>      void bt(vector<int>& nums, vector<vector<int>>& res, vector<int>& out, size_t  start)
+>      {
+>          res.push_back(out);//start from empty subset
+>  
+>          for(size_t i=start; i<nums.size(); i++)
+>          {
+>              //Preorder Position
+>              if(i>start && nums[i]==nums[i-1])  continue;
+>  
+>              out.push_back(nums[i]);
+>              bt(nums,res,out,i+1);
+>              out.pop_back();
+>  
+>              //Postorder Position
+>              //while (i+1 < nums.size() && nums[i] == nums[i+1]) i++;
+>          }
+>      }
+>  ```
+------
 ------
 >- `N-Queens`.51
 >
@@ -383,7 +489,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                               
+>                                                                   
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -393,9 +499,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                               
+>                                                                   
 >   bool isValidBST(struct TreeNode* root){
->                                               
+>                                                                   
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```

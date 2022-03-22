@@ -21,6 +21,7 @@ public:
             res.push_back(out);
             return;
         }
+        //Missing this condition will result in Time Limited Exceeded
         if(sum > target)
          return;
 
@@ -28,6 +29,7 @@ public:
         {
             sum += candidates[i];
             out.push_back(candidates[i]);
+            printf("i:%d sum:%d\n",i,sum);
             //The same number may be chosen from candidates an unlimited number of times.
             bt(candidates,res,out,target,sum,/*i+1*/ i); //Caution Here.
             out.pop_back();

@@ -9,7 +9,7 @@ class Solution {
 public:
 //simillar to 78
     //Iterate
-    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+    vector<vector<int>> subsetsWithDup1(vector<int>& nums) {
         sort(nums.begin(), nums.end());  // sort the numbers to handle duplicates
 
         vector<vector<int>> subsets;
@@ -36,7 +36,7 @@ public:
     }
 
     //Recursive
-    vector<vector<int>> subsetsWithDup2(vector<int>& nums)
+    vector<vector<int>> subsetsWithDup(vector<int>& nums)
     {
         std::vector<vector<int>> res;
         std::vector<int> out;
@@ -51,14 +51,15 @@ public:
 
         for(size_t i=start; i<nums.size(); i++)
         {
-            //while (i+1 < nums.size() && nums[i] == nums[i+1]) i++; // Here is Error
+            //Preorder Position
+            if(i>start && nums[i]==nums[i-1])  continue;
 
             out.push_back(nums[i]);
             bt(nums,res,out,i+1);
-            //print_out(out); //this position is PostOrder
             out.pop_back();
+
             //Postorder Position
-            while (i+1 < nums.size() && nums[i] == nums[i+1]) i++; // Because of the Sorted Arrary
+            //while (i+1 < nums.size() && nums[i] == nums[i+1]) i++;
         }
     }
 

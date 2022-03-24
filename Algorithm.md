@@ -64,31 +64,71 @@
 3. 递归操作
 4. 撤销选择
 4. *回溯算法*就是**多叉树的遍历问题**，关键是在**前序遍历**和**后序遍历**的位置做⼀些操作。某种程度上说，动态规划的**暴⼒求解阶段就是回溯算法**。只是有的问题具有重叠⼦问题性质，可以⽤dp table或者备忘录优化，将递归树⼤幅剪枝，这就变成了动态规划。
->- array `nums` of distinct integers, return *all the possible **permutations***.**46**
+>- array `nums` of distinct integers, return *all the possible **permutations***.**46** Time$O(N*N!)$ Space$O(N*N!)$
+>
 >```c++
-  vector<vector<int>> permute(vector<int>& num) {
-          vector<vector<int>> res;
-          vector<int> out, visited(num.size(), 0);
-          backtrack(num, 0, visited, out, res);
-          return res;
-      }
-      void backtrack(vector<int>& num, int level, vector<int>& visited, vector<int>& out, vector<vector<int>>& res) {
-          //level is recored current number of visited
-          if (level == num.size()) {
-                  res.push_back(out); 
-                  return;
-              }
-          for (int i = 0; i < num.size(); ++i) {
-              if (visited[i] == 1) //position of num array
-                  continue;
-              visited[i] = 1;
-              out.push_back(num[i]); //make a choice
-              backtrack(num, level + 1, visited, out, res);
-              out.pop_back(); //cancel the choice
-              visited[i] = 0;
-          }//end for
-      }
-  ```
+>vector<vector<int>> permute(vector<int>& num) {
+>      vector<vector<int>> res;
+>      vector<int> out, visited(num.size(), 0);
+>      backtrack(num, 0, visited, out, res);
+>      return res;
+>  }
+>
+>  void backtrack(vector<int>& num, int level, vector<int>& visited, vector<int>& out, vector<vector<int>>& res) {
+>
+>      //level is recored current number of visited
+>      if (level == num.size()) {
+>              res.push_back(out); 
+>              return;
+>          }
+>
+>      for (int i = 0; i < num.size(); ++i) {
+>          if (visited[i] == 1) //position of num array
+>              continue;
+>
+>          visited[i] = 1;
+>          out.push_back(num[i]); //make a choice
+>
+>          backtrack(num, level + 1, visited, out, res);
+>
+>          out.pop_back(); //cancel the choice
+>          visited[i] = 0;
+>      }//end for
+>  }
+>```
+>- array `nums` that might `contain duplicates` integers, return *all the possible **permutations***.**47** Time$O(N*N!)$ Space$O(N*N!)$
+>
+>```c++
+>vector<vector<int>> permuteUnique(vector<int>& nums) {
+>        vector<vector<int>> res;
+>        vector<bool> visited(nums.size(),false);
+>        vector<int> out;
+>        sort(nums.begin(),nums.end());
+>        bt(nums,res,out,visited,0);
+>        return res;
+>    }
+>
+>    void bt(vector<int>& nums, vector<vector<int>>& res, vector<int>& out, vector<bool>& visi, size_t leve)
+>    {
+>        if(leve >= nums.size())
+>        {
+>            res.push_back(out);
+>            return;
+>        }
+>
+>        for(size_t i=0; i<nums.size(); i++)
+>        {
+>            if(visi[i]) continue;
+>            if(i>0 && nums[i]==nums[i-1] && visi[i-1] == false) continue;
+>
+>            visi[i] = true;
+>            out.push_back(nums[i]);
+>            bt(nums,res,out,visi,leve+1);
+>            out.pop_back();
+>            visi[i] = false;
+>        }
+>    }
+>```
 ------
 ------
 >- integers `n` and `k`, return *all possible **combinations** of* `k` *numbers out of the range* `[1,n]`.**77**
@@ -192,60 +232,60 @@
 >
 ------
 ------
->- array nums of `distinct elements`, return *all possible **subsets** (the power set)*.**78**
+>- array nums of `distinct elements`, return *all possible **subsets** (the power set)*.**78** Time $O(N*2^N)$  Space$O(N*2^N)$
 >```c++
-vector<vector<int>> subsets(vector<int>& nums) {
-        if(nums.size() <= 0)
-            return vector<vector<int>>();
-        vector<vector<int>> res;
-        vector<int> out;
-        bt(nums,res,out,0);
-        return res;
-    } //end subsets
-    void bt(vector<int>& nums,vector<vector<int>>& res,vector<int>& out,int start)
-    {
-        //this maybe a NULL set ??
-        res.push_back(out); //Why and WF?????
-        for(int i=start; i<nums.size(); i++)
-        {
-            out.push_back(nums[i]);
-            bt(nums,res,out,i+1);
-            out.pop_back();
-        }
-    }
-  ```
+>vector<vector<int>> subsets(vector<int>& nums) {
+>      if(nums.size() <= 0) 
+>          return vector<vector<int>>();
+>      vector<vector<int>> res;
+>      vector<int> out;
+>      bt(nums,res,out,0);
+>      return res;
+>  } //end subsets
+>  void bt(vector<int>& nums,vector<vector<int>>& res,vector<int>& out,int start)
+>  {
+>      //this maybe a NULL set ??
+>      res.push_back(out); //Why and WF?????
+>      for(int i=start; i<nums.size(); i++)
+>      {
+>          out.push_back(nums[i]);
+>          bt(nums,res,out,i+1);
+>          out.pop_back();
+>      }
+>  }
+>```
 >- array nums that may `contain duplicates`, return all possible **subsets** (the power set).**90**
 >
->  ```c++
->  vector<vector<int>> subsetsWithDup(vector<int>& nums)
->      {
->          std::vector<vector<int>> res;
->          std::vector<int> out;
->      
->          std::sort(nums.begin(),nums.end());//sort array
->      
->          bt(nums,res,out,0);
->          return res;
->      }
->  
->      void bt(vector<int>& nums, vector<vector<int>>& res, vector<int>& out, size_t  start)
->      {
->          res.push_back(out);//start from empty subset
->  
->          for(size_t i=start; i<nums.size(); i++)
->          {
->              //Preorder Position
->              if(i>start && nums[i]==nums[i-1])  continue;
->  
->              out.push_back(nums[i]);
->              bt(nums,res,out,i+1);
->              out.pop_back();
->  
->              //Postorder Position
->              //while (i+1 < nums.size() && nums[i] == nums[i+1]) i++;
->          }
->      }
->  ```
+> ```c++
+> vector<vector<int>> subsetsWithDup(vector<int>& nums)
+>     {
+>         std::vector<vector<int>> res;
+>         std::vector<int> out;
+>
+>         std::sort(nums.begin(),nums.end());//sort array
+>
+>         bt(nums,res,out,0);
+>         return res;
+>     }
+>
+>     void bt(vector<int>& nums, vector<vector<int>>& res, vector<int>& out, size_t  start)
+>     {
+>         res.push_back(out);//start from empty subset
+>
+>         for(size_t i=start; i<nums.size(); i++)
+>         {
+>             //Preorder Position
+>             if(i>start && nums[i]==nums[i-1])  continue;
+>
+>             out.push_back(nums[i]);
+>             bt(nums,res,out,i+1);
+>             out.pop_back();
+>
+>             //Postorder Position
+>             //while (i+1 < nums.size() && nums[i] == nums[i+1]) i++;
+>         }
+>     }
+> ```
 ------
 ------
 >- `N-Queens`.51
@@ -489,7 +529,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                   
+>                                                                             
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -499,9 +539,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                   
+>                                                                             
 >   bool isValidBST(struct TreeNode* root){
->                                                                   
+>                                                                             
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```

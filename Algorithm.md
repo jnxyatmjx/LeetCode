@@ -244,8 +244,8 @@
 >  } //end subsets
 >  void bt(vector<int>& nums,vector<vector<int>>& res,vector<int>& out,int start)
 >  {
->      //this maybe a NULL set ??
->      res.push_back(out); //Why and WF?????
+>      //this maybe a NULL set
+>      res.push_back(out); //start from empty subset
 >      for(int i=start; i<nums.size(); i++)
 >      {
 >          out.push_back(nums[i]);
@@ -529,7 +529,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                             
+>                                                                               
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -539,9 +539,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                             
+>                                                                               
 >   bool isValidBST(struct TreeNode* root){
->                                                                             
+>                                                                               
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```

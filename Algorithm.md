@@ -529,7 +529,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                               
+>                                                                                         
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -539,9 +539,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                               
+>                                                                                         
 >   bool isValidBST(struct TreeNode* root){
->                                                                               
+>                                                                                         
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -672,3 +672,20 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 > 	quick_sort2(a, lft, i-1);
 > 	quick_sort2(a, i+1, rgt);
 > }
+
+> - Merge Sort
+> ```c++
+> template<class Iter>
+> void mergeSort(Iter bgin, Iter end) //exclude iterator end. [bgin, end)
+> {
+>         if( end - bgin <= 1 ) return ;
+>     
+>         Iter mid = bgin + (end-bgin)/2;
+>         mergeSort(bgin,mid); //[bgin,mid)
+>         mergeSort(mid,end);  //[mid,end)
+>         std::inplace_merge(bgin,mid,end);
+>     /*Merges two consecutive sorted ranges: [first,middle) and [middle,last)
+>       putting the result into the combined sorted range [first,last).*/
+> 
+> }
+

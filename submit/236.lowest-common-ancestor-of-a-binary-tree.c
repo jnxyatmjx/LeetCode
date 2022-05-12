@@ -23,6 +23,8 @@ struct TreeNode* lowestCommonAncestor(struct TreeNode* root, struct TreeNode* p,
 
     if(lft ==NULL) return rgt;
     if(rgt ==NULL) return lft;
+    
+    /*lft!=NULL && rgt!=NULL*/
     return root;
 }
 // @lc code=end

@@ -107,3 +107,15 @@ ___
 * ### OOP
 >- Difference between a `Reference` variable and a `Pointer` in C++?
 >A pointer stores the address of the variable whereas a reference variable is just an alias for that variable.
+
+
+
+
+
+
+* ### MySQL
+* #### InnoDB Cluster
+>- MySQL InnoDB Cluster provides a complete high availability solution for MySQL. Each MySQL server instance in an InnoDB Cluster runs MySQL Group Replication, which provides the mechanism to replicate data within an InnoDB Cluster, with built-in failover.
+>- [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) can automatically configure itself based on the cluster you deploy, connecting client applications transparently to the server instances.
+>- In the default Single-Primary mode, an InnoDB Cluster has a single Read-Write server instance - the Primary. Multiple secondary server instances are replicas of the primary. If the primary fails, a secondary is automatically promoted to the role of primary. 
+>- follow diagram show an overview of how the technologies work together:![](https://dev.mysql.com/doc/mysql-shell/8.0/en/images/innodb_cluster_overview.png)

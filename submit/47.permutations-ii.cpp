@@ -18,7 +18,7 @@ public:
 
     void bt(vector<int>& nums, vector<vector<int>>& res, vector<int>& out, vector<bool>& visi, size_t leve)
     {
-        if(leve >= nums.size())
+        if(leve == nums.size())
         {
             res.push_back(out);
             return;

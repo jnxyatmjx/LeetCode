@@ -18,6 +18,7 @@ public:
                 stack.push_back( s[i] );
                 continue;
             }
+
             // if s[i] is ')'
             if (stack.size() > 0)  {
                 stack.pop_back();
@@ -25,13 +26,12 @@ public:
                 cnt++; // missed the '('
             }
             
-            // if  s[i+1] is ')', need to skip
+            // if  s[i+1] and [i] all is ')', need to skip
             if ( i < len -1 && s[i+1] == ')' ) {
                 i++;
             }else{
                 cnt++; //missed the ')'
             }
-         
         }
         
         // if the stack still has '(', which means need double of ')'

@@ -27,6 +27,8 @@ public:
         for(size_t i=0; i<nums.size(); i++)
         {
             if(visi[i]) continue;
+
+            //The relative position of the same elements in the arrangement remain unchanged
             if(i>0 && nums[i]==nums[i-1] && visi[i-1] == false) continue;
 
             visi[i] = true;

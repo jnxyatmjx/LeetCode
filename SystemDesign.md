@@ -110,6 +110,11 @@ ___
 
 
 
+* ### Design Pattern
+> - ***Factory Method Pattern*** is defined as providing an interface for object creation but delegating the actual instantiation of objects to subclasses. 为对象的创建提供一个接口，但将对象实例化委托给子类。
+> - **Abstract factory pattern** is defined as defining an interface to create families of related or dependent objects without specifying their concrete classes. 定义一个接口来创建相关或依赖对象的家族，而不用指定它们的具体类。
+
+
 
 
 

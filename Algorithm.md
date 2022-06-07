@@ -68,66 +68,68 @@
 >
 >```c++
 >vector<vector<int>> permute(vector<int>& num) {
->      vector<vector<int>> res;
->      vector<int> out, visited(num.size(), 0);
->      backtrack(num, 0, visited, out, res);
->      return res;
->  }
+>     vector<vector<int>> res;
+>     vector<int> out, visited(num.size(), 0);
+>     backtrack(num, 0, visited, out, res);
+>     return res;
+> }
 >
->  void backtrack(vector<int>& num, int level, vector<int>& visited, vector<int>& out, vector<vector<int>>& res) {
+> void backtrack(vector<int>& num, int level, vector<int>& visited, vector<int>& out, vector<vector<int>>& res) {
 >
->      //level is recored current number of visited
->      if (level == num.size()) {
->              res.push_back(out); 
->              return;
->          }
+>     //level is recored current number of visited
+>     if (level == num.size()) {
+>             res.push_back(out); 
+>             return;
+>         }
 >
->      for (int i = 0; i < num.size(); ++i) {
->          if (visited[i] == 1) //position of num array
->              continue;
+>     for (int i = 0; i < num.size(); ++i) {
+>         if (visited[i] == 1) //position of num array
+>             continue;
 >
->          visited[i] = 1;
->          out.push_back(num[i]); //make a choice
+>         visited[i] = 1;
+>         out.push_back(num[i]); //make a choice
 >
->          backtrack(num, level + 1, visited, out, res);
+>         backtrack(num, level + 1, visited, out, res);
 >
->          out.pop_back(); //cancel the choice
->          visited[i] = 0;
->      }//end for
->  }
+>         out.pop_back(); //cancel the choice
+>         visited[i] = 0;
+>     }//end for
+> }
 >```
 >- array `nums` that might `contain duplicates` integers, return *all the possible **permutations***.**47** Time$O(N*N!)$ Space$O(N*N!)$
 >
 >```c++
 >vector<vector<int>> permuteUnique(vector<int>& nums) {
->        vector<vector<int>> res;
->        vector<bool> visited(nums.size(),false);
->        vector<int> out;
->        sort(nums.begin(),nums.end());
->        bt(nums,res,out,visited,0);
->        return res;
->    }
+>       vector<vector<int>> res;
+>       vector<bool> visited(nums.size(),false);
+>       vector<int> out;
+>       sort(nums.begin(),nums.end());
+>       bt(nums,res,out,visited,0);
+>       return res;
+>   }
 >
->    void bt(vector<int>& nums, vector<vector<int>>& res, vector<int>& out, vector<bool>& visi, size_t leve)
->    {
->        if(leve >= nums.size())
->        {
->            res.push_back(out);
->            return;
->        }
+>   void bt(vector<int>& nums, vector<vector<int>>& res, vector<int>& out, vector<bool>& visi, size_t leve)
+>   {
+>       if(leve == nums.size())
+>       {
+>           res.push_back(out);
+>           return;
+>       }
 >
->        for(size_t i=0; i<nums.size(); i++)
->        {
->            if(visi[i]) continue;
->            if(i>0 && nums[i]==nums[i-1] && visi[i-1] == false) continue;
+>       for(size_t i=0; i<nums.size(); i++)
+>       {
+>           if(visi[i]) continue;
+>           
+>           //The relative position of the same elements in the arrangement remain unchanged
+>           if(i>0 && nums[i]==nums[i-1] && visi[i-1] == false) continue;
 >
->            visi[i] = true;
->            out.push_back(nums[i]);
->            bt(nums,res,out,visi,leve+1);
->            out.pop_back();
->            visi[i] = false;
->        }
->    }
+>           visi[i] = true;
+>           out.push_back(nums[i]);
+>           bt(nums,res,out,visi,leve+1);
+>           out.pop_back();
+>           visi[i] = false;
+>       }
+>   }
 >```
 ------
 ------
@@ -160,7 +162,7 @@
 >    }//end backtrack;
 >```
 >
->- array of *distinct integers candidates* and a integer *target*, return a list of all unique **combinations** of candidates where the chosen numbers sum to target. *The same number may be chosen from candidates an unlimited number of times*.**39**
+>- array of *distinct integers candidates* and a integer *target*, return a list of all unique **combinations** of candidates where the chosen numbers sum to target. ***The same number may be chosen from candidates an unlimited number of times***.**39**
 >
 >```c++
 >vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
@@ -529,7 +531,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                         
+>                                                                                           
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -539,9 +541,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                         
+>                                                                                           
 >   bool isValidBST(struct TreeNode* root){
->                                                                                         
+>                                                                                           
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```

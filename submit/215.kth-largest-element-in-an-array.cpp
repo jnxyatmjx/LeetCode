@@ -40,6 +40,7 @@ void quick_sock2(vector<int>& a, int lft, int rgt,int k)
 
 
     //Decreasing array. the more forward, the bigger
+    // i is the pivot position, and if (k == i+1) so k is the position we need find
     if(k < i+1) //
         quick_sock2(a,lft,i-1,k);
     else if(k > i+1)

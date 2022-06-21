@@ -98,9 +98,9 @@ ___
 > - Redis周期性操作函数serverCron，定期检查是否满足RDB操作条件(save 600 3. 600秒内至少操作了3次修改)。如果满足则进行RDB相关操作。类似定时器操作***所以较容易丢失数据***
 > - RDB紧凑的单文件保存数据快照，易于传输且数据恢复速度快
 >
-> 
 
-
+3. In theory, **for asynchronous replication**, there is no guarantee to prevent data loss. 理论上，异步数据复制无法保证数据不丢失
+> -  However, this is an extremely low probability scenario as described above.但是可以极大减少出现的概率
 
 
 

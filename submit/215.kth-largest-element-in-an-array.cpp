@@ -9,8 +9,16 @@ class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
         
-        quick_sock2(nums,0,static_cast<int>(nums.size())-1,k);
-        return nums[k-1];
+        //quick_sock2(nums,0,static_cast<int>(nums.size())-1,k);
+        //quick_sock1(nums,0,static_cast<int>(nums.size())-1,k);
+        //return nums[k-1];
+        for(const auto n : nums)
+        {
+            minHeap.push(n);
+            if(minHeap.size() > k)
+                minHeap.pop();
+        }
+        return minHeap.top();
     }
 
 //Decrease Sort
@@ -55,26 +63,24 @@ void quick_sock1(vector<int>& a, int lft, int rgt, int k)
     
     while(1)
     {
-        while(a[++i]<pivot) //when equal to pivot stop i, swap i,j
-            if(i>=rgt)
-                break;
+        while(a[++i]>pivot) //when equal to pivot stop i, swap i,j
+            if(i>=rgt) break;
         
-        while(a[--j]>pivot) //when equal to pivot stop j, swap j,i
-            if(j<=lft)
-                break;
+        while(a[--j]<pivot) //when equal to pivot stop j, swap j,i
+            if(j<=lft) break;
 
-        if(i < j)
-            swap(a[i],a[j]);
-        else
-            break;
+        if(i < j) swap(a[i],a[j]);
+        else break;
         
     }//end while
 
     //set pivot to right position
     swap(a[j],a[lft]);
 
-    quick_sock1(a,lft,j-1,k);
-    quick_sock1(a,j+1,rgt,k);
+    if(k < j+1)
+        quick_sock1(a,lft,j-1,k);
+    else if(k > j+1)
+        quick_sock1(a,j+1,rgt,k);
 }
 
 //minHeap with k elements

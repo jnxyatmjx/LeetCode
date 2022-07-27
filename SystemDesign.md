@@ -116,6 +116,14 @@ ___
 
 
 
+* ### TCP Finite State Machine
+>- ![](http://www.tcpipguide.com/free/diagrams/tcpfsm.png)
+>- <img src="https://coolshell.cn/wp-content/uploads/2014/05/tcp_open_close.jpg" style="zoom:60%;" />
+>- 从TIME_WAIT状态到CLOSED状态，有一个超时设置是 2*MSL（[RFC793](https://tools.ietf.org/html/rfc793)）为什么要这有TIME_WAIT？为什么不直接给转成CLOSED状态呢？主要有两个原因：
+>>- 1）TIME_WAIT确保有足够的时间让对端收到ACK，如果被动关闭的那方没有收到ACK就会触发被动端重发FIN，一来一去正好2个MSL。
+>>- 2）防止旧链接的迷走segment，影响新连接(新旧链接相同四元组)。
+>- 如果两边同时断连接，那两边就都会就进入到CLOSING状态，然后到达TIME_WAIT状态。下图是双方同时断连接的示意图。
+><img src="http://www.tcpipguide.com/free/diagrams/tcpclosesimul.png" style="zoom:100%"/>
 
 
 * ### MySQL
@@ -124,3 +132,19 @@ ___
 >- [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) can automatically configure itself based on the cluster you deploy, connecting client applications transparently to the server instances.
 >- In the default Single-Primary mode, an InnoDB Cluster has a single Read-Write server instance - the Primary. Multiple secondary server instances are replicas of the primary. If the primary fails, a secondary is automatically promoted to the role of primary. 
 >- follow diagram show an overview of how the technologies work together:![](https://dev.mysql.com/doc/mysql-shell/8.0/en/images/innodb_cluster_overview.png)
+
+
+
+
+* ### Distributed System
+* #### CAP
+>- **Consistency ( C ):** All users see the same data at the same time.
+>- **Availability ( A ):** System continues to function even with node failures.
+>- **Partition tolerance ( P ):** System continues to function even if the communication fails between nodes.
+* #### Data Partitioning
+The act of distributing data across a set of nodes is called data partitioning. 
+>- **Consistent Hash**: only a small set of keys move when servers are added or removed.***Caveats$-\infty$*** *this scheme can result in non-uniform data and load distribution*. However solves these issues with the help of Virtual nodes.
+
+* #### Rate limiter
+**Rate limiter is used to control the rate of traffic sent by a client or a service**. Include *Token bucket*,*Leaking bucket*,*Fixed window counter*,*Sliding window log*, *Sliding window counter*.
+>- Sliding Windows with Redis backend. (使用Sorted Set配合zadd，zremrankbyscore，zcard)实现全局限流器。Local rate limiting can be used in conjunction with global rate limiting to reduce load on the global rate limit service. Thus, the rate limit is applied in two stages. The initial coarse grained limiting is performed by the token bucket limit before a fine grained global limit finishes the job.可以配合本地限流器吸收绝大部分流量以保护全局限流器。所以限流器可以用两步实现。在细颗粒度的全局限流器完成工作之前，初始的粗颗粒度的限制由令牌桶执行。

@@ -45,7 +45,8 @@
 
 
 
-
+* ###分布式服务器中较为准确的时间点
+> 
 
 
 * ### 死锁及检测死锁
@@ -531,7 +532,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                           
+>                                                                                                   
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -541,9 +542,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                           
+>                                                                                                   
 >   bool isValidBST(struct TreeNode* root){
->                                                                                           
+>                                                                                                   
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```

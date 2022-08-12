@@ -532,7 +532,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                                   
+>                                                                                                                                       
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -542,9 +542,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                                   
+>                                                                                                                                       
 >   bool isValidBST(struct TreeNode* root){
->                                                                                                   
+>                                                                                                                                       
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -692,3 +692,19 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 > 
 > }
 
+
+* ### Leetcode Block
+#### list
+>- 138 Copy List with Random Pointer.
+>  1、原链表节点追加新节点。--》 新节点random为原节点random的下一节点。
+>  2、使用map存储 原节点为key  ，新节点为value。
+>
+>- 86 Partition List
+> 1、按照x值将原链表分为两个子链表。--》将两个子链表合并为最终结果链表
+> 
+>- 148 Sort List
+>
+>   1、使用合并排序处理。使用到链表分裂功能
+>
+#### binary tree
+>-

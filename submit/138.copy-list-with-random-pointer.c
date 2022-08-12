@@ -13,7 +13,7 @@
  *     struct Node *random;
  * };
  */
-
+//https://mp.weixin.qq.com/s?__biz=MzU4NDE3MTEyMA==&mid=2247492747&idx=1&sn=1c30855f75abbe6507d6fe23698c3f58&chksm=fd9f4f94cae8c6822a15742063d9368f4500f23315c510fddab1f3090a4ce8d7ffd61a249593&scene=178&cur_album_id=1936977672195096585#rd
 void printfl(struct Node* head)
 {
     while(head!=NULL){

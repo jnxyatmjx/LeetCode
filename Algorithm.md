@@ -58,8 +58,8 @@
 
 
 
+### 回溯及操作步骤
 
-* ### 回溯及操作步骤
 1. 在选项集合中遍历选项
 2. 做出选择
 3. 递归操作
@@ -360,7 +360,8 @@
 
 
 
-* ### 二分查找及变种
+### 二分查找及变种
+
 - 普通二分查找
 - 查第一个二分查找
 - 查最后一个二分查找
@@ -429,7 +430,8 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 
 
 
-* ###  Binary Tree二叉树
+###  Binary Tree二叉树
+
 > - **Unique BST**.Integer `N`, return the number of **unique BST's**  which has exactly n nodes of unique values **from 1 to `N`**.96
 > ```c++
 > int numTrees(int n) {
@@ -532,7 +534,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                                                                         
+>                                                                                                                                                       
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -542,9 +544,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                                                                         
+>                                                                                                                                                       
 >   bool isValidBST(struct TreeNode* root){
->                                                                                                                                         
+>                                                                                                                                                       
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -612,8 +614,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 
 
 
-
-* ### 各种排序及其变种
+### 各种排序及其变种
 > - Quick Sorts
 > ```c++
 > //algorithm will cost 2 powers of N, when vector a is increase or decrease
@@ -693,7 +694,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 > }
 
 
-* ### Leetcode Block
+### Leetcode Block
 #### list
 >- 138 Copy List with Random Pointer.
 >  1、原链表节点追加新节点。--》 新节点random为原节点random的下一节点。
@@ -708,3 +709,38 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >
 #### binary tree
 >-
+#### cyclic sort
+>- problems for 41,268,442,448,645
+>
+>- 41 First Missing Positive
+>
+>	1、整数数组$nums$中将 元素下标$i$ 与 值$nums[i]$ 建立索引关系。（$nums[i]-1 == i$ )
+>
+>	2、如果下标$i$与值$nums[i]$符合上述索引关系，则移动下标至下一个位置$i+1$。
+>
+>	3、否则  则将当前下标$i$处元素 与  下标$nums[i]-1$处元素交换值。直到符合上述索引关系后 再移动索引至下一位置。
+>	
+>	```c++
+>	int firstMissingPositive(int* nums, int numsSize){
+>	
+>	    for(int i=0; i<numsSize;)
+>	    {
+>	        if(nums[i]>0 && nums[i]-1 != i 
+>	        && nums[i]-1 < numsSize /*prevent array overflow*/
+>	        && nums[i] != nums[nums[i]-1]/*remove duplicate element, prevent infinite loop*/){
+>	            std::swap(nums+i,nums+nums[i]-1);
+>	        }else
+>	            ++i;
+>	    }
+>		//check the result   
+>	    for(int i=0; i<numsSize;i++){
+>	        if(nums[i]!= i+1 /*[-2147483648] over flow*/)
+>	        {
+>	            return i+1;
+>	        }
+>	    }
+>	    return numsSize+1;
+>	}
+>	```
+>	
+>	

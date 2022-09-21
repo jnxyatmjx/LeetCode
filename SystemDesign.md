@@ -1,11 +1,11 @@
-- ### **Why the need for so many tiers**
+### **Why the need for so many tiers**
 
 > 1. **Single responsibility principle** simply means giving only one responsibility to a component and letting it execute it perfectly, be it saving data, running the application logic or ensuring the delivery of the messages throughout the system. This approach gives us a lot of flexibility and makes management easier. 
 > 2. **Separation of concerns** kind of means the same thing, be concerned about your work only and stop worrying about the rest of the stuff. Keeping the components separate makes them reusable. 
 
 
 
-- ### What is REST
+### What is REST
 > 1. **REST** stands for **Representational State Transfer**. It’s a software architectural style for implementing web services. Web services implemented using the REST architectural style are known as the **RESTful Web services**.
 >
 > 1. REST为**表现层状态转换**，是一种构建网络服务的软件架构风格，符合这种风格的网络服务就叫**RESTful**网络服务
@@ -25,7 +25,7 @@
 
 
 
-- ### Key Characteristics of Distributed Systems
+### Key Characteristics of Distributed Systems
 > 1. **Scalability**
 > > - *Horizontal*: add more servers. scale by adding more servers into pool of resources.  水平增加机器
 > > - *Vertical*: add more resources to the same server.  scale by adding more power (CPU, RAM, Storage, etc.) to an existing server.  提高单机性能
@@ -38,8 +38,8 @@
 
 
 
+### Cache
 
-* ## Cache
 ___
 - ### Keep the cache coherent with the source of truth缓存与库一致性
 > 1. **Write-through cache:** Under this scheme, data is written into the cache and the corresponding database simultaneously. 缓存与库***同时写***
@@ -71,7 +71,7 @@ ___
 
 
 
-* ### ZeroMQ
+### ZeroMQ
 > - A high-performance asynchronous messaging library,It provides a message queue.
 > - ZeroMQ supports *common messaging patterns* (**pub/sub, request/reply, client/server** and others) over a variety of transports (TCP, in-process, inter-process, multicast, WebSocket and more), making inter-process messaging as simple as inter-thread messaging. 
 >	- The inter-process transport passes messages between local processes using a system-dependent IPC mechanism. 
@@ -79,12 +79,12 @@ ___
 > - A ZeroMQ message is a discrete unit of data passed between applications or components of the same application.
 
 
-* ## Redis
+### Redis
 > - 序号发生器 INCR key
 > - 滑动窗口 API限流（使用Sorted Set配合zadd，zremrankbyscore，zcard)
 
 
-* ## Redis持久化方法及其实现原理
+### Redis持久化方法及其实现原理
 1. `AOF(Append Only File) `通过保存Redis的**写命令**来保存数据库状态。具体通过`命令追加`、`文件写入同步`三个步骤实现持久化
 > - **命令追加**: 每个写命令都会以协议格式追加到aof_buf缓冲区。
 >
@@ -110,13 +110,15 @@ ___
 
 
 
-* ### Design Pattern
-> - ***Factory Method Pattern*** is defined as providing an interface for object creation but delegating the actual instantiation of objects to subclasses. 为对象的创建提供一个接口，但将对象实例化委托给子类。
+### Design Pattern
+> - **Factory Method Pattern** is defined as providing an interface for object creation but delegating the actual instantiation of objects to subclasses. 为对象的创建提供一个接口，但将对象实例化委托给子类。
 > - **Abstract factory pattern** is defined as defining an interface to create families of related or dependent objects without specifying their concrete classes. 定义一个接口来创建相关或依赖对象的家族，而不用指定它们的具体类。
+> - **Observer Pattern** is defined as a one to many dependency between objects so that when one object changes state all the dependents are notified.定义了一对多的类关系。当一个subject状态发生变化时，所有observe能够感知到。
 
 
 
-* ### TCP Finite State Machine
+### TCP Finite State Machine
+
 >- ![](http://www.tcpipguide.com/free/diagrams/tcpfsm.png)
 >- <img src="https://coolshell.cn/wp-content/uploads/2014/05/tcp_open_close.jpg" style="zoom:60%;" />
 >- 从TIME_WAIT状态到CLOSED状态，有一个超时设置是 2*MSL（[RFC793](https://tools.ietf.org/html/rfc793)）为什么要这有TIME_WAIT？为什么不直接给转成CLOSED状态呢？主要有两个原因：
@@ -125,9 +127,11 @@ ___
 >- 如果两边同时断连接，那两边就都会就进入到CLOSING状态，然后到达TIME_WAIT状态。下图是双方同时断连接的示意图。
 ><img src="http://www.tcpipguide.com/free/diagrams/tcpclosesimul.png" style="zoom:100%"/>
 
+### MySQL
 
-* ### MySQL
+
 * #### InnoDB Cluster
+
 >- MySQL InnoDB Cluster provides a complete high availability solution for MySQL. Each MySQL server instance in an InnoDB Cluster runs MySQL Group Replication, which provides the mechanism to replicate data within an InnoDB Cluster, with built-in failover.
 >- [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) can automatically configure itself based on the cluster you deploy, connecting client applications transparently to the server instances.
 >- In the default Single-Primary mode, an InnoDB Cluster has a single Read-Write server instance - the Primary. Multiple secondary server instances are replicas of the primary. If the primary fails, a secondary is automatically promoted to the role of primary. 
@@ -135,9 +139,11 @@ ___
 
 
 
+### Distributed System
 
-* ### Distributed System
+
 * #### CAP
+
 >- **Consistency ( C ):** All users see the same data at the same time.
 >- **Availability ( A ):** System continues to function even with node failures.
 >- **Partition tolerance ( P ):** System continues to function even if the communication fails between nodes.

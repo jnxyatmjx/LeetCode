@@ -130,12 +130,20 @@ ___
 ### MySQL
 
 
-* #### InnoDB Cluster
+#### InnoDB Cluster
 
 >- MySQL InnoDB Cluster provides a complete high availability solution for MySQL. Each MySQL server instance in an InnoDB Cluster runs MySQL Group Replication, which provides the mechanism to replicate data within an InnoDB Cluster, with built-in failover.
 >- [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) can automatically configure itself based on the cluster you deploy, connecting client applications transparently to the server instances.
 >- In the default Single-Primary mode, an InnoDB Cluster has a single Read-Write server instance - the Primary. Multiple secondary server instances are replicas of the primary. If the primary fails, a secondary is automatically promoted to the role of primary. 
 >- follow diagram show an overview of how the technologies work together:![](https://dev.mysql.com/doc/mysql-shell/8.0/en/images/innodb_cluster_overview.png)
+
+#### InnoDB 主从复制原理
+>- MySQL Master 将数据变更写入二进制日志( binary log, 其中记录叫做二进制日志事件binary log events，可以通过 show binlog events 进行查看)
+>- MySQL Slave 向Master发送dump协议，Master收到dump请求后向Slave推送bin log。
+>- MySQL Slave 将binary log events 拷贝到它的中继日志(Relay log)。
+>- MySQL Slave 重放 relay log 中事件，将数据变更反映它自己的数据。
+
+
 
 
 

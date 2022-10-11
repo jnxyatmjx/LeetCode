@@ -18,7 +18,7 @@ public:
     virtual ~IObserver() = default;
 
 public:
-    virtual void updateState(const std::string&) = 0;
+    virtual void updateState(const std::string&) = 0; // Used for Subject class notify
 };
 
 class ISubject

@@ -84,7 +84,7 @@ ___
 > - 滑动窗口 API限流（使用Sorted Set配合zadd，zremrankbyscore，zcard)
 
 
-### Redis持久化方法及其实现原理
+### Redis Persistence
 1. `AOF(Append Only File) `通过保存Redis的**写命令**来保存数据库状态。具体通过`命令追加`、`文件写入同步`三个步骤实现持久化
 > - **命令追加**: 每个写命令都会以协议格式追加到aof_buf缓冲区。
 >
@@ -114,6 +114,7 @@ ___
 > - **Factory Method Pattern** is defined as providing an interface for object creation but delegating the actual instantiation of objects to subclasses. 为对象的创建提供一个接口，但将对象实例化委托给子类。
 > - **Abstract factory pattern** is defined as defining an interface to create families of related or dependent objects without specifying their concrete classes. 定义一个接口来创建相关或依赖对象的家族，而不用指定它们的具体类。
 > - **Observer Pattern** is defined as a one to many dependency between objects so that when one object changes state all the dependents are notified.定义了一对多的类关系。当一个subject状态发生变化时，所有observe能够感知到。
+> - **State Pattern** is defined as allowing an object to alter behavior when its internal state changes so that it appears to change its class. 允许对象在其内部状态发生变化时，改变其行为。看上去就像改变了自身所属类一样。
 
 
 

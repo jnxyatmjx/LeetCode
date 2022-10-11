@@ -27,9 +27,9 @@ int uniquePaths(int m, int n){
         for(int j=1;j<n;j++)
         {
             dp[i][j] = dp[i-1][j] + dp[i][j-1];/*表格内部当前格子值是 -- 当前格子的左侧格子走法 + 当前格子的上侧格子走法*/
-            printf("%d ",dp[i][j]);
+            //printf("%d ",dp[i][j]);
         }
-        printf("\n");
+        //printf("\n");
     }
             
     return dp[m-1][n-1];

@@ -58,13 +58,13 @@
 
 
 
-### 回溯及操作步骤
+### 回溯
 
 1. 在选项集合中遍历选项
 2. 做出选择
 3. 递归操作
 4. 撤销选择
-4. *回溯算法*就是**多叉树的遍历问题**，关键是在**前序遍历**和**后序遍历**的位置做⼀些操作。某种程度上说，动态规划的**暴⼒求解阶段就是回溯算法**。只是有的问题具有重叠⼦问题性质，可以⽤dp table或者备忘录优化，将递归树⼤幅剪枝，这就变成了动态规划。
+4. *回溯算法*就是**多叉树的遍历问题**，关键是在**前序遍历**和**后序遍历**的位置做⼀些操作。某种程度上说，*动态规划* 的**暴⼒求解阶段就是回溯算法**。只是有的问题具有重叠⼦问题性质，可以⽤dp table或者备忘录优化，将递归树⼤幅剪枝，这就变成了动态规划。
 >- array `nums` of distinct integers, return *all the possible **permutations***.**46** Time$O(N*N!)$ Space$O(N*N!)$
 >
 >```c++
@@ -359,6 +359,8 @@
 >  ```
 
 
+### 动态规划  Dynamic Programming
+
 
 ### 二分查找及变种
 
@@ -534,7 +536,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                                                                                       
+>                                                                                                                                                           
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -544,9 +546,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                                                                                       
+>                                                                                                                                                           
 >   bool isValidBST(struct TreeNode* root){
->                                                                                                                                                       
+>                                                                                                                                                           
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -722,7 +724,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >	
 >	```c++
 >	int firstMissingPositive(int* nums, int numsSize){
->	
+>			
 >	    for(int i=0; i<numsSize;)
 >	    {
 >	        if(nums[i]>0 && nums[i]-1 != i 

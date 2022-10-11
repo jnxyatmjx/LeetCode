@@ -14,7 +14,7 @@ bool isPalindrome(int x){
         invt = invt*10 + x%10;
         x /= 10;
     }
-
+//printf("%d  %d\n",x,invt);
     return x == invt || x == invt/10;
 }
 // @lc code=end

@@ -26,8 +26,8 @@ int minDepth(struct TreeNode* root){
         int left = minDepth(root->left);
         int right = minDepth(root->right);
         
-        if(left == 0) return right + 1;
-        if(right == 0) return left + 1;
+        if(left == 0) return right + 1; //if left subtree is NULL ,return right subtree+1
+        if(right == 0) return left + 1; //if right subtree is NULL,return left subtree+1
 
         return 1 + minl(left,right);
 }

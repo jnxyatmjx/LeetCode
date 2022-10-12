@@ -58,7 +58,7 @@
 
 
 
-### 回溯
+### 回溯 Back Track
 
 1. 在选项集合中遍历选项
 2. 做出选择
@@ -360,7 +360,7 @@
 
 
 ### 动态规划  Dynamic Programming
-
+- 动态规划比较适合求解最优问题，最大值最小值等问题。我们把问题分解为多个阶段，每个阶段对应一个决策。我们记录每一个阶段可达的状态集合（去掉重复的），然后通过当前阶段的状态集合，来推导下一个阶段的状态集合，动态地往前推进。
 
 ### 二分查找及变种
 
@@ -536,7 +536,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                                                                                           
+>                                                                                                                                                             
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -546,9 +546,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                                                                                           
+>                                                                                                                                                             
 >   bool isValidBST(struct TreeNode* root){
->                                                                                                                                                           
+>                                                                                                                                                             
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -724,7 +724,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >	
 >	```c++
 >	int firstMissingPositive(int* nums, int numsSize){
->			
+>				
 >	    for(int i=0; i<numsSize;)
 >	    {
 >	        if(nums[i]>0 && nums[i]-1 != i 

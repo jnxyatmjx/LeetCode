@@ -6,7 +6,7 @@
 
 // @lc code=start
 
-
+//dynamic programming
 int uniquePaths(int m, int n){
     //1 -- m: number of rows  n: number of columns.
     //2 -- DP TABLE 当前格子中的值:为从上一个格子到当前格子的不同到达方法!!!!

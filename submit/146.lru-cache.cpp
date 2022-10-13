@@ -197,6 +197,78 @@ public:
     }//end function
 };
 
+//Use std::list and double linked list container
+class LRUCache1 {
+private:
+    typedef struct node{
+        int key;
+        int val;
+        node(int k, int v)
+        {
+            key = k;
+            val = v;
+        }
+        ~node(){printf("destroyed\n");}
+    }dlNode;
+    typedef std::list<dlNode*>::iterator Itera;
+
+    std::list<dlNode*> cache;
+    std::unordered_map<int , Itera> idx;//<cache key,list's iterator>
+    int cap;
+public:
+    LRUCache1(int capacity) {
+        cap = capacity;
+        idx.clear();
+    }
+    
+    int get(int key) {
+        if(idx.count(key) > 0)
+        {
+            //get original status in list
+            Itera itr = idx[key];
+            int val = (*itr)->val;
+
+            //set new status for list
+            cache.erase(itr);
+            idx.erase(key);
+            delete (*itr);
+
+            cache.emplace_front(new dlNode(key,val)); //head is recently
+            idx[key] = cache.begin();
+            return val;
+        }else
+            return -1;
+    }
+    
+    //["LRUCache","put","put","put","put","get"]\n[[2],[1,1],[2,2],[3,3],[3,90],[3]]\n
+    void put(int key, int value) {
+        
+        if(idx.count(key) > 0)
+        {
+            Itera itr = idx[key];
+            cache.erase(itr); //all iterators and references unaffected after erase
+            idx.erase(key);
+            delete (*itr);
+
+            cache.emplace_front(new dlNode(key,value));
+            idx[key] = cache.begin();
+
+        }else{
+
+            if(cache.size() >= cap){
+                int key = cache.back()->key;// delete tailer node
+                Itera itr = idx[key];
+                
+                cache.erase(itr);
+                idx.erase(key);
+                delete (*itr);
+            }
+
+            cache.emplace_front(new dlNode(key,value));
+            idx[key] = cache.begin();
+        }
+    }
+};
 /**
  * ["LRUCache","put","put","put","put"]\n[[2],[1,1],[2,2],[3,3],[3,9]]\n
  * Your LRUCache object will be instantiated and called as such:

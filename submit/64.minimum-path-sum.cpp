@@ -13,6 +13,7 @@ __typeof__ (b) b_ = (b);\
     a_ < b_ ? a_ : b_;})
 
 public:
+    //dynamic programming
     int minPathSum(vector<vector<int>>& grid) {
         int res=0;
         vector<vector<int>> dp(grid.size(),vector<int>(grid[0].size(),0));

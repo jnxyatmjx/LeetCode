@@ -14,6 +14,7 @@
 //[[1,3,1,1],[1,5,1,2],[4,2,1,3]]
 int dp(int** grid, int**dp, int row, int col);
 
+//Recursive + dp table
 int minPathSum(int** grid, int gridSize, int* gridColSize){
     int m = gridSize;
     int n = gridColSize[0];

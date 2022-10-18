@@ -53,9 +53,13 @@
 
 >1. 在MySQL中，当两个或两个以上的事务相互持有或者请求锁，并形成一个**循环的依赖关系**，就会产生死锁
 >2. 两个或两个以上任务同时拥有并请求彼此的资源，请求时**形成一个循环依赖关系**，会产生死锁
->> 1. MySQL 的死锁检测算法是**深度优先搜索，如果在搜索过程中发现了环，就说明发生了死锁**. 为了避免死锁检测开销过大，如果搜索深度超过了 200（LOCK_MAX_DEPTH_IN_DEADLOCK_CHECK)也同样认为发生了死锁。[e.g. [here](https://leviathan.vip/2020/02/02/mysql-deadlock-check/)]
+>> 1. MySQL 的死锁检测算法是**深度优先搜索等待关系图，如果在搜索过程中发现了环，就说明发生了死锁**. 为了避免死锁检测开销过大，如果搜索深度超过了 200（LOCK_MAX_DEPTH_IN_DEADLOCK_CHECK)也同样认为发生了死锁。[e.g. [here](https://leviathan.vip/2020/02/02/mysql-deadlock-check/)]
 >> 2. InnoDB 使用 MVCC 来解决事务的并发控制，而其中 Undo Log 是 MVCC 的重要组成部分
-
+>3. 如何预防死锁
+>> 1. 加锁顺序化。固定各个表的加锁顺序。
+>> 2. 遇到可能的死锁不等待直接回滚事务。
+>> 3. 事务开始前获取所有锁，或者等待执行。
+>   
 
 
 ### 回溯 Back Track
@@ -536,7 +540,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                                                                                             
+>                                                                                                                                                                 
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -546,9 +550,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                                                                                             
+>                                                                                                                                                                 
 >   bool isValidBST(struct TreeNode* root){
->                                                                                                                                                             
+>                                                                                                                                                                 
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -724,7 +728,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >	
 >	```c++
 >	int firstMissingPositive(int* nums, int numsSize){
->				
+>						
 >	    for(int i=0; i<numsSize;)
 >	    {
 >	        if(nums[i]>0 && nums[i]-1 != i 

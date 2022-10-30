@@ -163,3 +163,11 @@ The act of distributing data across a set of nodes is called data partitioning.
 * #### Rate limiter
 **Rate limiter is used to control the rate of traffic sent by a client or a service**. Include *Token bucket*,*Leaking bucket*,*Fixed window counter*,*Sliding window log*, *Sliding window counter*.
 >- Sliding Windows with Redis backend. (使用Sorted Set配合zadd，zremrankbyscore，zcard)实现全局限流器。Local rate limiting can be used in conjunction with global rate limiting to reduce load on the global rate limit service. Thus, the rate limit is applied in two stages. The initial coarse grained limiting is performed by the token bucket limit before a fine grained global limit finishes the job.可以配合本地限流器吸收绝大部分流量以保护全局限流器。所以限流器可以用两步实现。在细颗粒度的全局限流器完成工作之前，初始的粗颗粒度的限制由令牌桶执行。
+
+* #### Quorum Consensus 法人共识算法
+**Quorum consensus** can guarantee consistency for both read and write operations.The configuration of $W$, $R$ and $N$ is a typical tradeoff between latency and consistency.
+>- $N$ = The number of replicas.
+>- $W$ = A write quorum of size $W$. For a write operation to be considered as successful, write
+operation must be acknowledged from $W$ replicas.
+>- $R$ = A read quorum of size $R$. For a read operation to be considered as successful, read
+operation must wait for responses from at least $R$ replicas.

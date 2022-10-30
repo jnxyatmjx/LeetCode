@@ -16,10 +16,10 @@
 
 bool ishelp(struct TreeNode* lft,struct TreeNode* rgt){
 
-    if(lft==false && rgt==false )
+    if(lft==NULL && rgt==NULL )
         return true;
 
-    if(lft==false || rgt==false)
+    if(lft==NULL || rgt==NULL)
         return false;
 
     if(lft->val != rgt->val)

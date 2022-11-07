@@ -115,6 +115,7 @@ ___
 > - **Abstract factory pattern** is defined as defining an interface to create families of related or dependent objects without specifying their concrete classes. 定义一个接口来创建相关或依赖对象的家族，而不用指定它们的具体类。
 > - **Observer Pattern** is defined as a one to many dependency between objects so that when one object changes state all the dependents are notified.定义了一对多的类关系。当一个subject状态发生变化时，所有observe能够感知到。
 > - **State Pattern** is defined as allowing an object to alter behavior when its internal state changes so that it appears to change its class. 允许对象在其内部状态发生变化时，改变其行为。看上去就像改变了自身所属类一样。
+> - **Prototype** is a creational design pattern that lets you copy existing objects without making your code dependent on their classes.是一种创建模式。允许在不依赖其他类的前提下复制此类对象。
 
 
 
@@ -158,7 +159,9 @@ ___
 >- **Partition tolerance ( P ):** System continues to function even if the communication fails between nodes.
 * #### Data Partitioning
 The act of distributing data across a set of nodes is called data partitioning. 
->- **Consistent Hash**: only a small set of keys move when servers are added or removed.***Caveats$-\infty$*** *this scheme can result in non-uniform data and load distribution*. However solves these issues with the help of Virtual nodes.
+>- **Consistent Hash**: is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only $k/n$ keys need to be remapped on average, where $k$ is the number of keys, and $n$ is the number of slots(Each slot is then represented by a server in a distributed system or cluster).
+>> - only a small set of keys move when servers are added or removed.
+>> - *This scheme can result in non-uniform data and load distribution*.First, it is impossible to keep the same size of partitions on the ring for all servers considering a server can be added or removed.Second, it is possible to have a non-uniform key distribution on the ring. However solves these issues with the help of ***Virtual Nodes***.
 
 * #### Rate limiter
 **Rate limiter is used to control the rate of traffic sent by a client or a service**. Include *Token bucket*,*Leaking bucket*,*Fixed window counter*,*Sliding window log*, *Sliding window counter*.
@@ -171,3 +174,10 @@ The act of distributing data across a set of nodes is called data partitioning.
 operation must be acknowledged from $W$ replicas.
 >- $R$ = A read quorum of size $R$. For a read operation to be considered as successful, read
 operation must wait for responses from at least $R$ replicas.
+
+* ####Bloom Filter
+**Bloom Filter** how to make a valid choice of parameter.[here](https://hur.st/bloomfilter/)
+>- $n$  number of items in the filter.
+>- $m$ number of bits in the filter.
+>- $k$  number of hash functions.
+>- $p$ probability of **False Positives**. fraction between 0 and 1 or a number indicating $1$-in-$p$.

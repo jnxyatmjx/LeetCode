@@ -10,6 +10,7 @@
 #include <list>
 #include <iostream>
 
+namespace pattern{
 int curs= 0 ;
 
 class IObserver
@@ -88,6 +89,9 @@ private:
     std::string messg_;
     int curnum_;
 };
+}//end namespace
+
+using namespace pattern;
 
 int main(int argc, char *argv[])
 {

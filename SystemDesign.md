@@ -152,30 +152,54 @@ ___
 ### Distributed System
 
 
-* #### CAP
-
+#### CAP
 >- **Consistency ( C ):** All users see the same data at the same time.
 >- **Availability ( A ):** System continues to function even with node failures.
 >- **Partition tolerance ( P ):** System continues to function even if the communication fails between nodes.
-* #### Data Partitioning
+#### Data Partitioning
 The act of distributing data across a set of nodes is called data partitioning. 
 >- **Consistent Hash**: is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only $k/n$ keys need to be remapped on average, where $k$ is the number of keys, and $n$ is the number of slots(Each slot is then represented by a server in a distributed system or cluster).
 >> - only a small set of keys move when servers are added or removed.
 >> - *This scheme can result in non-uniform data and load distribution*.First, it is impossible to keep the same size of partitions on the ring for all servers considering a server can be added or removed.Second, it is possible to have a non-uniform key distribution on the ring. However solves these issues with the help of ***Virtual Nodes***.
 
-* #### Rate limiter
+#### Rate limiter
 **Rate limiter is used to control the rate of traffic sent by a client or a service**. Include *Token bucket*,*Leaking bucket*,*Fixed window counter*,*Sliding window log*, *Sliding window counter*.
 >- Sliding Windows with Redis backend. (使用Sorted Set配合zadd，zremrankbyscore，zcard)实现全局限流器。Local rate limiting can be used in conjunction with global rate limiting to reduce load on the global rate limit service. Thus, the rate limit is applied in two stages. The initial coarse grained limiting is performed by the token bucket limit before a fine grained global limit finishes the job.可以配合本地限流器吸收绝大部分流量以保护全局限流器。所以限流器可以用两步实现。在细颗粒度的全局限流器完成工作之前，初始的粗颗粒度的限制由令牌桶执行。
 
-* #### Quorum Consensus 法人共识算法
+#### RPC
+  **RPC** (Remote Procedure Call) is called “𝐫𝐞𝐦𝐨𝐭𝐞” because it enables communications between remote services when services are deployed to different servers. From the user’s point of view, it acts like a local function call.让远程服务器上的不同服务间进行通讯，从用户角度看就像调用本地函数一样。
+
+  <img src="D:\EastMoney\LeetCode\pictures\Fg-cdXRVEAArIQf.jpg" style="zoom:43%;" />
+#### Distribute Lock
+>- **Redis Redlock Algorithm**
+>>1. It gets the current time in milliseconds. 客户端获取当前时间戳。
+>>
+>>2. It tries to acquire the lock in all the $N$ instances sequentially, using the same key name and random value in all the instances. During step 2, when setting the lock in each instance, the client uses a timeout which is small compared to the total lock auto-release time in order to acquire it. For example if the auto-release time is 10 seconds, the timeout could be in the ~ 5-50 milliseconds range. This prevents the client from remaining blocked for a long time trying to talk with a Redis node which is down: if an instance is not available, we should try to talk with the next instance ASAP.
+>>
+>>   客户端 使用相同key和随机value，在N个实例中***顺序***获取锁。如果锁有效时间为10秒，则令获取锁的超时时间为50毫秒，以保证在某个实例节点不可达时客户端能尽快的轮询下一个节点实例。
+>>
+>>3. The client computes how much time elapsed in order to acquire the lock, by subtracting from the current time the timestamp obtained in step 1. If and only if the client was able to acquire the lock in the majority of the instances (at least 3), and the total time elapsed to acquire the lock is less than lock validity time, the lock is considered to be acquired.                  
+>>
+>>   客户端通过公式计算加锁的消耗时间 $ T当前时间戳 - 步骤1的时间戳$。当且仅当客户端获得了大部分锁($N/2+1$)且$T$小于锁有效时间，怎认为客户端加锁成功。
+>>
+>>4. If the lock was acquired, its validity time is considered to be the initial validity time minus the time elapsed, as computed in step 3. 
+>>
+>>   如果加锁成功则此锁的有效时间为原始锁有效时间(10秒)减去步骤3中的加锁耗时$T$。
+>>
+>>5. If the client failed to acquire the lock for some reason (either it was not able to lock N/2+1 instances or the validity time is negative), it will try to unlock all the instances (even the instances it believed it was not able to lock).
+>>
+>>   如果客户端加锁失败则会主动释放锁。
+>- **Zookeeper**
+#### Quorum Consensus 法人共识算法
 **Quorum consensus** can guarantee consistency for both read and write operations.The configuration of $W$, $R$ and $N$ is a typical tradeoff between latency and consistency.
+
 >- $N$ = The number of replicas.
 >- $W$ = A write quorum of size $W$. For a write operation to be considered as successful, write
 operation must be acknowledged from $W$ replicas.
 >- $R$ = A read quorum of size $R$. For a read operation to be considered as successful, read
 operation must wait for responses from at least $R$ replicas.
 
-* ####Bloom Filter
+####Bloom Filter
 **Bloom Filter** how to make a valid choice of parameter.[here](https://hur.st/bloomfilter/)
 >- $n$  number of items in the filter.
 >- $m$ number of bits in the filter.

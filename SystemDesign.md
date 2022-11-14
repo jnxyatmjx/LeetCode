@@ -167,29 +167,50 @@ The act of distributing data across a set of nodes is called data partitioning.
 >- Sliding Windows with Redis backend. (使用Sorted Set配合zadd，zremrankbyscore，zcard)实现全局限流器。Local rate limiting can be used in conjunction with global rate limiting to reduce load on the global rate limit service. Thus, the rate limit is applied in two stages. The initial coarse grained limiting is performed by the token bucket limit before a fine grained global limit finishes the job.可以配合本地限流器吸收绝大部分流量以保护全局限流器。所以限流器可以用两步实现。在细颗粒度的全局限流器完成工作之前，初始的粗颗粒度的限制由令牌桶执行。
 
 #### RPC
-  **RPC** (Remote Procedure Call) is called “𝐫𝐞𝐦𝐨𝐭𝐞” because it enables communications between remote services when services are deployed to different servers. From the user’s point of view, it acts like a local function call.让远程服务器上的不同服务间进行通讯，从用户角度看就像调用本地函数一样。
+**RPC** (Remote Procedure Call) is called “𝐫𝐞𝐦𝐨𝐭𝐞” because it enables communications between remote services when services are deployed to different servers. From the user’s point of view, it acts like a local function call.让远程服务器上的不同服务间进行通讯，从用户角度看就像调用本地函数一样。
 
   <img src="D:\EastMoney\LeetCode\pictures\Fg-cdXRVEAArIQf.jpg" style="zoom:43%;" />
 #### Distribute Lock
->- **Redis Redlock Algorithm**
->>1. It gets the current time in milliseconds. 客户端获取当前时间戳。
->>
->>2. It tries to acquire the lock in all the $N$ instances sequentially, using the same key name and random value in all the instances. During step 2, when setting the lock in each instance, the client uses a timeout which is small compared to the total lock auto-release time in order to acquire it. For example if the auto-release time is 10 seconds, the timeout could be in the ~ 5-50 milliseconds range. This prevents the client from remaining blocked for a long time trying to talk with a Redis node which is down: if an instance is not available, we should try to talk with the next instance ASAP.
->>
->>   客户端 使用相同key和随机value，在N个实例中***顺序***获取锁。如果锁有效时间为10秒，则令获取锁的超时时间为50毫秒，以保证在某个实例节点不可达时客户端能尽快的轮询下一个节点实例。
->>
->>3. The client computes how much time elapsed in order to acquire the lock, by subtracting from the current time the timestamp obtained in step 1. If and only if the client was able to acquire the lock in the majority of the instances (at least 3), and the total time elapsed to acquire the lock is less than lock validity time, the lock is considered to be acquired.                  
->>
->>   客户端通过公式计算加锁的消耗时间 $ T当前时间戳 - 步骤1的时间戳$。当且仅当客户端获得了大部分锁($N/2+1$)且$T$小于锁有效时间，怎认为客户端加锁成功。
->>
->>4. If the lock was acquired, its validity time is considered to be the initial validity time minus the time elapsed, as computed in step 3. 
->>
->>   如果加锁成功则此锁的有效时间为原始锁有效时间(10秒)减去步骤3中的加锁耗时$T$。
->>
->>5. If the client failed to acquire the lock for some reason (either it was not able to lock N/2+1 instances or the validity time is negative), it will try to unlock all the instances (even the instances it believed it was not able to lock).
->>
->>   如果客户端加锁失败则会主动释放锁。
->- **Zookeeper**
+> - **Redis Single Instance Lock**
+> >   Set-if-Not-Exists to obtain a lock, atomic Delete-if-Value-Matches to release a lock. **As an efficiency optimization, not for correctness**.For example, a good use case is maintaining request counters per IP address (for rate limiting purposes) and sets of distinct IP addresses per user ID (for abuse detection).上锁时 如果没有就设置key_name，其值为每个用户特定随机值uid并设置超时。放琐时用户能匹配uid就可以安全删除，防止用户释放了他人锁。
+> >
+> >   ```lua
+> >   --acquire the lock
+> >   SET key_name client_random_value NX PX 3000
+> >   --release the lock
+> >   if redis.call("get",KEYS[1]) == ARGV[1] then
+> >       return redis.call("del",KEYS[1])
+> >   else
+> >       return 0
+> >   end
+> >   ```
+> - **Redis Redlock Algorithm**
+> > 1. It gets the current time in milliseconds. 客户端获取当前时间戳。
+> > 2. It tries to acquire the lock in all the $N$ instances **Sequentially**, using the same key name and random value in all the instances. During step 2, when setting the lock in each instance, the client uses a timeout which is small compared to the total lock auto-release time in order to acquire it. For example if the auto-release time is 10 seconds, the timeout could be in the ~ 5-50 milliseconds range. This prevents the client from remaining blocked for a long time trying to talk with a Redis node which is down: if an instance is not available, we should try to talk with the next instance ASAP.
+> >   客户端 使用相同key和随机value，在N个实例中***顺序***获取锁。如果锁有效时间为10秒，则令获取锁的超时时间为50毫秒，以保证在某个实例节点不可达时客户端能尽快的轮询下一个节点实例。
+> > 3. The client computes how much time elapsed in order to acquire the lock, by subtracting from the current time the timestamp obtained in step 1. If and only if the client was able to acquire the lock in the majority of the instances (at least 3), and the total time elapsed to acquire the lock is less than lock validity time, the lock is considered to be acquired. 
+> >   客户端通过公式计算加锁的消耗时间 $ T当前时间戳 - 步骤1的时间戳$。当且仅当客户端获得了大部分锁($N/2+1$)且$T$小于锁有效时间，则认为客户端加锁成功。
+> > 4. If the lock was acquired, its validity time is considered to be the initial validity time minus the time elapsed, as computed in step 3. 
+> >   如果加锁成功，则此锁的有效时间为原始锁有效时间(10秒)减去步骤3中的加锁耗时$T$。
+> > 5. If the client failed to acquire the lock for some reason (either it was not able to lock N/2+1 instances or the validity time is negative), it will try to unlock all the instances (even the instances it believed it was not able to lock).
+> >   如果加锁失败，则会主动释放所有节点锁。
+>     **Zookeeper**
+>
+> 基于redis的分布式锁有两个问题
+>
+> - 有fencing tocken错误，如下图
+> <img src="D:\EastMoney\LeetCode\pictures\fencingtoken.JPG" alt="10%" style="zoom: 86%;" />
+>
+> - 基于分布式系统时间假设情况。即分布式系统中每个节点的本地时间基本一致增张方向相同，且锁有效期远大于节点间的时间漂移。(NTP与本地时间差距巨大，管理员修改了时间等情况)。
+>
+> > 1.创建永久znode作为锁节点。
+> > 2.用户加锁时在锁节点下创建临时有序znode。
+> > 3.用户加锁时如下：
+>> 3-1. 先创建临时有序子节点。EPHEMERAL_SEQUENTIAL znode
+>> 3-2. 查找到锁节点的所有子节点并按序号排序。
+>> 3-3. 如果序号是最小序号子节点则加锁成功。
+>> 3-4. 如果不是最小序号则监听上一个子节点。防止惊群现象。
+> > 4.用户释放琐时，直接删除其创建的临时有序子节点。
 #### Quorum Consensus 法人共识算法
 **Quorum consensus** can guarantee consistency for both read and write operations.The configuration of $W$, $R$ and $N$ is a typical tradeoff between latency and consistency.
 

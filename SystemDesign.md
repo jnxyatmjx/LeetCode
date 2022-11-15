@@ -84,7 +84,7 @@ ___
 > - 滑动窗口 API限流（使用Sorted Set配合zadd，zremrankbyscore，zcard)
 
 
-### Redis Persistence
+#### Redis Persistence
 1. `AOF(Append Only File) `通过保存Redis的**写命令**来保存数据库状态。具体通过`命令追加`、`文件写入同步`三个步骤实现持久化
 > - **命令追加**: 每个写命令都会以协议格式追加到aof_buf缓冲区。
 >
@@ -194,23 +194,29 @@ The act of distributing data across a set of nodes is called data partitioning.
 > >   如果加锁成功，则此锁的有效时间为原始锁有效时间(10秒)减去步骤3中的加锁耗时$T$。
 > > 5. If the client failed to acquire the lock for some reason (either it was not able to lock N/2+1 instances or the validity time is negative), it will try to unlock all the instances (even the instances it believed it was not able to lock).
 > >   如果加锁失败，则会主动释放所有节点锁。
->     **Zookeeper**
->
-> 基于redis的分布式锁有两个问题
->
+> - **Zookeeper** is a distributed key-value store and is used for coordination and storing configurations. It is highly optimized for reads. 基于redis的分布式锁有两个问题
 > - 有fencing tocken错误，如下图
 > <img src="D:\EastMoney\LeetCode\pictures\fencingtoken.JPG" alt="10%" style="zoom: 86%;" />
->
-> - 基于分布式系统时间假设情况。即分布式系统中每个节点的本地时间基本一致增张方向相同，且锁有效期远大于节点间的时间漂移。(NTP与本地时间差距巨大，管理员修改了时间等情况)。
->
-> > 1.创建永久znode作为锁节点。
+> 
+>- 基于分布式系统时间假设情况。即分布式系统中每个节点的本地时间基本一致增张方向相同，且锁有效期远大于节点间的时间漂移。(NTP与本地时间差距巨大，管理员修改了时间等情况)。
+> 
+>> 1.创建永久属性znode作为锁节点。
 > > 2.用户加锁时在锁节点下创建临时有序znode。
 > > 3.用户加锁时如下：
->> 3-1. 先创建临时有序子节点。EPHEMERAL_SEQUENTIAL znode
->> 3-2. 查找到锁节点的所有子节点并按序号排序。
+> > 3-1. 在锁节点下创建临时有序子节点。EPHEMERAL_SEQUENTIAL znode
+>> 3-2. 查找锁节点的所有子节点并按序号排序。
 >> 3-3. 如果序号是最小序号子节点则加锁成功。
->> 3-4. 如果不是最小序号则监听上一个子节点。防止惊群现象。
-> > 4.用户释放琐时，直接删除其创建的临时有序子节点。
+>> 3-4. 如果不是最小序号则监听上一个子节点的变动，并等待。防止惊群现象。
+>> 4.用户释放琐时，直接删除其创建的临时有序子节点。
+
+####Kafka
+
+Kafka was created at LinkedIn around 2010 to track various events, such as page views, messages from the messaging system, and logs from various services.
+Kafka divides its messages into categories called **Topics**. In simple terms, a **topic** is like a table in a database, and the messages are the rows in that table.As topics can get quite big, they are split into **partitions** of a smaller size for better performance and scalability.Kafka guarantees that **all messages inside a partition are stored in the sequence they came in**. Ordering of messages is maintained at the partition level, not across the topic.By using **consumer groups**, consumers can be parallelized so that multiple consumers can read from multiple partitions on a topic, allowing a very high message processing throughput.
+
+Why is Kafka fast?
+<img src="D:\EastMoney\LeetCode\pictures\kafaka-zerocopy.jpg" style="zoom: 63%;" />
+
 #### Quorum Consensus 法人共识算法
 **Quorum consensus** can guarantee consistency for both read and write operations.The configuration of $W$, $R$ and $N$ is a typical tradeoff between latency and consistency.
 

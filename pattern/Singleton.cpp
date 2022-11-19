@@ -41,7 +41,7 @@ public:
 	~Singleton() = delete;
 public:
 	static T& instance(){
-		if(inst_ == NULL)
+		if(inst_ == NULL) //data race
 		{
 			inst_ = new T();
 		}

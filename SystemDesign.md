@@ -128,6 +128,23 @@ ___
 >>- 2）防止旧链接的迷走segment，影响新连接(新旧链接相同四元组)。
 >- 如果两边同时断连接，那两边就都会就进入到CLOSING状态，然后到达TIME_WAIT状态。下图是双方同时断连接的示意图。
 ><img src="http://www.tcpipguide.com/free/diagrams/tcpclosesimul.png" style="zoom:100%"/>
+------
+### HTTPS
+How does HTTPS work?
+
+Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Transfer Protocol (HTTP.) HTTPS transmits encrypted data using Transport Layer Security (TLS.) If the data is hijacked online, all the hijacker gets is binary code.<img src="D:\EastMoney\LeetCode\pictures\https.jpg" style="zoom:47%;" />
+
+> Step 1 - The client (browser) and the server **establish a TCP connection**.创建TCP连接
+>
+> Step 2 - The client sends a “**client hello**” to the server. The message contains a set of necessary encryption algorithms and the latest TLS version it can support. The server responds with a “**server hello**” so the browser knows whether it can support the algorithms and TLS version.The **server then sends the SSL certificate to the client**. The certificate contains the public key, host name, expiry dates, etc. The client validates the certificate.客户端与服务段相互发送hello，用以确定加密算法和TLS版本。确定好后服务段发送证书给客户端，证书中包含公钥、过期时间和域名。
+>
+> Step 3 - After validating the SSL certificate, the **client generates a session key** and encrypts it using the public key. The server receives the encrypted session key and decrypts it with the private key.客户端校验完证书正确后生成session key，并用证书加密后发给服务端，服务端用私钥解密得到session key。
+>
+> Step 4 - Now that both the client and the server hold the same session key (**symmetric encryption**), the encrypted data is transmitted in a secure bi-directional channel.客户端和服务端通过session key对数据进行对称加密。
+>
+> Why does HTTPS switch to symmetric encryption during data transmission? There are two main reasons:
+>>1. Security: The asymmetric encryption goes only one way. This means that if the server tries to send the encrypted data back to the client, anyone can decrypt the data using the public key.
+>>2. Server resources: The asymmetric encryption adds quite a lot of mathematical overhead. It is not suitable for data transmissions in long sessions.
 
 ### MySQL
 
@@ -212,7 +229,11 @@ The act of distributing data across a set of nodes is called data partitioning.
 ####Kafka
 
 Kafka was created at LinkedIn around 2010 to track various events, such as page views, messages from the messaging system, and logs from various services.
-Kafka divides its messages into categories called **Topics**. In simple terms, a **topic** is like a table in a database, and the messages are the rows in that table.As topics can get quite big, they are split into **partitions** of a smaller size for better performance and scalability.Kafka guarantees that **all messages inside a partition are stored in the sequence they came in**. Ordering of messages is maintained at the partition level, not across the topic.By using **consumer groups**, consumers can be parallelized so that multiple consumers can read from multiple partitions on a topic, allowing a very high message processing throughput.
+A Kafka server is also called a **broker**. Brokers are responsible for reliably storing data provided by the producers and making it available to the consumers.Kafka divides its messages into categories called **Topics**. In simple terms, a **topic** is like a table in a database, and the messages are the rows in that table.As topics can get quite big, they are split into **partitions** of a smaller size for better performance and scalability.Kafka guarantees that **all messages inside a partition are stored in the sequence they came in**. **Ordering** of messages is maintained **at the partition level**, not across the topic.By using **consumer groups**, consumers can be parallelized so that multiple consumers can read from multiple partitions on a topic, allowing a very high message processing throughput. 
+
+A **leader** **is the node responsible for *all* reads and writes** for the given partition. Every partition has one Kafka broker acting as a leader.To handle single point of failure, Kafka can replicate partitions and distribute them across multiple broker servers called **followers**.
+
+**To handle split-brain** (where we have **multiple active controller brokers**), Kafka uses ‘epoch number,’ which is simply a monotonically increasing number to indicate a server’s generation.This way, brokers can easily differentiate the real Controller by simply **trusting the Controller with the highest number**. This epoch number is stored in ZooKeeper.
 
 Why is Kafka fast?
 <img src="D:\EastMoney\LeetCode\pictures\kafaka-zerocopy.jpg" style="zoom: 63%;" />

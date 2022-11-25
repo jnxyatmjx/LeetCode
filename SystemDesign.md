@@ -124,8 +124,8 @@ ___
 >- ![](http://www.tcpipguide.com/free/diagrams/tcpfsm.png)
 >- <img src="https://coolshell.cn/wp-content/uploads/2014/05/tcp_open_close.jpg" style="zoom:60%;" />
 >- 从TIME_WAIT状态到CLOSED状态，有一个超时设置是 2*MSL（[RFC793](https://tools.ietf.org/html/rfc793)）为什么要这有TIME_WAIT？为什么不直接给转成CLOSED状态呢？主要有两个原因：
->>- 1）TIME_WAIT确保有足够的时间让对端收到ACK，如果被动关闭的那方没有收到ACK就会触发被动端重发FIN，一来一去正好2个MSL。
->>- 2）防止旧链接的迷走segment，影响新连接(新旧链接相同四元组)。
+>>- 1）TIME_WAIT确保有足够的时间让对端收到ACK，能够安全正确的关闭双全工TCP连接。如果被动关闭的那方没有收到ACK就会触发被动端重发FIN，一来一去正好2个MSL。
+>>- 2）防止旧链接的**迷走segment**(e.g. **迷走**就是由于路由协议的问题，TCP分组被路由器A转发给路由器B，随后又被路由器B转发给路由器A)，影响新连接(新旧链接相同四元组)。
 >- 如果两边同时断连接，那两边就都会就进入到CLOSING状态，然后到达TIME_WAIT状态。下图是双方同时断连接的示意图。
 ><img src="http://www.tcpipguide.com/free/diagrams/tcpclosesimul.png" style="zoom:100%"/>
 ------
@@ -175,12 +175,13 @@ Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Tran
 >- **Partition tolerance ( P ):** System continues to function even if the communication fails between nodes.
 #### Data Partitioning
 The act of distributing data across a set of nodes is called data partitioning. 
->- **Consistent Hash**: is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only $k/n$ keys need to be remapped on average, where $k$ is the number of keys, and $n$ is the number of slots(Each slot is then represented by a server in a distributed system or cluster).
+>- **Consistent Hash**: is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only $k/n$ keys need to be remapped on average, where $k$ is the number of keys, and $n$ is the number of slots(Each **slot** is represented by **a server** in a distributed system or cluster).一致哈希是一个hash环，key映射到环的某个位置后，由指定的node(也就是服务器)负责。当node增加或删除后
 >> - only a small set of keys move when servers are added or removed.
 >> - *This scheme can result in non-uniform data and load distribution*.First, it is impossible to keep the same size of partitions on the ring for all servers considering a server can be added or removed.Second, it is possible to have a non-uniform key distribution on the ring. However solves these issues with the help of ***Virtual Nodes***.
 
 #### Rate limiter
 **Rate limiter is used to control the rate of traffic sent by a client or a service**. Include *Token bucket*,*Leaking bucket*,*Fixed window counter*,*Sliding window log*, *Sliding window counter*.
+
 >- Sliding Windows with Redis backend. (使用Sorted Set配合zadd，zremrankbyscore，zcard)实现全局限流器。Local rate limiting can be used in conjunction with global rate limiting to reduce load on the global rate limit service. Thus, the rate limit is applied in two stages. The initial coarse grained limiting is performed by the token bucket limit before a fine grained global limit finishes the job.可以配合本地限流器吸收绝大部分流量以保护全局限流器。所以限流器可以用两步实现。在细颗粒度的全局限流器完成工作之前，初始的粗颗粒度的限制由令牌桶执行。
 
 #### RPC
@@ -231,10 +232,19 @@ The act of distributing data across a set of nodes is called data partitioning.
 Kafka was created at LinkedIn around 2010 to track various events, such as page views, messages from the messaging system, and logs from various services.
 A Kafka server is also called a **broker**. Brokers are responsible for reliably storing data provided by the producers and making it available to the consumers.Kafka divides its messages into categories called **Topics**. In simple terms, a **topic** is like a table in a database, and the messages are the rows in that table.As topics can get quite big, they are split into **partitions** of a smaller size for better performance and scalability.Kafka guarantees that **all messages inside a partition are stored in the sequence they came in**. **Ordering** of messages is maintained **at the partition level**, not across the topic.By using **consumer groups**, consumers can be parallelized so that multiple consumers can read from multiple partitions on a topic, allowing a very high message processing throughput. 
 
-A **leader** **is the node responsible for *all* reads and writes** for the given partition. Every partition has one Kafka broker acting as a leader.To handle single point of failure, Kafka can replicate partitions and distribute them across multiple broker servers called **followers**.
+A **leader** **is the node responsible for *all* reads and writes** for the given partition. **Every partition** has one Kafka broker **acting as a leader**.To handle single point of failure, Kafka can replicate partitions and distribute them across multiple broker servers called **followers**.
 
-**To handle split-brain** (where we have **multiple active controller brokers**), Kafka uses ‘epoch number,’ which is simply a monotonically increasing number to indicate a server’s generation.This way, brokers can easily differentiate the real Controller by simply **trusting the Controller with the highest number**. This epoch number is stored in ZooKeeper.
+**To handle split-brain** (where we have **multiple active controller brokers**), Kafka uses ‘epoch number,’ which is simply a monotonically increasing number to indicate a server’s generation.**This epoch is included in every request that is sent from the Controller to other brokers**.This way, brokers can easily differentiate the real Controller by simply **trusting the Controller with the highest number**. This epoch number is stored in ZooKeeper.
 
+- How can a producer know that the data is successfully stored at the leader or that the followers are keeping up with the leader？生产者保证数据写入成功的几种方式
+> **Async**: Producer sends a message to Kafka and does not wait for acknowledgment from the server. 
+> **Committed to Leader**: Producer waits for an acknowledgment from the leader. 
+> **Committed to Leader and Quorum**: Producer waits for an acknowledgment from the leader and the quorum.
+- What message-delivery guarantees does Kafka provide to consumers? kafka怎样保证消费者消费到数据。
+> **At-most-once**: Messages may be lost but are never redelivered.**Consumers** commit message offsets before they process them.消费者先commit offset再处理消息。
+> **At-least-once**: Messages are never lost but may be redelivered.**Consumer** can process the message first and then commit the offset. 消费者先处理消息再commit offset。
+> **Exactly-once**: Each message is delivered once and only once. Tags every message with a sequence number. In this way, the broker can keep track of the largest number per PID and reject duplicates.
+------
 Why is Kafka fast?
 <img src="D:\EastMoney\LeetCode\pictures\kafaka-zerocopy.jpg" style="zoom: 63%;" />
 

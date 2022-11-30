@@ -244,6 +244,10 @@ A **leader** **is the node responsible for *all* reads and writes** for the give
 > **At-most-once**: Messages may be lost but are never redelivered.**Consumers** commit message offsets before they process them.消费者先commit offset再处理消息。
 > **At-least-once**: Messages are never lost but may be redelivered.**Consumer** can process the message first and then commit the offset. 消费者先处理消息再commit offset。
 > **Exactly-once**: Each message is delivered once and only once. Tags every message with a sequence number. In this way, the broker can keep track of the largest number per PID and reject duplicates.
+
+- 消息的保序
+- 消息的保持 事件回溯模式
+
 ------
 Why is Kafka fast?
 <img src="D:\EastMoney\LeetCode\pictures\kafaka-zerocopy.jpg" style="zoom: 63%;" />

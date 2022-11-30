@@ -18,7 +18,7 @@
  */
 class Solution {
 public:
-    int findBottomLeftValue(TreeNode* root) {
+    int findBottomLeftValue1(TreeNode* root) {
         int res;
         std::deque<TreeNode*> q;
         q.push_back(root);
@@ -32,6 +32,18 @@ public:
             }
         } //end while
         return res;
+    }
+
+    int findBottomLeftValue(TreeNode* root) {
+
+        std::deque<TreeNode*> q;
+        q.push_back(root);
+        while(!q.empty()){
+            root = q.front(); q.pop_front();
+            if(root->right) q.push_back(root->right); //right node first
+            if(root->left) q.push_back(root->left);   // left node second
+        } //end while
+        return root->val;
     }
 };
 // @lc code=end

@@ -14,7 +14,7 @@ class Solution {
         List<List<Integer>> res = new ArrayList<>();
 Arrays.sort(nums);
 
-        for(int i=0; i<nums.length-1; i++){
+        for(int i=0; i<nums.length-2; i++){
             List<List<Integer>> tmp = twsum(nums, i+1, 0-nums[i]);
 
             for(int j=0; j<tmp.size(); j++){
@@ -22,7 +22,7 @@ Arrays.sort(nums);
                 res.add(tmp.get(j));
             }
 
-            while(i < nums.length-1 && nums[i]== nums[i+1]) i++;
+            while(i < nums.length-2 && nums[i]== nums[i+1]) i++;
         }
         return res;
     }

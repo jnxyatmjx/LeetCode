@@ -13,7 +13,7 @@ public:
         sort(nums.begin(),nums.end());
 
         vector<vector<int>> res;
-        for(size_t i=0; i<nums.size()-1;i++)
+        for(size_t i=0; i<nums.size()-2;i++)
         {
             vector<vector<int>> tepval = towsum(nums,i+1,0-nums[i]);
 
@@ -24,7 +24,7 @@ public:
             }
 
             //remove duplicate elements in nums
-            while(i<nums.size()-1 && nums[i]==nums[i+1]) i++;
+            while(i<nums.size()-2 && nums[i]==nums[i+1]) i++;
         }//end for
         
         return res;

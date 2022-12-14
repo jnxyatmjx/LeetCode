@@ -78,6 +78,14 @@ ___
 >	- The in-process transport passes messages via memory directly between threads sharing a single ØMQ *context*.
 > - A ZeroMQ message is a discrete unit of data passed between applications or components of the same application.
 
+### I/O Pattern
+- **Reactor**  is an event handling  pattern for handling service requests delivered concurrently to a service handler by one or more inputs. 事件驱动，的能并发处理I/O并分发至相关处理器。
+> - ***Resources***: 任何能读写的文件资源。Any resource that can provide input to or consume output from the system.
+> -  ***Synchronous Event Demultiplexer***: 同步事件发生器。
+> - ***Dispatcher***: 将I/O从事件发生器分发给指定处理程序。Handles registering and unregistering of request handlers. Dispatches resources from the demultiplexer to the associated request handler.
+> -  ***Request Handler***: I/O处理程序。 An application defined request handler and its associated resource.
+
+- **Proactor** 异步事件发生器，相当于reactor的异步版本
 
 ### Redis
 > - 序号发生器 INCR key

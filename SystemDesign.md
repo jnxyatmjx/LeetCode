@@ -140,7 +140,7 @@ ___
 ### HTTPS
 How does HTTPS work?
 
-Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Transfer Protocol (HTTP.) HTTPS transmits encrypted data using Transport Layer Security (TLS.) If the data is hijacked online, all the hijacker gets is binary code.<img src="D:\EastMoney\LeetCode\pictures\https.jpg" style="zoom:47%;" />
+Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Transfer Protocol (HTTP.) HTTPS transmits encrypted data using Transport Layer Security (TLS.) If the data is hijacked online, all the hijacker gets is binary code.<img src=".\pictures\https.jpg" style="zoom:47%;" />
 
 > Step 1 - The client (browser) and the server **establish a TCP connection**.创建TCP连接
 >
@@ -195,7 +195,7 @@ The act of distributing data across a set of nodes is called data partitioning.
 #### RPC
 **RPC** (Remote Procedure Call) is called “𝐫𝐞𝐦𝐨𝐭𝐞” because it enables communications between remote services when services are deployed to different servers. From the user’s point of view, it acts like a local function call.让远程服务器上的不同服务间进行通讯，从用户角度看就像调用本地函数一样。
 
-  <img src="D:\EastMoney\LeetCode\pictures\Fg-cdXRVEAArIQf.jpg" style="zoom:43%;" />
+  <img src=".\pictures\Fg-cdXRVEAArIQf.jpg" style="zoom:43%;" />
 #### Distribute Lock
 > - **Redis Single Instance Lock**
 > >   Set-if-Not-Exists to obtain a lock, atomic Delete-if-Value-Matches to release a lock. **As an efficiency optimization, not for correctness**.For example, a good use case is maintaining request counters per IP address (for rate limiting purposes) and sets of distinct IP addresses per user ID (for abuse detection).上锁时 如果没有就设置key_name，其值为每个用户特定随机值uid并设置超时。放琐时用户能匹配uid就可以安全删除，防止用户释放了他人锁。
@@ -222,7 +222,7 @@ The act of distributing data across a set of nodes is called data partitioning.
 > >   如果加锁失败，则会主动释放所有节点锁。
 > - **Zookeeper** is a distributed key-value store and is used for coordination and storing configurations. It is highly optimized for reads. 基于redis的分布式锁有两个问题
 > - 有fencing tocken错误，如下图
-> <img src="D:\EastMoney\LeetCode\pictures\fencingtoken.JPG" alt="10%" style="zoom: 86%;" />
+> <img src=".\pictures\fencingtoken.JPG" alt="10%" style="zoom: 86%;" />
 > 
 >- 基于分布式系统时间假设情况。即分布式系统中每个节点的本地时间基本一致增张方向相同，且锁有效期远大于节点间的时间漂移。(NTP与本地时间差距巨大，管理员修改了时间等情况)。
 > 
@@ -258,7 +258,7 @@ A **leader** **is the node responsible for *all* reads and writes** for the give
 
 ------
 Why is Kafka fast?
-<img src="D:\EastMoney\LeetCode\pictures\kafaka-zerocopy.jpg" style="zoom: 63%;" />
+<img src=".\pictures\kafaka-zerocopy.jpg" style="zoom: 63%;" />
 
 #### Quorum Consensus 法人共识算法
 **Quorum consensus** can guarantee consistency for both read and write operations.The configuration of $W$, $R$ and $N$ is a typical tradeoff between latency and consistency.

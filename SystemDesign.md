@@ -235,7 +235,7 @@ The act of distributing data across a set of nodes is called data partitioning.
 >> 3-4. 如果不是最小序号则监听上一个子节点的变动，并等待。防止惊群现象。
 >> 4.用户释放琐时，直接删除其创建的临时有序子节点。
 
-####Kafka
+#### Kafka
 
 Kafka was created at LinkedIn around 2010 to track various events, such as page views, messages from the messaging system, and logs from various services.
 A Kafka server is also called a **broker**. Brokers are responsible for reliably storing data provided by the producers and making it available to the consumers.Kafka divides its messages into categories called **Topics**. In simple terms, a **topic** is like a table in a database, and the messages are the rows in that table.As topics can get quite big, they are split into **partitions** of a smaller size for better performance and scalability.Kafka guarantees that **all messages inside a partition are stored in the sequence they came in**. **Ordering** of messages is maintained **at the partition level**, not across the topic.By using **consumer groups**, consumers can be parallelized so that multiple consumers can read from multiple partitions on a topic, allowing a very high message processing throughput. 
@@ -269,7 +269,7 @@ operation must be acknowledged from $W$ replicas.
 >- $R$ = A read quorum of size $R$. For a read operation to be considered as successful, read
 operation must wait for responses from at least $R$ replicas.
 
-####Bloom Filter
+#### Bloom Filter
 **Bloom Filter** how to make a valid choice of parameter.[here](https://hur.st/bloomfilter/)
 >- $n$  number of items in the filter.
 >- $m$ number of bits in the filter.

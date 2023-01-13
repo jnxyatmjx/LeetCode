@@ -83,7 +83,7 @@ ___
 Reactor是处理事件驱动的设计模式，用于同步的处理服务的高并发请求。
 > - ***Resources***: 任何能读写的文件资源。Any resource that can provide input to or consume output from the system.
 > -  ***Synchronous Event Demultiplexer***: 同步事件发生器。
-> - ***Dispatcher***: 注册或注销请求，并将I/O从事件发生器分发给指定处理程序。Handles registering and unregistering of request handlers. Dispatches resources from the demultiplexer to the associated request handler.
+> - ***Dispatcher***: 注册或注销请求，并将I/O从事件发生器分发给指定处理程序。For registering, removing, and dispatching Event Handlers. Handles registering and unregistering of request handlers. Dispatches resources from the demultiplexer to the associated request handler.
 > -  ***Request Handler***: I/O处理程序。 An application defined request handler and its associated resource.
 
 - **Proactor** 也是处理事件驱动的设计模式，相当于Reactor的异步版本。是Asynchronous Event demultiplexer异步事件发生器。**Proactor** is a software design pattern for event handling in which long running activities are running in an asynchronous part.
@@ -120,11 +120,12 @@ Reactor是处理事件驱动的设计模式，用于同步的处理服务的高�
 
 
 ### Design Pattern
-> - **Factory Method Pattern** is defined as providing an interface for object creation but delegating the actual instantiation of objects to subclasses. 为对象的创建提供一个接口，但将对象实例化委托给子类。
-> - **Abstract factory pattern** is defined as defining an interface to create families of related or dependent objects without specifying their concrete classes. 定义一个接口来创建相关或依赖对象的家族，而不用指定它们的具体类。
-> - **Observer Pattern** is defined as a one to many dependency between objects so that when one object changes state all the dependents are notified.定义了一对多的类关系。当一个subject状态发生变化时，所有observe能够感知到。
-> - **State Pattern** is defined as allowing an object to alter behavior when its internal state changes so that it appears to change its class. 允许对象在其内部状态发生变化时，改变其行为。看上去就像改变了自身所属类一样。
-> - **Prototype** is a creational design pattern that lets you copy existing objects without making your code dependent on their classes.是一种创建模式。允许在不依赖其他类的前提下复制此类对象。
+> - **Factory Method Pattern** is defined as providing an interface for object creation but delegating the actual instantiation of objects to subclasses.**工厂模式**  为对象的创建提供一个接口，但将对象实例化委托给子类。
+> - **Abstract factory pattern** is defined as defining an interface to create families of related or dependent objects without specifying their concrete classes. **虚拟工厂模式** 定义一个接口来创建相关或依赖对象的家族，而不用指定它们的具体类。
+> - **Observer Pattern** is defined as a one to many dependency between objects so that when one object changes state all the dependents are notified.**观察者模式** 定义了一对多的类关系。当一个subject状态发生变化时，所有observe能够感知到。
+> - **State Pattern** is defined as allowing an object to alter behavior when its internal state changes so that it appears to change its class. **状态模式** 允许对象在其内部状态发生变化时，改变其行为。看上去就像改变了自身所属类一样。
+> - **Prototype Pattern** is a creational design pattern that lets you copy existing objects without making your code dependent on their classes.是一种创建模式。允许在不依赖其他类的前提下复制此类对象。
+> - **Adapter Pattern** is defined as allowing incompatible classes to work together by converting the interface of one class into another expected。**适配器模式** 让多个不兼容的类可以共同工作。
 
 
 

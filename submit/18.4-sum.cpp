@@ -8,7 +8,7 @@
 class Solution {
 public:
 
-    vector<vector<int>> towsum(vector<int>& nums,int lft,int target)
+    vector<vector<int>> towsum(vector<int>& nums,int lft,long target)
     {
         int rgt=nums.size()-1; //array index
         vector<vector<int>> res;
@@ -48,7 +48,7 @@ public:
             {
                 if(j>i+1 && nums[j]==nums[j-1]) continue; //removete duplicate
                 
-                vector<vector<int>> tval = towsum(nums,j+1,target-nums[i]-nums[j]);
+                vector<vector<int>> tval = towsum(nums,j+1,(long)target-nums[i]-nums[j]);
                 for(auto ts : tval)
                 {
                     ts.push_back(nums[i]);

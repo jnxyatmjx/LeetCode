@@ -40,7 +40,7 @@ int helper(struct TreeNode* root,int *nmax)
     int maxr = helper(root->right,nmax);
 
     //return only one branch (maximum left or right subtree) plus root path sum
-    //when left or right subtree is negative,discard negative value
+    //when left or right subtree node is negative,discard negative value
     int curmax = lmax((lmax(maxl,maxr) + root->val),root->val); //discard negative value
 
     //update maximum result

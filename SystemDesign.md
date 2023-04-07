@@ -70,6 +70,14 @@ ___
 > -  **EWOULDBLOCK**     Operation would block (may be same value as EAGAIN) (POSIX.1-2001).
 
 
+###Debug
+> - C++服务调试工具及步骤【无需coredump文件生成】
+> > -  涉及工具 gdb、addr2line、objdump、objcopy、valgrind等。
+> > -  服务编译时增加指定编译选项 -O0 -g -rdynamic -fPIC 。编译优化要关闭
+> > -  单独线程内开启 ::backtrace(frame, max_frames)、::backtrace_symbols(frame, nptrs)等保证有问题 能输出必要信息
+> > -  objdump -Slt  mian   打印服务相关汇编信息。
+> > -  addr2line -fCe main 0xfff(由backtrace生成的 相关地址信息)   打印运行当前输出的内容
+
 
 ### ZeroMQ
 > - A high-performance asynchronous messaging library,It provides a message queue.
@@ -110,6 +118,8 @@ Reactor是处理事件驱动的设计模式，用于同步的处理服务的高�
 
 3. In theory, **for asynchronous replication**, there is no guarantee to prevent data loss. 理论上，异步数据复制无法保证数据不丢失
 > -  However, this is an extremely low probability scenario as described above.但是可以极大减少出现的概率
+> -  数据丢失问题。如Svr1 和 Svr2通过redis list结构互联，Svr1push 到list里。 Svr2从list里pop数据。现在Svr2没收到某个数据，Svr1认为已经写入redis了。问Svr1 和 Svr2 怎么定位具体问题。{查看rdb 或者 aof文件即可。}
+> -  一份变量 一线程写 多线程读。 怎样保证正确读写操作。
 
 
 
@@ -172,7 +182,8 @@ Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Tran
 >- MySQL Slave 将binary log events 拷贝到它的中继日志(Relay log)。
 >- MySQL Slave 重放 relay log 中事件，将数据变更反映它自己的数据。
 
-
+#### Indexes
+Indexes are a data structure that helps decrease the look-up time of requested data. 
 
 
 

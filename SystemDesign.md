@@ -143,6 +143,7 @@ Reactor是处理事件驱动的设计模式，用于同步的处理服务的高�
 
 >- ![](http://www.tcpipguide.com/free/diagrams/tcpfsm.png)
 >- <img src="https://coolshell.cn/wp-content/uploads/2014/05/tcp_open_close.jpg" style="zoom:60%;" />
+>- <img src="http://www.tcpipguide.com/free/diagrams/tcpclose.png"/>
 >- 从TIME_WAIT状态到CLOSED状态，有一个超时设置是 2*MSL（[RFC793](https://tools.ietf.org/html/rfc793)）为什么要这有TIME_WAIT？为什么不直接给转成CLOSED状态呢？主要有两个原因：
 >>- 1）TIME_WAIT确保有足够的时间让对端收到ACK，能够安全正确的关闭双全工TCP连接。如果被动关闭的那方没有收到ACK就会触发被动端重发FIN，一来一去正好2个MSL。
 >>- 2）防止旧链接的**迷走segment**(e.g. **迷走**就是由于路由协议的问题，TCP分组被路由器A转发给路由器B，随后又被路由器B转发给路由器A)，影响新连接(新旧链接相同四元组)。

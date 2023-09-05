@@ -540,7 +540,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                                                                                                   
+>                                                                                                                                                                     
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -550,9 +550,9 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                                                                                                   
+>                                                                                                                                                                     
 >   bool isValidBST(struct TreeNode* root){
->                                                                                                                                                                   
+>                                                                                                                                                                     
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -623,7 +623,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 ### 各种排序及其变种
 > - Quick Sorts
 > ```c++
-> //algorithm will cost 2 powers of N, when vector a is increase or decrease
+> //algorithm will cost 2 powers of N, when vector is increase or decrease
 > template <typename T>
 > void quick_sort1(T *a, int lft, int rgt)
 > {
@@ -653,7 +653,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 > 	quick_sort1(a, j+1, rgt);
 > }
 > 
-> //algorithm will cost 2 powers of N, when vector a is increase or decrease
+> //algorithm will cost 2 powers of N, when vector is increase or decrease
 > template <typename T>
 > void quick_sort2(T *a, int lft, int rgt)
 > {
@@ -728,7 +728,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >	
 >	```c++
 >	int firstMissingPositive(int* nums, int numsSize){
->							
+>								
 >	    for(int i=0; i<numsSize;)
 >	    {
 >	        if(nums[i]>0 && nums[i]-1 != i 

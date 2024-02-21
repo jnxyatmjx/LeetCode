@@ -56,7 +56,7 @@ void help(int* nums,int lft,int rgt,int target,int* res)
     }
 }
 
-int* twoSum(int* nums, int numsSize, int target, int* returnSize)
+int* twoSumError(int* nums, int numsSize, int target, int* returnSize)
 {
     //sort array
     quick_sort(nums,0,numsSize-1);

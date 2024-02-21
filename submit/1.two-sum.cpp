@@ -19,7 +19,7 @@ public:
                 res.push_back(i);
                 break;
             }
-            mp[nums[i]] = i;
+            mp[nums[i]] = i;//put nums[i] into map , if target-nums[i] in map ,so we find the result
         }
 
         return res;

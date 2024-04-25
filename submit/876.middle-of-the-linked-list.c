@@ -13,11 +13,12 @@
  * };
  */
 
-
-struct ListNode* middleNode(struct ListNode* head){
-    if(head==NULL) return NULL;
-    struct ListNode *fast=head, *slow=head;
-    while(fast!=NULL && fast->next!=NULL)
+struct ListNode *middleNode(struct ListNode *head)
+{
+    if (head == NULL)
+        return head;
+    struct ListNode *fast = head, *slow = head;
+    while (fast != NULL && fast->next != NULL)
     {
         fast = fast->next->next;
         slow = slow->next;
@@ -25,4 +26,3 @@ struct ListNode* middleNode(struct ListNode* head){
     return slow;
 }
 // @lc code=end
-

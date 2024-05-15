@@ -10,7 +10,7 @@ public:
     vector<int> twoSum(vector<int>& nums, int target) {
         std::map<int,int> mp;
         std::vector<int> res;
-        for(int i = 0; i < (int)(nums.size()); i++)
+        for(size_t i = 0; i < nums.size(); i++)
         {
             int comp = target - nums[i];
             if(mp.count(comp) > 0)

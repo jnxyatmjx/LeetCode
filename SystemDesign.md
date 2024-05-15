@@ -30,7 +30,7 @@
 > > - *Horizontal*: add more servers. scale by adding more servers into pool of resources.  水平增加机器
 > > - *Vertical*: add more resources to the same server.  scale by adding more power (CPU, RAM, Storage, etc.) to an existing server.  提高单机性能
 > 2. **Reliability**.keeps delivering its services even when one or several of its software or hardware components fail
-> 2. **Availability**.is the time a system remains operational to perform its required function in a specific period.
+> 2. **Availability**.is the percentage of time that some service or infrastructure is accessible to clients and is operated upon under normal conditions.
 > 2. **Efficiency**.
 > > - *response time (or latency) that denotes the delay to obtain the first item*
 > > - *the throughput (or bandwidth) which denotes the number of items delivered in a given time unit (e.g., a second)*
@@ -158,15 +158,17 @@ Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Tran
 
 > Step 1 - The client (browser) and the server **establish a TCP connection**.创建TCP连接
 >
-> Step 2 - The client sends a “**client hello**” to the server. The message contains a set of necessary encryption algorithms and the latest TLS version it can support. The server responds with a “**server hello**” so the browser knows whether it can support the algorithms and TLS version.The **server then sends the SSL certificate to the client**. The certificate contains the public key, host name, expiry dates, etc. The client validates the certificate.客户端与服务段相互发送hello，用以确定加密算法和TLS版本。确定好后服务段发送证书给客户端，证书中包含公钥、过期时间和域名。
+> Step 2 - The client sends a “**client hello**” to the server. The message contains a set of necessary encryption algorithms(cipher suites) , the latest TLS version it can support *and client random*.
 >
-> Step 3 - After validating the SSL certificate, the **client generates a session key** and encrypts it using the public key. The server receives the encrypted session key and decrypts it with the private key.客户端校验完证书正确后生成session key，并用证书加密后发给服务端，服务端用私钥解密得到session key。
+> The server responds with a “**server hello**” so the browser knows whether it can support the algorithms(cipher algorithms) and TLS version *and server random*.The **server then sends the SSL certificate to the client**. The certificate contains the public key, host name, expiry dates, etc. The client validates the certificate.客户端与服务段相互发送hello，用以确定加密算法和TLS版本。确定好后服务段发送证书给客户端，证书中包含公钥、过期时间和域名。
 >
-> Step 4 - Now that both the client and the server hold the same session key (**symmetric encryption**), the encrypted data is transmitted in a secure bi-directional channel.客户端和服务端通过session key对数据进行对称加密。
+> Step 3 - After validating the SSL certificate, the ***client generates* a pre-master secret** and encrypts it using the public key. The server receives the encrypted pre-master secret  and decrypts it with the private key.客户端校验完证书正确后生成pre-master secret，并用证书加密后发给服务端，服务端用私钥解密得到pre-master secret。
+>
+> Step 4 - Now both the client and the server calculate the **session key** (**symmetric encryption**) using the client random, server random, and the pre-master secret. They both will obtain the same session key. The encrypted data is transmitted in a secure bi-directional channel.客户端和服务端通过session key对数据进行对称加密。
 >
 > Why does HTTPS switch to symmetric encryption during data transmission? There are two main reasons:
->>1. Security: The asymmetric encryption goes only one way. This means that if the server tries to send the encrypted data back to the client, anyone can decrypt the data using the public key.
->>2. Server resources: The asymmetric encryption adds quite a lot of mathematical overhead. It is not suitable for data transmissions in long sessions.
+> >1. **Security**: The asymmetric encryption goes only one way. **This means that if the server tries to send the encrypted data back to the client, anyone can decrypt the data using the public key**.
+> >2. **Server resources**: The asymmetric encryption adds quite a lot of mathematical overhead. It is not suitable for data transmissions in long sessions.
 
 ### MySQL
 
@@ -196,16 +198,70 @@ Indexes are a data structure that helps decrease the look-up time of requested d
 >- **Consistency ( C ):** All users see the same data at the same time.
 >- **Availability ( A ):** System continues to function even with node failures.
 >- **Partition tolerance ( P ):** System continues to function even if the communication fails between nodes.
+#### Data Replication
+**Replication** refers to keeping multiple copies of the data at various nodes (preferably geographically distributed) to achieve **availability**, **scalability**, and **performance**.
+
+Additional complexities that could arise due to replication are as follows:
+- How do we keep multiple copies of data consistent with each other?
+- How do we deal with failed replica nodes?
+- Should we replicate synchronously or asynchronously?
+  - How do we deal with replication lag in case of asynchronous replication?
+- How do we handle concurrent writes?
+- What consistency model needs to be exposed to the end programmers?
+##### Data replication models
+
+- **Single leader or primary-secondary replication**
+  In primary-secondary replication, data is replicated across multiple nodes. One node is designated as the primary. It’s responsible for processing any writes to data stored on the cluster. It also sends all the writes to the secondary nodes and keeps them in sync.Primary-secondary replication is appropriate when our workload is read-heavy.
+  *There are many different replication methods in primary-secondary replication:*
+  - Statement-based replication
+  - Write-ahead log (WAL) shipping
+  - Logical (row-based) replication
+- **Multi-leader replication**
+	There are multiple primary nodes that process the writes and send them to all other primary and secondary nodes to replicate. Multi-leader replication gives better performance and scalability than single leader replication, but it also has a significant disadvantage. Since all the primary nodes concurrently deal with the write requests, they may modify the same data, which can create a conflict between them. For example, suppose the same data is edited by two clients simultaneously. In that case, their writes will be successful in their associated primary nodes, but when they reach the other primary nodes asynchronously, it creates a conflict.
+	*There are many topologies through which multi-leader replication is implemented*, The most common is the all-to-all topology.
+	  - circular topology
+	  - star topology
+	  - all-to-all topology
+- **Peer-to-peer or leaderless replication**
+
 #### Data Partitioning
 The act of distributing data across a set of nodes is called data partitioning. 
->- **Consistent Hash**: is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only $k/n$ keys need to be remapped on average, where $k$ is the number of keys, and $n$ is the number of slots(Each **slot** is represented by **a server** in a distributed system or cluster).一致哈希是一个hash环，key映射到环的某个位置后，由指定的node(也就是服务器)负责。当node增加或删除后
->> - only a small set of keys move when servers are added or removed.
->> - *This scheme can result in non-uniform data and load distribution*.First, it is impossible to keep the same size of partitions on the ring for all servers considering a server can be added or removed.Second, it is possible to have a non-uniform key distribution on the ring. However solves these issues with the help of ***Virtual Nodes***.
+- **Vertical sharding**
+> **We might break a table into multiple tables so that some columns are in one table while the rest are in the other**. Often, **vertical sharding** is used to increase the speed of data retrieval from a table consisting of columns with very wide text or a binary large object (blob). In this case, the column with large text or a blob is split into a different table.
+- **Horizontal sharding**
+> +  **Key-range based sharding**
+> In the key-range based sharding, each partition is assigned a continuous range of keys.
+> <img src=".\pictures\horizationp1.JPG" style="zoom:50%" />
+> Sometimes, a database consists of multiple tables **bound by foreign key relationships**. In such a case, the horizontal partition is performed using the same partition key on all tables in a relation. Tables (or subtables) that belong to the same partition key are distributed to one database shard. The following figure shows that several tables with the same partition key are placed in a single database shard:
+> <img src=".\pictures\horizationp2.JPG" style="zoom:50%"/>
+>
+> + **Hash based sharding**
+> **Consistent Hash**: is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only $k/n$ keys need to be remapped on average, where $k$ is the number of keys, and $n$ is the number of slots(Each **slot** is represented by **a server** in a distributed system or cluster).一致哈希是一个hash环，key映射到环的某个位置后，由指定的node(也就是服务器)负责。当node增加或删除后
+>
+> > - only a small set of keys move when servers are added or removed.
+> > - *This scheme can result in non-uniform data and load distribution*.First, it is impossible to keep the same size of partitions on the ring for all servers considering a server can be added or removed.Second, it is possible to have a non-uniform key distribution on the ring. However solves these issues with the help of ***Virtual Nodes***.
 
 #### Rate limiter
-**Rate limiter is used to control the rate of traffic sent by a client or a service**. Include *Token bucket*,*Leaking bucket*,*Fixed window counter*,*Sliding window log*, *Sliding window counter*.
+**Rate limiter is used to control the rate of traffic sent by a client or a service**.
+
+> <img src=".\pictures\ratelimiterarchiter.JPG" style="zoom: 60%" />
+> **Rule database**: This is the database, consisting of rules defined by the service owner. Each rule specifies the number of requests allowed for a particular client per unit of time.
+> **Rules retriever**: This is a background process that periodically checks for any modifications to the rules in the database. The rule cache is updated if there are any modifications made to the existing rules.
+> **Throttle rules cache**: The cache consists of rules retrieved from the rule database. The cache serves a rate-limiter request faster than persistent storage. As a result, it increases the performance of the system. So, when the rate limiter receives a request against an ID (key), it checks the ID against the rules in the cache.
+> **Decision-maker**: This component is responsible for making decisions against the rules in the cache. This component works based on one of the rate-limiting algorithms that are token bucket,leaking bucket etc.
+> **Client identifier builder**: This component generates a unique ID for a request received from a client. This could be a remote IP address, login ID, or a combination of several other attributes, due to which a sequencer can’t be used here. This ID is considered as a key to store the user data in the key-value database. So, this key is passed to the decision-maker for further service decisions.
+
+Include *Token bucket*, *Leaking bucket*, *Fixed window counter*, *Sliding window log*,  *Sliding window counter*.
 
 >- Sliding Windows with Redis backend. (使用Sorted Set配合zadd，zremrankbyscore，zcard)实现全局限流器。Local rate limiting can be used in conjunction with global rate limiting to reduce load on the global rate limit service. Thus, the rate limit is applied in two stages. The initial coarse grained limiting is performed by the token bucket limit before a fine grained global limit finishes the job.可以配合本地限流器吸收绝大部分流量以保护全局限流器。所以限流器可以用两步实现。在细颗粒度的全局限流器完成工作之前，初始的粗颗粒度的限制由令牌桶执行。
+>
+>- **Token Bucket algorithm** can sometimes suffer from overrunning the limit at the edges. 会出现边界超限的问题
+> <img src=".\pictures\Tokenbucketsurpasslimit.JPG" style="zoom:73%;" />
+>
+>- A client has to send 18 MB of data at a rate of 6 Mbps (megabits per second) to a server. Let’s assume that the server processes data at a rate of 4 Mbps. If the **leaky bucket algorithm** is used at the server end, *how much capacity must the queue hold so as not to discard any data?*
+>  seconds taken to transmit $18MB$:   $18MB / 6Mbps = 24s$, server can process data  in $24s$:  $4Mbps * 24s = 12MB$.
+>   bucket queue size:$18MB - 12MB = 6MB$.
+> - In the event of a failure where a rate limiter is unable to perform the task of throttling, the request should be accepted. This approach ensures that the system remains available and fault-tolerant, adhering to non-functional requirements. It’s important because there are usually multiple rate limiters at different service levels, and even if a specific rate limiter fails, other mechanisms like load balancers can still manage the load to some extent. However, it’s crucial for the engineering team to quickly address the failure, as rate limiting is a critical component of a system’s infrastructure to prevent overloading.
 
 #### RPC
 **RPC** (Remote Procedure Call) is called “𝐫𝐞𝐦𝐨𝐭𝐞” because it enables communications between remote services when services are deployed to different servers. From the user’s point of view, it acts like a local function call.让远程服务器上的不同服务间进行通讯，从用户角度看就像调用本地函数一样。

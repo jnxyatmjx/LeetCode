@@ -178,7 +178,7 @@ Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Tran
 >- MySQL InnoDB Cluster provides a complete high availability solution for MySQL. Each MySQL server instance in an InnoDB Cluster runs MySQL Group Replication, which provides the mechanism to replicate data within an InnoDB Cluster, with built-in failover.
 >- [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) can automatically configure itself based on the cluster you deploy, connecting client applications transparently to the server instances.
 >- In the default Single-Primary mode, an InnoDB Cluster has a single Read-Write server instance - the Primary. Multiple secondary server instances are replicas of the primary. If the primary fails, a secondary is automatically promoted to the role of primary. 
->- follow diagram show an overview of how the technologies work together:![](https://dev.mysql.com/doc/mysql-shell/8.0/en/images/innodb_cluster_overview.png)
+>- follow diagram show an overview of how the technologies work together:![](https://dev.mysql.com/doc/mysql-shell/8.0/en/images/innodb-cluster-overview.png)
 
 #### InnoDB 主从复制原理
 >- MySQL Master 将数据变更写入二进制日志( binary log, 其中记录叫做二进制日志事件binary log events，可以通过 show binlog events 进行查看)
@@ -217,7 +217,7 @@ Additional complexities that could arise due to replication are as follows:
   - Write-ahead log (WAL) shipping
   - Logical (row-based) replication
 - **Multi-leader replication**
-	There are multiple primary nodes that process the writes and send them to all other primary and secondary nodes to replicate. Multi-leader replication gives better performance and scalability than single leader replication, but it also has a significant disadvantage. Since all the primary nodes concurrently deal with the write requests, they may modify the same data, which can create a conflict between them. For example, suppose the same data is edited by two clients simultaneously. In that case, their writes will be successful in their associated primary nodes, but when they reach the other primary nodes asynchronously, it creates a conflict.
+	**There are multiple primary nodes that process the writes and send them to all other primary and secondary nodes to replicate.** Multi-leader replication gives better performance and scalability than single leader replication, but it also has a significant disadvantage. Since all the primary nodes concurrently deal with the write requests, they may modify the same data, which can create a conflict between them. For example, suppose the same data is edited by two clients simultaneously. In that case, their writes will be successful in their associated primary nodes, but when they reach the other primary nodes asynchronously, it creates a conflict.
 	*There are many topologies through which multi-leader replication is implemented*, The most common is the all-to-all topology.
 	  - circular topology
 	  - star topology
@@ -239,7 +239,7 @@ The act of distributing data across a set of nodes is called data partitioning.
 > **Consistent Hash**: is a special kind of hashing such that when a hash table is re-sized and consistent hashing is used, only $k/n$ keys need to be remapped on average, where $k$ is the number of keys, and $n$ is the number of slots(Each **slot** is represented by **a server** in a distributed system or cluster).一致哈希是一个hash环，key映射到环的某个位置后，由指定的node(也就是服务器)负责。当node增加或删除后
 >
 > > - only a small set of keys move when servers are added or removed.
-> > - *This scheme can result in non-uniform data and load distribution*.First, it is impossible to keep the same size of partitions on the ring for all servers considering a server can be added or removed.Second, it is possible to have a non-uniform key distribution on the ring. However solves these issues with the help of ***Virtual Nodes***.
+> > - *This scheme can result in non-uniform data and load distribution(HotKeys)*.First, it is impossible to keep the same size of partitions on the ring for all servers **considering a server can be added or removed**.Second, it is possible to have a non-uniform key distribution on the ring. However solves these issues with the help of ***Virtual Nodes***.Adding replicas reduces the load on hot shards. Another way to handle the hotkeys problem is to do further sharding within the range of those keys. 增加slot可以缓解热key的问题，还有一种方法就是为每个key继续划分slot。(ont key belong to multiple slots)
 
 #### Rate limiter
 **Rate limiter is used to control the rate of traffic sent by a client or a service**.

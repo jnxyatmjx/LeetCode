@@ -347,3 +347,10 @@ operation must wait for responses from at least $R$ replicas.
 >- $m$ number of bits in the filter.
 >- $k$  number of hash functions.
 >- $p$ probability of **False Positives**. fraction between 0 and 1 or a number indicating $1$-in-$p$.
+
+### 交易系统简介
+
+证券公司使用的核心交易系统，其基本的核心组件、数据流向、系统边界基本一致。通过系统的参考架构示意图，对核心交易系统进行整体说明。核心交易系统参考架构图，如图1。
+
+![](.\pictures\OTCtradingsystem.JPG)
+核心交易系统的核心组件包括接入网关、交易引擎、报盘通道、行情模块及账户、清算等，其中接入网关负责外围接入系统报入订单的接收及路由，交易引擎负责订单检查及处理，报盘通道将订单报送到交易所进行撮合处理，行情模块负责接收交易所行情信息并进行行情处理，账户、清算等模块负责开户、清算文件处理等。清算模块就是把交易的钱券算准确后更新到资金表和股份表，这一天交易就结束了。美股是上手IB，港股是CCASS，A股是中国登记结算中心。

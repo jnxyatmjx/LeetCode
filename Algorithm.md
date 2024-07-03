@@ -40,7 +40,7 @@
 * ### 无序数组中找到第$Kth$大(小)的值
 
 > 1. 排序后找到$Kth$值 Time: $O(Nlog_2N)$
-> 2. 遍历数据同时放入堆 Time:$O(Nlog_2K)$
+> 2. 遍历数据同时放入小顶堆 Time:$O(Nlog_2K)$
 > 3. [**快速选择**]  类似  [**快速排序**] 能以**最快$O(2N-1)$**,\[**最差$O(N^2)$有序数组**\]速度找打$Kth$值 (e.g.  215)
 
 
@@ -540,7 +540,6 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >   bool preorder_traver(struct TreeNode* root,struct TreeNode* min,struct TreeNode* max)
 >   {
 >       if(root==NULL) return true;
->                                                                                                                                                                     
 >       if(min && root->val <= min->val) return false;
 >       if(max && root->val >= max->val) return false;
 >   	/*
@@ -550,9 +549,7 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >       return preorder_traver(root->left,min,root) && 
 >              preorder_traver(root->right,root,max);
 >   }
->                                                                                                                                                                     
 >   bool isValidBST(struct TreeNode* root){
->                                                                                                                                                                     
 >       return preorder_traver(root,NULL,NULL);
 >   }
 >   ```
@@ -728,7 +725,6 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >	
 >	```c++
 >	int firstMissingPositive(int* nums, int numsSize){
->								
 >	    for(int i=0; i<numsSize;)
 >	    {
 >	        if(nums[i]>0 && nums[i]-1 != i 
@@ -748,5 +744,3 @@ int Binary_normal(int*num,int tar,int lef ,int rig)
 >	    return numsSize+1;
 >	}
 >	```
->	
->	

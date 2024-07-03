@@ -55,7 +55,7 @@ void quick_sock2(vector<int>& a, int lft, int rgt,int k)
         quick_sock2(a,i+1,rgt,k);
 }
 
-//Increase Sort
+//Decrease Sort
 void quick_sock1(vector<int>& a, int lft, int rgt, int k)
 {
     if(lft >= rgt) return;
